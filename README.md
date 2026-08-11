@@ -69,10 +69,11 @@ The rest of the application layout is specified in [architecture.md](architectur
 ## Running the baseline
 
 Stage 0 runs the whole corpus in context — no database, no embeddings, no retrieval. The only
-requirement is an OpenAI key in the environment, never in a file:
+requirement is an OpenAI key. Paste it into `.env` at the repo root (copy `.env.example` if it
+does not exist) — the file is gitignored and read automatically on startup, and an exported
+`OPENAI_API_KEY` always wins over it. The key never goes in a tracked file.
 
 ```bash
-export OPENAI_API_KEY=...
 python3 apps/cli/chat.py
 ```
 

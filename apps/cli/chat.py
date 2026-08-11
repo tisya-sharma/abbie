@@ -27,6 +27,9 @@ from packages.corpus_loader import (
     estimate_tokens,
     extract_citations,
 )
+from packages.envfile import load_env_file
+
+load_env_file()
 
 SYSTEM_PROMPT_PATH = REPO_ROOT / "apps" / "api" / "prompts" / "system.md"
 DEFAULT_MODEL = os.environ.get("ABBIE_MODEL", "gpt-5-mini")
@@ -69,7 +72,8 @@ def main() -> None:
 
     if not os.environ.get("OPENAI_API_KEY"):
         raise SystemExit(
-            "OPENAI_API_KEY is not set. Export IPI's key in this shell first."
+            "OPENAI_API_KEY is not set. Paste IPI's key into .env at the repo root,"
+            " or export it in this shell."
         )
 
     from openai import OpenAI

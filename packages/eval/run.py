@@ -30,7 +30,10 @@ sys.path.insert(0, str(REPO_ROOT))
 import yaml
 
 from packages.corpus_loader import build_system_message, estimate_tokens
+from packages.envfile import load_env_file
 from packages.eval.checks import score_case
+
+load_env_file()
 
 GOLDEN_PATH = REPO_ROOT / "packages" / "eval" / "golden.yaml"
 SYSTEM_PROMPT_PATH = REPO_ROOT / "apps" / "api" / "prompts" / "system.md"
@@ -305,7 +308,10 @@ def main() -> None:
         return
 
     if not os.environ.get("OPENAI_API_KEY"):
-        raise SystemExit("OPENAI_API_KEY is not set. Export IPI's key in this shell first.")
+        raise SystemExit(
+            "OPENAI_API_KEY is not set. Paste IPI's key into .env at the repo root,"
+            " or export it in this shell."
+        )
 
     from openai import OpenAI
 

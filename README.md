@@ -77,9 +77,13 @@ does not exist) — the file is gitignored and read automatically on startup, an
 python3 apps/cli/chat.py
 ```
 
-`--ask "question"` answers once and exits, `--internal` includes pre-publication concepts,
-and `ABBIE_MODEL` overrides the default model. The loader validates the graph invariants on
-startup and refuses to serve a corpus that fails them.
+By default each question is first routed to one of the four behaviors by a cheap classifier
+call; refusals and abstentions are then served from fixed templates with no model call, and
+redirects run without the corpus in context so they cannot lecture from it. `--baseline` skips
+routing and runs the original single-call full-context pipeline. `--ask "question"` answers
+once and exits, `--internal` includes pre-publication concepts, and `ABBIE_MODEL` overrides
+the default model. The loader validates the graph invariants on startup and refuses to serve
+a corpus that fails them.
 
 ## Warehouse audit tooling
 

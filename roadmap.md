@@ -87,8 +87,9 @@ citations, and abstains on everything else.
   [architecture.md](architecture.md), Guiding principles 3 to 6.
 - FastAPI plus Postgres with `pgvector` running locally in Docker.
 - Ingest job: markdown to chunks to embeddings, writing `concept` and `concept_chunk`.
-- Answer composition: citation rendering, the abstention path, prerequisite expansion in learning
-  mode, and follow-up offers generated from `leads_to` edges.
+- Answer composition: citation rendering, behavior routing with a deterministic refusal and
+  abstention layer, prerequisite expansion in learning mode, and follow-up offers generated from
+  `leads_to` edges.
 - Per-session `covered` set, so an already-explained concept is not re-offered or re-defined.
 - **Prose access ships as a full-context baseline, not retrieval.** The whole corpus is ~9,000
   tokens at full scope, well under 10% of a 128K window, so there is no haystack for retrieval to

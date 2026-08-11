@@ -132,6 +132,8 @@ never be phrased in a way that implies the antibody failed.
    publicly for the same reason: they leak direction without any single record leaking.
    Abstentions must also carry the framework's fifth interpretive principle — absence of evidence
    is not evidence of failure — so "I have no data on that" never reads as "that antibody is bad."
+   The identical wording is enforced by a fixed template on the abstention path rather than
+   requested from the model, so it holds structurally instead of probabilistically.
 5. **Redirects are hospitality, not enforcement.** A user asking something off topic has not done
    anything wrong, and a curt scope lecture is a worse experience than a brief, warm deflection
    that offers a real hook back to antibodies. Two rules: keep it to a sentence or two, and reserve
@@ -212,7 +214,11 @@ revamp — the site loads the widget and is otherwise untouched.
 
 **Backend.** A Python FastAPI application. Orchestration is plain, typed Python calling the
 provider's native tool loop: route, retrieve, call tools, generate, verify and cite, respond or
-abstain. For a linear pipeline with one abstain branch, a hand-written flow wins on the axis that
+abstain. Routing includes behavior, not only retrieval regime: a minimal-effort call on the cheap
+tier classifies each question as answer, abstain, refuse, or redirect before any generation, and
+refusals and abstentions are then rendered deterministically from versioned prompt files rather
+than generated. Every router failure falls back to the answer path, so a routing problem degrades
+to the single-call pipeline instead of failing the turn. For a linear pipeline with one abstain branch, a hand-written flow wins on the axis that
 matters here, which is auditability — a reviewer can read one file top to bottom and see what was
 retrieved, what the model said, which claims failed verification, and why it abstained. It also
 avoids LangGraph's licensing cliff, where the library is MIT but the production server runtime is
@@ -333,6 +339,16 @@ Federation. Deliberately skips VMs, Kubernetes, and model hosting.
 Retrieval decides what is available. Composition decides what the reader actually gets, and for a
 teaching tool that is where most of the product lives.
 
+**Behavior routing and per-behavior context.** Each behavior's reply is composed from only the
+context it needs: answers see the corpus; redirects see redirect instructions alone; refusals and
+abstentions are fixed text and a template with no model call at all. A path that never receives
+the corpus cannot cite it or lecture from it — the same physical-separation reasoning as the
+clearance indexes, applied to behaviors. This was prompted by the first golden-set runs, where
+both model tiers sometimes answered clinical and off-topic questions with cited corpus content:
+with the whole corpus in context and a cite-everything instruction, prompt-stated behavior rules
+lose. The router is a measured classifier, not a guarantee — the eval records its accuracy on
+every run, and its failure mode is today's single-call behavior, never worse.
+
 **Reader mode is inferred from the question, not set by a toggle.** A question carrying a clone
 name, an RRID, an application abbreviation, and a species is not a novice question, and a scientist
 asking for a ranking does not want `paralog` defined inline. A question phrased as "what is…" or
@@ -381,7 +397,10 @@ and third-party database content is not authored here, so retrieved chunks stop 
 and become untrusted input that happens to sit in the prompt. Two requirements follow: retrieved
 content is delimited and labeled as data the model may quote and cite but must never treat as
 instruction, and third-party text is never concatenated into the system prompt region. This is a
-constraint on how Stage 5 ingestion is built, not a feature added afterward.
+constraint on how Stage 5 ingestion is built, not a feature added afterward. The behavior router
+and deterministic refusal layer narrow the user-input side of the same threat before launch: a
+hijack attempt can reach at most the grounded answer path, and refusal and abstention wording
+cannot be steered at all.
 
 **Conversational state is one set, and deliberately nothing more.** A per-session
 `covered: set[concept_id]` records which concepts have been drawn on. It suppresses already-seen

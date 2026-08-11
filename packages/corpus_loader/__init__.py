@@ -131,6 +131,22 @@ def assemble_context(concepts: dict[str, Concept]) -> str:
     return "<corpus>\n" + "\n\n".join(blocks) + "\n</corpus>"
 
 
+def build_system_message(
+    prompt: str, include_pre_publication: bool = False
+) -> tuple[str, dict[str, "Concept"]]:
+    """Compose the system prompt plus the assembled corpus for one build.
+
+    Takes the prompt text rather than a path so the loader stays ignorant of
+    where prompts live. Raises ValueError if the visible corpus fails its graph
+    invariants, so no caller can serve a build that violates them.
+    """
+    concepts = load_corpus(include_pre_publication=include_pre_publication)
+    errors = validate(concepts)
+    if errors:
+        raise ValueError("corpus failed validation:\n" + "\n".join(errors))
+    return f"{prompt}\n\n{assemble_context(concepts)}", concepts
+
+
 def extract_citations(text: str, concepts: dict[str, Concept]) -> list[str]:
     """Return concept ids the model cited, in order of first appearance."""
     seen: list[str] = []

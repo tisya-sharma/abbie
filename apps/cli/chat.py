@@ -23,29 +23,13 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(REPO_ROOT))
 
 from packages.corpus_loader import (
-    assemble_context,
+    build_system_message,
     estimate_tokens,
     extract_citations,
-    load_corpus,
-    validate,
 )
 
 SYSTEM_PROMPT_PATH = REPO_ROOT / "apps" / "api" / "prompts" / "system.md"
 DEFAULT_MODEL = os.environ.get("ABBIE_MODEL", "gpt-5-mini")
-
-
-def build_system_message(include_pre_publication: bool) -> tuple[str, dict]:
-    """Assemble the system prompt plus corpus and report what went into it."""
-    concepts = load_corpus(include_pre_publication=include_pre_publication)
-    errors = validate(concepts)
-    if errors:
-        for error in errors:
-            print(f"invariant violation: {error}", file=sys.stderr)
-        raise SystemExit("corpus failed validation, refusing to start")
-
-    prompt = SYSTEM_PROMPT_PATH.read_text(encoding="utf-8")
-    context = assemble_context(concepts)
-    return f"{prompt}\n\n{context}", concepts
 
 
 def stream_reply(client, model: str, messages: list[dict]) -> str:
@@ -91,7 +75,11 @@ def main() -> None:
     from openai import OpenAI
 
     client = OpenAI()
-    system_message, concepts = build_system_message(args.internal)
+    prompt = SYSTEM_PROMPT_PATH.read_text(encoding="utf-8")
+    try:
+        system_message, concepts = build_system_message(prompt, args.internal)
+    except ValueError as exc:
+        raise SystemExit(f"{exc}\nrefusing to start")
 
     build = "internal" if args.internal else "public"
     print(

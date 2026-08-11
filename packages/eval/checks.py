@@ -41,7 +41,9 @@ def classify_behavior(text: str, concepts: dict[str, Concept]) -> str:
 
     Abstention is deterministic because the prompt pins its opening words.
     Refuse detection is a keyword heuristic, a known softness that stays
-    visible in the per-case report rather than being hidden.
+    visible in the per-case report rather than being hidden. This scores reply
+    text after the fact; packages.router.classify predicts question intent
+    before generation — different measurements, never interchangeable.
     """
     if ABSTAIN_PHRASE in text:
         return "abstain"

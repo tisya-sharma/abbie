@@ -495,6 +495,20 @@ refusal correctness, redirect correctness, retrieval recall@k where applicable, 
 p50/p95 latency. Scoring all three on every run costs little at this corpus size and makes every
 subsequent decision a measured one.
 
+**Statistical policy for reading runs.** At golden-set scale a single run's pass count is a smoke
+test, not a measurement: observed pass counts wobble by one to two cases on identical inputs from
+sampling alone, and confidence intervals at this size overlap across genuinely different
+configurations. Decisions at the margin therefore use repeated trials (3 to 5 — diminishing
+returns set in quickly past that) with majority verdicts and an explicit unstable flag for cases
+whose trials disagree; A-versus-B comparisons are read as per-case paired flips with an exact
+McNemar test (`packages/eval/compare.py`), never as pass-count differences. A change merges on
+one of three grounds: paired statistical significance, repeat-confirmed improvement, or
+deterministic construction — a code path the eval verifies rather than estimates needs no
+statistical power at all. To keep the growing set honest, roughly a third of new cases are tagged
+held-out and excluded while tuning, and abstain cases are re-audited whenever the corpus changes
+what is answerable, since Stage 2 catalog data will turn some correct abstentions into answerable
+questions.
+
 **Citation correctness must be checked at the claim level, not the concept level, or the eval misses
 the failure it exists to catch.** `must_cite` records which concepts an answer should draw on, but
 an answer that cites `molecular-integrity` while asserting something absent from that file passes a

@@ -21,6 +21,7 @@ answer_references/
 
 # Eval runs reference commit SHAs; promoting one to a committed baseline is deliberate
 packages/eval/results/
+packages/eval/.cache/
 
 # Python
 __pycache__/

@@ -109,8 +109,21 @@ def estimate_cost(model: str, prompt_tokens: int, completion_tokens: int) -> flo
     )
 
 
-def ask(client, model: str, system: str, question: str, max_output_tokens: int) -> dict:
-    """One non-streaming completion, returning the reply plus measurements."""
+def ask(
+    client,
+    model: str,
+    system: str,
+    question: str,
+    max_output_tokens: int,
+    reasoning_effort: str,
+) -> dict:
+    """One non-streaming completion, returning the reply plus measurements.
+
+    Reasoning effort is pinned rather than left to the model default because
+    reasoning tokens bill as output and count against the completion cap; at
+    the default effort they can consume the entire cap and return an empty
+    reply. Every run records the value used, since it changes behavior.
+    """
     start = time.perf_counter()
     response = client.chat.completions.create(
         model=model,
@@ -119,6 +132,7 @@ def ask(client, model: str, system: str, question: str, max_output_tokens: int) 
             {"role": "user", "content": question},
         ],
         max_completion_tokens=max_output_tokens,
+        reasoning_effort=reasoning_effort,
     )
     latency_ms = round((time.perf_counter() - start) * 1000)
     choice = response.choices[0]
@@ -174,6 +188,7 @@ def run_matrix(
     property_spec: dict,
     concepts: dict,
     max_output_tokens: int,
+    reasoning_effort: str,
 ) -> list[dict]:
     """Score every model x config x case combination, printing progress."""
     runs = []
@@ -182,7 +197,10 @@ def run_matrix(
             print(f"running {model} / {config_name} ({len(cases)} cases)")
             scored = []
             for case in cases:
-                measured = ask(client, model, system, case["question"], max_output_tokens)
+                measured = ask(
+                    client, model, system, case["question"],
+                    max_output_tokens, reasoning_effort,
+                )
                 result = score_case(case, measured["reply"], concepts, property_spec)
                 if measured["finish_reason"] == "length":
                     result["failures"].append("infrastructure: hit max_completion_tokens")
@@ -280,8 +298,11 @@ def main() -> None:
                         help="comma-separated subset of: naive, full-context")
     parser.add_argument("--case", action="append",
                         help="run only this case id, repeatable")
-    parser.add_argument("--max-output-tokens", type=int, default=2048,
+    parser.add_argument("--max-output-tokens", type=int, default=4096,
                         help="cap per reply, reasoning tokens count against it")
+    parser.add_argument("--reasoning-effort", default="low",
+                        choices=["minimal", "low", "medium", "high"],
+                        help="reasoning effort passed to the model, recorded in results")
     parser.add_argument("--dry-run", action="store_true",
                         help="print the matrix and cost projection, no API calls")
     parser.add_argument("--no-report", action="store_true",
@@ -317,7 +338,8 @@ def main() -> None:
 
     client = OpenAI()
     runs = run_matrix(
-        client, models, configs, cases, property_spec, concepts, args.max_output_tokens
+        client, models, configs, cases, property_spec, concepts,
+        args.max_output_tokens, args.reasoning_effort,
     )
 
     now = dt.datetime.now(dt.timezone.utc)
@@ -330,6 +352,7 @@ def main() -> None:
             "models": models,
             "configs": list(configs),
             "max_output_tokens": args.max_output_tokens,
+            "reasoning_effort": args.reasoning_effort,
         },
         "runs": runs,
     }

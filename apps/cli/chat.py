@@ -35,10 +35,15 @@ SYSTEM_PROMPT_PATH = REPO_ROOT / "apps" / "api" / "prompts" / "system.md"
 DEFAULT_MODEL = os.environ.get("ABBIE_MODEL", "gpt-5-mini")
 
 
-def stream_reply(client, model: str, messages: list[dict]) -> str:
+def stream_reply(
+    client, model: str, messages: list[dict], reasoning_effort: str
+) -> str:
     """Stream one completion to stdout and return the full text."""
     stream = client.chat.completions.create(
-        model=model, messages=messages, stream=True
+        model=model,
+        messages=messages,
+        stream=True,
+        reasoning_effort=reasoning_effort,
     )
     parts: list[str] = []
     for chunk in stream:
@@ -68,6 +73,12 @@ def main() -> None:
         help="include pre-publication concepts (internal build)",
     )
     parser.add_argument("--model", default=DEFAULT_MODEL)
+    parser.add_argument(
+        "--reasoning-effort",
+        default="low",
+        choices=["minimal", "low", "medium", "high"],
+        help="reasoning effort for the model, low keeps replies fast",
+    )
     args = parser.parse_args()
 
     if not os.environ.get("OPENAI_API_KEY"):
@@ -97,7 +108,7 @@ def main() -> None:
 
     def turn(question: str) -> None:
         messages.append({"role": "user", "content": question})
-        reply = stream_reply(client, args.model, messages)
+        reply = stream_reply(client, args.model, messages, args.reasoning_effort)
         messages.append({"role": "assistant", "content": reply})
 
         cited = extract_citations(reply, concepts)

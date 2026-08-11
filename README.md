@@ -1,0 +1,103 @@
+# Abbie
+
+A grounded antibody-validation assistant for the Institute for Protein Innovation.
+
+Abbie answers what antibody validation and characterization mean, how an antibody should be
+validated, and — as approved data becomes available — how well characterized a given antibody
+is. Every factual claim carries a citation, and the assistant abstains rather than guesses.
+
+Status: Stage 0 in progress — corpus loader, 14 concepts, system prompt, and the full-context
+CLI baseline are working; the eval harness runs the golden set locally. Corpus expansion and
+CI wiring are next.
+
+## The documents, and who each is for
+
+| Document | Audience | Purpose |
+|---|---|---|
+| [roadmap.md](roadmap.md) | me | The operational sequence — stages, deliverables, gates, blockers. **Start here.** |
+| [architecture.md](architecture.md) | me, and any future engineer | Architecture, technology choices, and the reasoning behind them. The source of truth for design and cost. |
+| [chatbot-proposal.md](chatbot-proposal.md) | Deb and leadership | The proposal and the asks. Non-technical. |
+| [hosting-decision.md](hosting-decision.md) | IT | Why Abbie needs its own environment and what the Google Cloud footprint is. |
+| [warehouse-findings.md](warehouse-findings.md) | the science team, and me | What the Benchling warehouse actually contains, recorded as measurements rather than conclusions. |
+
+Where these overlap, precedence runs: **roadmap.md** for sequence, **architecture.md** for design
+and cost, **warehouse-findings.md** for what the data actually is. The proposal and hosting
+documents restate conclusions for their audiences and should be updated to follow rather than
+lead.
+
+## The short version
+
+Abbie is built on **IPI's own 4D framework** — Molecular Integrity, Target Engagement,
+Selectivity, Experimental Readout — with evidence reported as an application-specific
+Validation Profile. This is deliberately not the field's Five Pillars; the framework departs
+from them, and an earlier version of this plan had it wrong.
+
+The warehouse audit shaped the sequence. IPI's antibodies are well characterized and the
+supporting evidence is there in volume — every assay IPI-CHR-001 treats as universal has tens of
+thousands of rows behind it. What the warehouse does not have is a machine-readable flag saying
+which records are public, and it never will: Benchling's publishing feature was never enabled and
+its review pipeline is not part of IPI's workflow. So the approval manifest is the review gate
+rather than a workaround for one. The criteria themselves already exist — IPI-CHR-001 defines what
+an antibody must pass before Addgene distribution — so what IPI supplies is a confirmation and a
+mapping, not a policy written from scratch.
+
+Abbie therefore leads with the validation corpus: what validation is and how to do it, grounded
+in IPI's framework and cited throughout. It needs no data decisions, it is useful on its own,
+and it is where every abstention about an unknown antibody has to land.
+
+One constraint to know before reading further: the 4D framework is an **unpublished draft
+manuscript**, so what the public surface may say about it is an open question with Deb. See
+[roadmap.md](roadmap.md).
+
+## Repository layout
+
+```
+corpus/         the concept corpus — see corpus/README.md
+packages/
+  corpus_loader/  load, validate, and assemble the corpus for a build target
+  eval/           golden evaluation set
+apps/
+  api/prompts/    Abbie's system prompt, version-controlled
+  cli/            interactive full-context baseline
+scripts/        Benchling warehouse audit tooling, read-only
+schema-audit/   audit output, gitignored
+config/         local connection configuration, gitignored
+```
+
+The rest of the application layout is specified in [architecture.md](architecture.md).
+
+## Running the baseline
+
+Stage 0 runs the whole corpus in context — no database, no embeddings, no retrieval. The only
+requirement is an OpenAI key in the environment, never in a file:
+
+```bash
+export OPENAI_API_KEY=...
+python3 apps/cli/chat.py
+```
+
+`--ask "question"` answers once and exits, `--internal` includes pre-publication concepts,
+and `ABBIE_MODEL` overrides the default model. The loader validates the graph invariants on
+startup and refuses to serve a corpus that fails them.
+
+## Warehouse audit tooling
+
+The scripts in `scripts/` connect to the Benchling warehouse read-only and inspect structure
+and aggregate counts, never record values. They require a `config/benchling.local.json` and a
+password in the macOS Keychain, neither of which is in version control.
+
+```bash
+python scripts/configure_benchling_connection.py
+python scripts/benchling_schema_audit.py
+python scripts/benchling_aggregate_readiness.py
+python scripts/benchling_table_census.py
+python scripts/benchling_validation_status.py
+```
+
+Run the schema audit first — the census and status scripts build their queries from its output,
+so they only ever reference columns known to exist. The aggregate readiness script covers a
+hand-picked 14 tables and is superseded for coverage purposes by the census, which counts all of
+them.
+
+These are an offline audit tool. The application will never hold Benchling credentials or a
+network path to the warehouse — it reads only an approved extract in its own database.

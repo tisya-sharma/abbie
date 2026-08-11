@@ -1,0 +1,16 @@
+[project]
+name = "abbie"
+version = "0.1.0"
+description = "Grounded antibody-validation assistant for the Institute for Protein Innovation"
+requires-python = ">=3.12"
+dependencies = [
+    "openai>=2.38,<3",
+    "pyyaml>=6",
+]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["packages", "packages.corpus_loader", "packages.eval"]

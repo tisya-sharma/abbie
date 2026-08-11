@@ -1,0 +1,35 @@
+# Local credentials and connection configuration
+.env
+.env.*
+!.env.example
+*.local.env
+.pgpass
+*.pem
+*.key
+config/benchling.local.json
+
+# Warehouse audit output
+schema-audit/
+*.schema.tsv
+
+# Internal IPI reference material: unpublished draft manuscript, SOPs, meeting notes
+# with staff contact details. Reference only, never distributed with the repo.
+answer_references/
+
+# Unrelated prototype kept out of Abbie's history, untouched on disk
+/Travis Codex Vibecoded No Plan/
+
+# Eval runs reference commit SHAs; promoting one to a committed baseline is deliberate
+packages/eval/results/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+*.egg-info/
+
+# macOS and editor files
+.DS_Store
+.vscode/
+.idea/
+.claude/settings.local.json

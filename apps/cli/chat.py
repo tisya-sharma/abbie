@@ -1,14 +1,18 @@
 #!/usr/bin/env python3
-"""Interactive Abbie prototype running the full-context baseline.
+"""Interactive Abbie prototype with behavior routing.
 
-The whole visible corpus rides in the system prompt, so there is no retrieval
-step. Conversation state is the covered set from architecture.md: concept ids
-already cited, used to keep follow-up offers fresh.
+Each question is classified into one of the four behaviors before any
+generation, and each behavior composes its reply from only the context it
+needs: answers see the full corpus, redirects see redirect instructions alone,
+and refusals and abstentions are deterministic text with no model call.
+--baseline skips routing and runs the original single-call full-context
+pipeline. Conversation state is the covered set from architecture.md: concept
+ids already cited, used to keep follow-up offers fresh.
 
 Usage:
-    export OPENAI_API_KEY=...
     python3 apps/cli/chat.py
     python3 apps/cli/chat.py --ask "What is antibody validation?"
+    python3 apps/cli/chat.py --baseline --ask "Coke or Pepsi?"
     python3 apps/cli/chat.py --internal    includes pre-publication concepts
 """
 
@@ -22,36 +26,40 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(REPO_ROOT))
 
+from packages.composer import ComposerPrompts, read_prompt_file, respond
 from packages.corpus_loader import (
     build_system_message,
     estimate_tokens,
     extract_citations,
 )
 from packages.envfile import load_env_file
+from packages.router import Route, classify
 
 load_env_file()
 
-SYSTEM_PROMPT_PATH = REPO_ROOT / "apps" / "api" / "prompts" / "system.md"
+PROMPTS_DIR = REPO_ROOT / "apps" / "api" / "prompts"
 DEFAULT_MODEL = os.environ.get("ABBIE_MODEL", "gpt-5-mini")
+DEFAULT_ROUTER_MODEL = os.environ.get("ABBIE_ROUTER_MODEL", "gpt-5-mini")
+
+BASELINE_ROUTE = Route(
+    behavior="answer",
+    subject=None,
+    fallback=False,
+    fallback_reason=None,
+    model="none",
+    prompt_tokens=0,
+    completion_tokens=0,
+    latency_ms=0,
+)
 
 
-def stream_reply(
-    client, model: str, messages: list[dict], reasoning_effort: str
-) -> str:
-    """Stream one completion to stdout and return the full text."""
-    stream = client.chat.completions.create(
-        model=model,
-        messages=messages,
-        stream=True,
-        reasoning_effort=reasoning_effort,
-    )
-    parts: list[str] = []
-    for chunk in stream:
-        delta = chunk.choices[0].delta.content or ""
-        parts.append(delta)
-        print(delta, end="", flush=True)
-    print()
-    return "".join(parts)
+def read_prompt(name: str) -> str:
+    """Read one prompt file, failing fast with a clear message if missing."""
+    path = PROMPTS_DIR / name
+    try:
+        return read_prompt_file(path)
+    except FileNotFoundError:
+        raise SystemExit(f"missing prompt file: {path}")
 
 
 def follow_ups_for(cited: list[str], concepts: dict, covered: set[str]) -> list[str]:
@@ -65,7 +73,7 @@ def follow_ups_for(cited: list[str], concepts: dict, covered: set[str]) -> list[
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Abbie full-context baseline")
+    parser = argparse.ArgumentParser(description="Abbie CLI")
     parser.add_argument("--ask", help="ask one question and exit")
     parser.add_argument(
         "--internal",
@@ -77,7 +85,17 @@ def main() -> None:
         "--reasoning-effort",
         default="low",
         choices=["minimal", "low", "medium", "high"],
-        help="reasoning effort for the model, low keeps replies fast",
+        help="reasoning effort for the answer path, low keeps replies fast",
+    )
+    parser.add_argument(
+        "--baseline",
+        action="store_true",
+        help="skip routing and run the original single-call full-context pipeline",
+    )
+    parser.add_argument(
+        "--router-model",
+        default=DEFAULT_ROUTER_MODEL,
+        help="model for the behavior router",
     )
     args = parser.parse_args()
 
@@ -90,34 +108,73 @@ def main() -> None:
     from openai import OpenAI
 
     client = OpenAI()
-    prompt = SYSTEM_PROMPT_PATH.read_text(encoding="utf-8")
+    system_prompt = read_prompt("system.md")
     try:
-        system_message, concepts = build_system_message(prompt, args.internal)
+        answer_system, concepts = build_system_message(system_prompt, args.internal)
     except ValueError as exc:
         raise SystemExit(f"{exc}\nrefusing to start")
 
+    if args.baseline:
+        router_prompt = ""
+        prompts = ComposerPrompts(
+            answer_system=answer_system,
+            redirect_system="",
+            refuse_text="",
+            abstain_template="",
+        )
+    else:
+        router_prompt = read_prompt("router.md")
+        prompts = ComposerPrompts(
+            answer_system=answer_system,
+            redirect_system=read_prompt("redirect.md"),
+            refuse_text=read_prompt("refuse.md"),
+            abstain_template=read_prompt("abstain.md"),
+        )
+
+    mode = "baseline" if args.baseline else "routed"
     build = "internal" if args.internal else "public"
     print(
-        f"abbie baseline | {build} build | {len(concepts)} concepts | "
-        f"~{estimate_tokens(system_message)} tokens of system context | "
+        f"abbie {mode} | {build} build | {len(concepts)} concepts | "
+        f"~{estimate_tokens(answer_system)} tokens of system context | "
         f"model {args.model}\n"
     )
 
-    messages: list[dict] = [{"role": "system", "content": system_message}]
+    history: list[dict] = []
     covered: set[str] = set()
 
     def turn(question: str) -> None:
-        messages.append({"role": "user", "content": question})
-        reply = stream_reply(client, args.model, messages, args.reasoning_effort)
-        messages.append({"role": "assistant", "content": reply})
+        if args.baseline:
+            route = BASELINE_ROUTE
+        else:
+            route = classify(client, question, args.router_model, router_prompt)
+        result = respond(
+            client,
+            route,
+            question,
+            prompts,
+            args.model,
+            args.reasoning_effort,
+            history=history,
+            on_delta=lambda delta: print(delta, end="", flush=True),
+        )
+        print()
+        history.append({"role": "user", "content": question})
+        history.append({"role": "assistant", "content": result.text})
 
-        cited = extract_citations(reply, concepts)
+        cited = extract_citations(result.text, concepts)
         covered.update(cited)
         offers = follow_ups_for(cited, concepts, covered)
+        status: list[str] = []
+        if not args.baseline:
+            subject = f" (subject: {route.subject})" if route.subject else ""
+            fallback = " [router fallback]" if route.fallback else ""
+            status.append(f"behavior: {result.behavior}{subject}{fallback}")
         if cited:
-            print(f"\n  cited: {', '.join(cited)}")
+            status.append(f"cited: {', '.join(cited)}")
         if offers:
-            print(f"  graph follow-ups: {', '.join(offers[:4])}")
+            status.append(f"graph follow-ups: {', '.join(offers[:4])}")
+        if status:
+            print("\n" + "\n".join(f"  {line}" for line in status))
         print()
 
     if args.ask:

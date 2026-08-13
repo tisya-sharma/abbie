@@ -20,6 +20,12 @@ from fpdf import FPDF
 from fpdf.enums import XPos, YPos
 
 from packages.corpus_loader import Concept
+from packages.guardrail import is_publishable
+
+# Fixed rather than derived from the concepts in the document: a filename
+# built from concept ids would carry them out of the server in the
+# Content-Disposition header, which is the one thing no user surface may do.
+CHECKLIST_FILENAME = "abbie-validation-checklist.pdf"
 
 DISPLAY = (27, 30, 35)
 BODY = (75, 80, 88)
@@ -178,9 +184,8 @@ def render_checklist(
         for label in published:
             _flow(pdf, width, 3.8, label)
 
-    slug = "-".join(c.id for c in selected)[:60]
     return ChecklistDocument(
-        filename=f"abbie-checklist-{slug}.pdf",
+        filename=CHECKLIST_FILENAME,
         body=bytes(pdf.output()),
     )
 
@@ -188,17 +193,16 @@ def render_checklist(
 def _published_sources(selected: list[Concept]) -> list[str]:
     """Deduplicated citations for the concepts in the document.
 
-    Only sources carrying a public url are listed, which is the same rule
-    is_publishable applies in the widget: unpublished IPI material grounds
-    answers and is never cited. The short byline form is used rather than the
-    full Vancouver label, matching what the sources row shows and keeping a
-    reference list that a reader can scan on paper.
+    Filtered through the same is_publishable the widget's sources row uses, so
+    a printed reference list can never carry something the screen withholds.
+    The short byline form is used rather than the full Vancouver label, keeping
+    a reference list that a reader can scan on paper.
     """
     seen: set[str] = set()
     out: list[str] = []
     for concept in selected:
         for source in concept.sources:
-            if not source.get("url"):
+            if not is_publishable(source):
                 continue
             short = str(source.get("short", "")).strip()
             if not short:

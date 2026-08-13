@@ -5,7 +5,12 @@
 
 import unittest
 
-from packages.guardrail import StreamScrubber, leak_scan, scrub_text
+from packages.guardrail import (
+    StreamScrubber,
+    is_publishable,
+    leak_scan,
+    scrub_text,
+)
 
 SLUGS = {
     "antibody-validation",
@@ -148,6 +153,31 @@ class LeakScanTests(unittest.TestCase):
                       "A proposal for validation of antibodies",
                       "Immunobiology: The Immune System in Health and Disease"):
             self.assertEqual(leak_scan(field, SLUGS), [], field)
+
+
+class IsPublishableTests(unittest.TestCase):
+    def test_real_paper_is_publishable(self):
+        self.assertTrue(is_publishable({
+            "url": "https://doi.org/10.7554/eLife.91645",
+            "label": "Ayoubi R, et al. eLife. 2023;12:RP91645.",
+        }))
+
+    def test_source_without_a_url_is_withheld(self):
+        self.assertFalse(is_publishable({"label": "Ayoubi R, et al. eLife. 2023."}))
+
+    def test_internal_label_withheld_even_carrying_a_url(self):
+        # The regression this guards: withholding on the absent url alone
+        # publishes IPI's unpublished material the day someone adds one.
+        for label in ("D. Moshinsky, chatbot kickoff notes, 14 July 2026",
+                      "IPI 4D framework, internal draft",
+                      "Notes from D. MOSHINSKY"):
+            self.assertFalse(
+                is_publishable({"url": "https://example.org", "label": label}),
+                label,
+            )
+
+    def test_missing_label_with_a_url_is_publishable(self):
+        self.assertTrue(is_publishable({"url": "https://example.org"}))
 
 
 if __name__ == "__main__":

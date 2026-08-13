@@ -134,6 +134,24 @@ def scrub_text(text: str) -> str:
     return scrubber.feed(text) + scrubber.flush()
 
 
+def is_publishable(source: dict) -> bool:
+    """Whether a frontmatter source may be shown to a reader.
+
+    Two independent conditions, both required. A public URL is what makes a
+    source citable at all. The internal-label check is the deliberate half:
+    IPI's unpublished material grounds answers but is never itself cited, and
+    leaning on the absent URL alone would publish it the day someone adds one.
+
+    Every surface that renders a source calls this — the widget's sources row
+    and the exported checklist's reference list alike. One rule in one place,
+    because a surface that reimplements half of it drifts silently.
+    """
+    if not source.get("url"):
+        return False
+    label = str(source.get("label", "")).lower()
+    return not any(marker in label for marker in INTERNAL_LABEL_MARKERS)
+
+
 def _normalize(text: str) -> str:
     return _INVISIBLE.sub("", text).lower()
 

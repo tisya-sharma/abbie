@@ -34,8 +34,8 @@ from packages.corpus_loader import build_system_message, extract_citations
 from packages.export import checklist_concepts, render_checklist
 from packages.envfile import load_env_file
 from packages.guardrail import (
-    INTERNAL_LABEL_MARKERS,
     StreamScrubber,
+    is_publishable,
     leak_scan,
     scrub_text,
 )
@@ -179,20 +179,6 @@ def pending_offer(history: list[dict]) -> str | None:
 
 
 SOURCE_DISPLAY_FIELDS = ("short", "journal", "title")
-
-
-def is_publishable(source: dict) -> bool:
-    """Whether a frontmatter source may be shown to a visitor.
-
-    Two independent conditions, both required. A public URL is what makes a
-    source citable at all. The internal-label check is the deliberate half:
-    IPI's unpublished material grounds answers but is never itself cited, and
-    leaning on the absent URL alone would publish it the day someone adds one.
-    """
-    if not source.get("url"):
-        return False
-    label = source.get("label", "").lower()
-    return not any(marker in label for marker in INTERNAL_LABEL_MARKERS)
 
 
 def sources_for(cited: list[str], concepts: dict) -> list[dict]:

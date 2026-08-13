@@ -4,7 +4,7 @@ Working document. This is the operational plan — what gets built, in what orde
 each stage is waiting on. [architecture.md](architecture.md) holds the architecture and the reasoning behind
 it; this file holds the sequence.
 
-Last revised: August 7, 2026.
+Last revised: August 13, 2026.
 
 ## What the reference material changed
 
@@ -77,16 +77,15 @@ citations, and abstains on everything else.
 
 - Repo committed and scaffolded to the layout in architecture.md.
 - `corpus/concepts/` — 25 to 35 concept files, markdown with provenance frontmatter
-  (`id`, `title`, `aliases`, `provenance`, `sources`, `status`, `reviewed_by`, `clearance`,
-  `related`). Coverage follows IPI's framework: characterization versus validation; the four
+  (`id`, `title`, `aliases`, `ask`, `provenance`, `sources`, `status`, `reviewed_by`,
+  `clearance`, `level`, `requires`, `leads_to`). Coverage follows IPI's framework: characterization versus validation; the four
   dimensions individually; the Validation Map, Validation Profile, and Fitness for Purpose;
   the five interpretive principles; the six applications individually; and the distinction
   between validation methods and evidence-strengthening approaches.
 - `packages/eval/golden.yaml` — 15 to 20 question / ideal-answer / required-citation triples,
   each tagged `answer`, `abstain`, `refuse`, or `redirect`. All four behaviors are tested; see
   [architecture.md](architecture.md), Guiding principles 3 to 6.
-- FastAPI plus Postgres with `pgvector` running locally in Docker.
-- Ingest job: markdown to chunks to embeddings, writing `concept` and `concept_chunk`.
+- FastAPI, serving the routed pipeline over SSE to a single static page.
 - Answer composition: citation rendering, behavior routing with a deterministic refusal and
   abstention layer, prerequisite expansion in learning mode, and follow-up offers generated from
   `leads_to` edges.
@@ -95,21 +94,37 @@ citations, and abstains on everything else.
   tokens at full scope, well under 10% of a 128K window, so there is no haystack for retrieval to
   search. Retrieval is built and scored but only merged if it beats the baseline on the golden set.
   See [architecture.md](architecture.md), Two retrieval regimes.
-- **Query rewriting ships with retrieval, not with Stage 0.** A follow-up like "what about in mouse
-  tissue?" is meaningless as a search string, so retrieval requires rewriting it against the
-  conversation first. Under full context there is no query to rewrite. Do not merge retrieval
-  without it — a retrieval system missing this degrades on every follow-up turn, and the cause is
-  hard to see from the outside.
-- Eval harness scoring three configurations — `naive`, `full-context`, `retrieval` — writing
-  timestamped results to `packages/eval/results/`. Baselines cannot be reconstructed later, so they
-  are captured before anything is built on top of them.
-- CI: unit tests, the eval gate, a leak check failing on any RRID, clone-name, or design-ID
-  pattern in the corpus, and a clearance check that no concept marked pre-publication can reach
-  a public build.
-- `apps/mcp/` — an authoring MCP server over the corpus and golden set: `list_concepts(status)`,
-  `get_concept(id)`, `find_uncited()`, `run_eval(id)`. It makes corpus authoring and eval
-  inspectable from an agent client during the work, and it proves the shared-library packaging
-  step that Stage 4's staff server later reuses. No approved data, no deployment.
+- Eval harness scoring `naive`, `full-context`, and `routed`, writing timestamped results to
+  `packages/eval/results/`. Baselines cannot be reconstructed later, so they are captured before
+  anything is built on top of them.
+- CI: unit tests, a leak check failing on any identifier pattern in the corpus, and a clearance
+  check that no concept marked pre-publication can reach a public build. The eval is deliberately
+  not in CI, because it spends OpenAI credit on every push; it runs deliberately and its result
+  json is promoted into the repo as the gate record.
+
+**Four deliverables were superseded, and why.** Recorded rather than deleted, because each was a
+reasoned position and the reasoning is what dates.
+
+- **Postgres with `pgvector` in Docker, and the embeddings ingest job.** Both existed to serve
+  retrieval. The full-context baseline won, so neither has a consumer. Retrieval over a corpus
+  this size cannot improve precision and can lose, because every top-k selection is a chance to
+  miss a chunk the answer needed.
+- **The `retrieval` eval configuration.** Replaced by `routed`, which is the comparison that
+  turned out to matter: behavior routing against a single full-context call.
+- **Query rewriting.** It was a precondition on merging retrieval. With no retrieval it has
+  nothing to rewrite against. The constraint stands unchanged for whenever retrieval arrives.
+- **`apps/mcp/`, the authoring server.** Written to make corpus authoring inspectable from an
+  agent client. At seventeen files the corpus is edited directly and the server would be tooling
+  for a problem that never appeared. MCP's real consumer is Stage 4's staff surface, serving the
+  antibody library through ChatGPT and Slack, and that is where it should be built.
+
+**The trigger for revisiting retrieval is a measurement, not a milestone.** The assembled corpus
+is currently 6,384 tokens across seventeen concepts, about 376 tokens each. Cost and attention
+dilution both start to bind somewhere around 100k tokens of prose, which is roughly 250 concepts
+at that size. So: build retrieval when assembly crosses ~50k tokens, around 130 concepts, which
+leaves room to measure before it is needed. Ingesting IPI publications or protocols wholesale,
+rather than hand-authoring concepts, crosses that line immediately and is the likelier trigger.
+The rule that retrieval must beat the full-context baseline on the golden set does not change.
 
 **Head start.** The kickoff notes already carry Deb's own answers for four questions — what
 antibody validation is, and what each of Molecular Integrity, Target Engagement, and
@@ -131,24 +146,41 @@ abstains on every antibody-specific question.
 stating its own position), plus a `clearance` of `public` or `pre-publication`. Nothing about a
 specific antibody enters the corpus — CI enforces that mechanically rather than by memory.
 
-## Stage 1 — Scientific review and first demo
+## Stage 1 — Sourcing pass and first demo
 
-**Goal.** The corpus carries scientist sign-off, and Deb and Travis have seen Abbie work.
+**Goal.** Every claim in the corpus traces to a source that was read, and Deb and Travis have
+seen Abbie work.
+
+**This stage was re-cut because scientist review is not available on the timescale it assumed.**
+The original gate required every concept at `status: approved` with `reviewed_by` populated,
+which needs an afternoon of a scientist's time that has not been schedulable. Waiting for it
+would hold the demo indefinitely, and marking files approved without a reviewer would put a
+sign-off in the audit trail that nobody gave. So the corpus now has a third status between the
+two: `sourced` means every claim was traced back to a cited public source and checked against
+it, which is the highest bar reachable without a scientist. `approved` keeps its meaning and
+its `reviewed_by`, and CI fails on an approved file that names no reviewer.
 
 **Deliverables**
 
-- Every concept file reviewed and moved from `status: draft` to `status: approved`, with
-  `reviewed_by` populated. Review happens as a pull request, so the diff is the audit trail.
-- Answers filled in for the four questions the kickoff notes left blank.
-- A decision from Deb on 4D publication timing, per the constraint above.
-- Demo.
+- Every concept file at `status: sourced`, each claim checked against the source it cites.
+  Review happens as a pull request, so the diff is the audit trail either way.
+- The kickoff notes' blank questions split by kind: the ones with published answers researched
+  and written, the ones asking IPI to take a position deferred and left visibly absent rather
+  than filled in with a plausible number. See corpus/README.md.
+- A decision from Deb on 4D publication timing, per the constraint above. Still hers, and still
+  the item that determines what the first public release may say.
+- Demo, described as running on a sourced corpus rather than an approved one.
 
-**Gate.** Corpus approved, clearance decision recorded, demo delivered.
+**Gate.** Corpus at `sourced` with CI green, the deferred questions listed rather than answered,
+demo delivered. Scientist sign-off moves to its own gate, taken whenever the time exists.
 
-**Blocked on.** Roughly an afternoon of scientist time. Keep this ask separate from Stage 3's,
-so the small one is not held up by the large one.
+**Blocked on.** Nothing, which is the point of the re-cut. The 4D publication decision is still
+outstanding and still Deb's, but it gates what the *public* surface may say rather than whether
+this stage can finish. Scientist sign-off remains wanted, and the ask stays separate from
+Stage 3's so the small one is not held up by the large one.
 
-**Estimate.** About a week, plus review turnaround.
+**Estimate.** About two weeks. Sourcing is slower than drafting, because a claim that cannot be
+traced has to be rewritten or dropped rather than softened.
 
 ## Stage 2 — Catalog identity
 
@@ -312,9 +344,12 @@ Needing someone else:
    concepts live in a separate index, so the decision flips a build target.
 2. **Confirmation that the Addgene-cleared set is the public set**, and which fields may be shown
    (Stage 2).
-3. **Answers to the four questions the kickoff notes left blank** (Stage 1): what "functional" means
-   for SPR, good versus okay versus bad per application, monoclonal versus polyclonal, and why
-   recombinant antibodies are preferable.
+3. **What "functional" means for SPR, and good versus okay versus bad per application** (Stage 1).
+   Narrowed from four questions to this one: monoclonal versus polyclonal and the case for
+   recombinant antibodies have published answers and are being researched and written rather than
+   asked. This one has no consensus banding to look up, and the framework declines to produce a
+   quantitative score by design, so any threshold Abbie states is IPI's position rather than the
+   field's. Until it is answered, no concept states a band.
 4. **Which name the fourth dimension takes.** The kickoff notes say "Function in Applications"; the
    manuscript says "Experimental Readout." Abbie will use one in every answer.
 5. **Whether capability 5 should produce a ranking at all**, given the framework declines to produce

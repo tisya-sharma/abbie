@@ -35,8 +35,8 @@ sources:                         # required unless provenance is ipi-authored
     short: "Uhlén 2016"          # first author and year, how a paper is named out loud
     journal: "Nat Methods"       # standard abbreviation, omit for books
     title: "A proposal for validation of antibodies"
-status: draft                    # draft | approved
-reviewed_by:                     # the scientist who approved it
+status: draft                    # draft | sourced | approved
+reviewed_by:                     # the scientist who approved it, set only at approved
 clearance: public                # public | pre-publication
 level: core                      # foundational | core | advanced
 requires: [what-is-a-reagent]    # prerequisites, always simpler than this concept
@@ -54,6 +54,19 @@ the work genuinely has none. A book has no journal, and inventing one is worse t
 and their ideas may be used freely, but they carry no `url` and must never appear as a source, on
 request or otherwise. `is_publishable()` in `apps/api/main.py` enforces this on two independent
 conditions, and `leak_scan` blocks any reply whose sources mention them.
+
+**`status`** has three values, and the middle one exists because scientist time is the scarcest
+input to this project.
+
+- `draft` — written, not yet checked. Nothing downstream should assume anything about it
+- `sourced` — every claim has been traced back to a cited public source and checked against it.
+  This is a claim about provenance, not a scientific endorsement, and it is the highest status
+  reachable without a scientist
+- `approved` — a named scientist has read it and signed off. `reviewed_by` is set only here
+
+Keeping these separate is the point. Collapsing `sourced` into `approved` to unblock a demo
+would put a sign-off in the audit trail that nobody gave, and the review diff is the audit
+trail. A demo may ship on `sourced` as long as it is described as such.
 
 **`level`** is what stops the corpus recursing forever.
 
@@ -312,10 +325,22 @@ resurface — this list exists so they can be rejected on sight rather than re-l
   figure stands; the performance consequence does not.
 - **That the five pillars each work without prior knowledge of the target.**
 
-## Two questions still open with Deb
+## Two questions left blank in the kickoff notes
 
-Both were left blank in the kickoff notes and both block a concept:
+Both block a concept, but they are not the same kind of question, and treating them the same
+is what kept both stuck.
 
-1. What "functional" means for SPR, and what good versus acceptable versus poor looks like per
-   application.
-2. Monoclonal versus polyclonal, and why recombinant antibodies are preferable.
+1. **What "functional" means for SPR, and what good versus acceptable versus poor looks like
+   per application.** Deferred, not researchable. The literature has no consensus banding to
+   look up, and the 4D framework declines to produce a quantitative score by design, so any
+   thresholds Abbie states would be IPI's position rather than the field's. This waits for a
+   scientist. Until then no concept states a band, and questions that ask for one are answered
+   qualitatively or abstained on.
+2. **Monoclonal versus polyclonal, and why recombinant antibodies are preferable.** Resolvable
+   from published sources — reproducibility, defined sequence, and lot-to-lot consistency are
+   all argued in the literature already cited elsewhere in this corpus. This is a writing task,
+   not a blocked one, and belongs in `recombinant-vs-conventional`.
+
+The distinction generalizes: a question with a published answer gets researched and written at
+`sourced`. A question that asks IPI to take a position gets deferred and stays visibly absent
+rather than being quietly filled in with a plausible number.

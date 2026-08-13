@@ -37,6 +37,11 @@ from packages.guardrail import INTERNAL_LABEL_MARKERS
 # with per-file review until someone supplies the real registry format.
 CLEARANCES = frozenset({"public", "pre-publication"})
 
+# sourced sits between draft and approved: every claim traced to a cited
+# public source, but no scientist sign-off. reviewed_by belongs to approved
+# alone, so a file claiming approved without one is the mistake to catch.
+STATUSES = frozenset({"draft", "sourced", "approved"})
+
 IDENTIFIER_PATTERNS = (
     ("RRID", re.compile(r"\bRRID:\s*[A-Z]{2}_\d+", re.I)),
     ("antibody registry id", re.compile(r"\bAB_\d{4,}\b")),
@@ -111,9 +116,37 @@ def check_internal_sources_stay_uncitable() -> list[str]:
     return findings
 
 
+def check_review_status() -> list[str]:
+    """Status vocabulary, and the sign-off that approved has to carry.
+
+    approved is the only status that asserts a scientist read the file, so it
+    is the only one allowed to be claimed without reviewed_by naming who. The
+    reverse is also an error: a reviewer recorded against a file still marked
+    draft means one of the two fields was not updated.
+    """
+    findings: list[str] = []
+    for concept in load_corpus(include_pre_publication=True).values():
+        if concept.status not in STATUSES:
+            findings.append(
+                f"{concept.id}: unknown status {concept.status!r}, "
+                f"expected one of {sorted(STATUSES)}"
+            )
+            continue
+        reviewer = (concept.reviewed_by or "").strip()
+        if concept.status == "approved" and not reviewer:
+            findings.append(f"{concept.id}: approved but reviewed_by is empty")
+        if concept.status != "approved" and reviewer:
+            findings.append(
+                f"{concept.id}: reviewed_by names {reviewer!r} but status is "
+                f"{concept.status!r}"
+            )
+    return findings
+
+
 CHECKS = (
     ("graph invariants", check_graph),
     ("clearance", check_clearance),
+    ("review status", check_review_status),
     ("antibody identifiers", check_identifiers),
     ("internal sources uncitable", check_internal_sources_stay_uncitable),
 )

@@ -35,6 +35,10 @@ class Concept:
     provenance: str
     status: str
     body: str
+    # Who signed the concept off, set only at status approved. Carried through
+    # rather than dropped at load so the review gate is checkable in CI: an
+    # approved file with nobody named is a sign-off that never happened.
+    reviewed_by: str | None = None
     aliases: list[str] = field(default_factory=list)
     sources: list[dict] = field(default_factory=list)
     requires: list[str] = field(default_factory=list)
@@ -67,6 +71,7 @@ def load_corpus(include_pre_publication: bool = False) -> dict[str, "Concept"]:
             clearance=meta["clearance"],
             provenance=meta["provenance"],
             status=meta.get("status", "draft"),
+            reviewed_by=meta.get("reviewed_by"),
             body=match.group(2).strip(),
             aliases=meta.get("aliases") or [],
             sources=meta.get("sources") or [],

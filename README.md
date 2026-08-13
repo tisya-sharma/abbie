@@ -6,9 +6,10 @@ Abbie answers what antibody validation and characterization mean, how an antibod
 validated, and — as approved data becomes available — how well characterized a given antibody
 is. Every factual claim carries a citation, and the assistant abstains rather than guesses.
 
-Status: Stage 0 in progress — corpus loader, 14 concepts, system prompt, and the full-context
-CLI baseline are working; the eval harness runs the golden set locally. Corpus expansion and
-CI wiring are next.
+Status: Stage 0 near its gate — 17 concepts, behavior routing, per-behavior composition, the
+output guardrail, the streamed web demo, and a 41-case golden set are all working, and the
+corpus and unit checks run in CI. What remains for the gate is corpus expansion to the 25 to 35
+concepts Stage 0 specifies, and an eval run against the current golden set.
 
 ## The documents, and who each is for
 
@@ -55,12 +56,15 @@ manuscript**, so what the public surface may say about it is an open question wi
 corpus/         the concept corpus — see corpus/README.md
 packages/
   corpus_loader/  load, validate, and assemble the corpus for a build target
-  guardrail/      output-side scrub and leak scan for user-visible text
-  eval/           golden evaluation set
+  router/         one cheap call classifying behavior, subject, and question form
+  composer/       per-behavior composition, with context separated by behavior
+  guardrail/      output-side scrub, leak scan, and the publishability rule
+  export/         the downloadable checklist, composed from reviewed frontmatter
+  eval/           golden evaluation set, scorer, and paired-run comparison
 apps/
-  api/prompts/    Abbie's system prompt, version-controlled
+  api/            FastAPI server, prompts, and the widget it serves
   cli/            interactive full-context baseline
-scripts/        Benchling warehouse audit tooling, read-only
+scripts/        corpus gate checks, and Benchling warehouse audit tooling
 schema-audit/   audit output, gitignored
 config/         local connection configuration, gitignored
 ```
@@ -87,6 +91,38 @@ routing and runs the original single-call full-context pipeline. `--ask "questio
 once and exits, `--internal` includes pre-publication concepts, and `ABBIE_MODEL` overrides
 the default model. The loader validates the graph invariants on startup and refuses to serve
 a corpus that fails them.
+
+## Running the demo
+
+The same pipeline over HTTP, with the widget mounted into a mock site backdrop so the
+corner framing is visible while developing.
+
+```bash
+uvicorn apps.api.main:app --reload --port 8811
+```
+
+Then open http://127.0.0.1:8811. Port 8811 rather than uvicorn's default 8000, which collides
+with an unrelated local service. Both endpoints refuse cross-origin requests outright, so a
+foreign page cannot spend the OpenAI key against a localhost port. There is no persistence and
+no accounts: session state lives in the process and goes away with it.
+
+## Checks
+
+Everything here runs without an API key, and runs in CI on every push.
+
+```bash
+find packages apps -name 'test_*.py' | sed 's|/|.|g; s|\.py$||' | xargs python3 -m unittest
+python3 scripts/check_corpus.py
+```
+
+The corpus gate covers the graph invariants, the clearance vocabulary, the review status and
+its sign-off, the antibody-identifier rule, and the rule that an internal source may never
+carry a url. The eval is not in CI, because it spends OpenAI credit on every push:
+
+```bash
+python3 packages/eval/run.py --dry-run --configs routed --include-holdout   # cost projection
+python3 packages/eval/run.py --configs routed --repeats 3 --include-holdout # the gate run
+```
 
 ## Warehouse audit tooling
 

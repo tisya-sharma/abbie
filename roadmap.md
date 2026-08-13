@@ -273,6 +273,18 @@ orderable and defensible because the user picked the dimension and can see what 
 What must not ship is a single validation score collapsing four dimensions into one number. This is
 Deb's framework and Deb's stated capability, so it is her call.
 
+## Web search — designed, not scheduled
+
+The full design is recorded in [architecture.md](architecture.md), Web search (planned, not yet
+built): a server-side search tool on the existing single call (never an agent loop), per-request
+search caps and a vetted domain allowlist, search results handled as delimited untrusted data under
+the Stage 5 rule, project-scoped API key with a monthly budget cap, per-IP rate limiting and a
+kill-switch feature flag shipped first, and a log-only then staff-only then public rollout, each
+stage gated on clean spend data and a citation eval partition. It slots in no earlier than Stage 4
+(staff-only, alongside the internal pilot) with public enablement no earlier than Stage 7. Nothing
+is built until the design's rollout gate is met; the point of writing it down now is that the cost
+and injection controls are requirements, not retrofits.
+
 ## Mapping to the original phases
 
 | This roadmap | architecture.md original | What changed |

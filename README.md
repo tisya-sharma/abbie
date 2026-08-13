@@ -55,6 +55,7 @@ manuscript**, so what the public surface may say about it is an open question wi
 corpus/         the concept corpus — see corpus/README.md
 packages/
   corpus_loader/  load, validate, and assemble the corpus for a build target
+  guardrail/      output-side scrub and leak scan for user-visible text
   eval/           golden evaluation set
 apps/
   api/prompts/    Abbie's system prompt, version-controlled
@@ -64,7 +65,9 @@ schema-audit/   audit output, gitignored
 config/         local connection configuration, gitignored
 ```
 
-The rest of the application layout is specified in [architecture.md](architecture.md).
+The rest of the application layout is specified in [architecture.md](architecture.md), which also
+records the approved-but-unbuilt web search design (server-side tool, hard cost caps, staged
+rollout) under "Web search (planned, not yet built)".
 
 ## Running the baseline
 

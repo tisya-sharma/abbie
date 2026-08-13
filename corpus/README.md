@@ -27,10 +27,14 @@ knowledge, and the model composes an answer for whatever wording actually came i
 id: molecular-integrity          # kebab-case, matches the filename
 title: Molecular Integrity
 aliases: [integrity, reagent integrity]   # phrasings a user might use
+ask: What is Molecular Integrity?   # the follow-up chip label, phrased as a question a first-time visitor would type
 provenance: ipi-authored         # quoted | summarized | ipi-authored
 sources:                         # required unless provenance is ipi-authored
-  - label: Uhlen et al., Nature Methods 2016
+  - label: "Uhlén M, Bandrowski A, Carr S, et al. A proposal for validation of antibodies. Nat Methods. 2016;13(10):823-827."
     url: https://doi.org/10.1038/nmeth.3995
+    short: "Uhlén 2016"          # first author and year, how a paper is named out loud
+    journal: "Nat Methods"       # standard abbreviation, omit for books
+    title: "A proposal for validation of antibodies"
 status: draft                    # draft | approved
 reviewed_by:                     # the scientist who approved it
 clearance: public                # public | pre-publication
@@ -38,6 +42,18 @@ level: core                      # foundational | core | advanced
 requires: [what-is-a-reagent]    # prerequisites, always simpler than this concept
 leads_to: [assay-sec, assay-mass-spectrometry]   # elaborations, always harder
 ```
+
+**`sources`** carries both the full citation and the pieces the widget displays. `label` is the
+complete Vancouver-style reference and `url` is what makes a source citable at all; `short`,
+`journal` and `title` are what a visitor actually reads, shown as a byline over the paper's title.
+Take those three from the resolved record — Crossref for a DOI, PubMed for a PMID, the Bookshelf
+entry for a book — rather than by splitting the label string, and leave a field out entirely when
+the work genuinely has none. A book has no journal, and inventing one is worse than omitting it.
+
+**Unpublished IPI material is never cited.** Deb's notes and the 4D framework draft ground answers,
+and their ideas may be used freely, but they carry no `url` and must never appear as a source, on
+request or otherwise. `is_publishable()` in `apps/api/main.py` enforces this on two independent
+conditions, and `leak_scan` blocks any reply whose sources mention them.
 
 **`level`** is what stops the corpus recursing forever.
 
@@ -88,9 +104,12 @@ this schema matters as much as that boundary holding.
 
 ## Files and folders
 
-The directory layout is invisible to the model. Abbie sees the assembled context — concept
-blocks carrying id, title, level, follow-ups, and sources — never file paths. Organization for
-the model is the frontmatter graph; folders exist only for the humans editing this directory.
+Folder structure is invisible to the model, but concept ids are not: ids equal filename stems
+by construction, and the assembled context carries them in `id` and `follow_ups` attributes, so
+the model effectively sees every file name. That is why ids are treated as internal identifiers
+— the server scrubs citation markers from user-visible text, and the guardrail leak scan treats
+any id that reaches a user surface as a release-blocking failure. Organization for the model is
+the frontmatter graph; folders exist only for the humans editing this directory.
 
 The concepts directory is flat today and the loader reads it recursively, so subfolders can be
 introduced at any point without touching code. When they arrive, organize by topic
@@ -125,6 +144,12 @@ form thereafter.** Selectivity has no short form because it is already one word.
 
 They are **dimensions**, never "pillars." Pillars is the IWGAV term for a different framework
 that IPI's departs from, and using it collapses the distinction the framework exists to draw.
+
+The five-pillar framework itself is **background knowledge only**: `five-pillars-iwgav` exists
+so Abbie can answer a visitor who explicitly asks how IPI's framework relates to it, and for no
+other reason. No concept may point a `leads_to` edge at it, no answer may raise it unprompted,
+and the eval enforces both (the `no_unprompted_mention` property check). Abbie presents the
+four-dimensional framework; the field's framing appears only when the visitor brings it up.
 
 **`provenance`** records where the content came from.
 
@@ -220,7 +245,8 @@ is and shape it accordingly.
 
 ## The concept map
 
-Twelve concepts written. Status reflects the August 7 sourcing pass.
+Seventeen concepts written. Status reflects the August 7 sourcing pass, with three concepts
+added on August 12 to close the bench-controls gap described below.
 
 ### Written
 
@@ -240,14 +266,17 @@ Twelve concepts written. Status reflects the August 7 sourcing pass.
 | `what-is-an-antibody` | foundational | public | established, reference works |
 | `what-is-a-reagent` | foundational | public | established, plus Ayoubi 2025 framing |
 | `genetic-perturbation-controls` | advanced | public | Uhlen 2016, Ayoubi 2023/2025, Smits |
+| `experimental-readout` | core | public | 4D draft, kickoff notes |
+| `controls-in-validation` | core | public | Pillai-Kastoori 2020, Ayoubi 2023/2025 |
+| `application-western-blot` | core | public | Pillai-Kastoori 2020, Ghosh 2014, Tsuji 2020 |
 
 ### Still to write, sourcing available
 
 `antibody-characterization`, `validation-vs-characterization`, `why-validation-matters`,
-`experimental-readout`, `validation-map`, `validation-profile`, `fitness-for-purpose`,
-`interpretive-principles`, `evidence-strengthening-approaches`, `orthogonal-validation`,
-`controls-in-validation`, the six per-application concepts, and the assay concepts
-(`assay-sec`, `assay-mass-spectrometry`, `assay-spr-bli`, `assay-cell-display`).
+`validation-map`, `validation-profile`, `fitness-for-purpose`, `interpretive-principles`,
+`evidence-strengthening-approaches`, `orthogonal-validation`, the five remaining
+per-application concepts, and the assay concepts (`assay-sec`, `assay-mass-spectrometry`,
+`assay-spr-bli`, `assay-cell-display`).
 
 ## Known sourcing gaps
 
@@ -264,7 +293,7 @@ scientist sign-off — flag them for particular attention in review.
 |---|---|---|
 | **Avidity** — entirely unsourced | `what-is-binding` covers affinity and specificity only | Janeway's Immunobiology treats affinity and avidity separately, but the section was not retrieved |
 | **Isoform and splice-variant attribution** — only paralogs are sourced | Stated as an explicit limit inside `paralogs-and-isoforms` | Unknown whether published guidance exists |
-| **What each application measures** — beyond the conformation and sample-preparation axis | The six per-application concepts cannot be written yet | Per-application methods literature |
+| **What each application measures** — beyond the conformation and sample-preparation axis | Closed for Western blot on August 12; still open for the other five | Per-application methods literature. Pillai-Kastoori 2020, Ghosh 2014 and Tsuji 2020 closed it for blotting, and equivalents are what the remaining five need |
 | **Mechanism of lot-to-lot variation** — beyond "finite resource" and "genetic drift" | `reagent-reproducibility` stops at those two mechanisms | Not yet identified |
 | **Communicating validation to non-experts** | No published guidance found; Abbie's approach is adapted from scientist-to-scientist reporting principles by analogy, which should be stated rather than implied | Science communication literature, or portal documentation |
 

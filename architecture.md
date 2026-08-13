@@ -366,7 +366,40 @@ follow-up chips, which is metadata, not architecture. `requires` is consumed in 
 **Follow-up offers come from `leads_to`, never from the model.** The "want to know more about X or
 Y?" prompts are graph edges rendered as options. They are not generated per answer, which means they
 cannot point at a concept that does not exist, and they stay correct automatically as the corpus
-grows.
+grows. Chips are labeled with the concept's `ask` frontmatter — a question a first-time visitor
+would actually type — falling back to the title, and clicking a chip sends that question verbatim.
+Concept ids never appear in chip labels or payloads.
+
+**Response shapes: depth is calibrated to the question's form.** The router classifies every
+answerable question into a form — definitional, conceptual, comparative, procedural, deepening, or
+acceptance — as a third field on the routing call it already makes, and the composer injects a
+per-turn shape note the answer prompt keys off. Each form carries a word budget (definitional ~110,
+conceptual and comparative ~150, procedural ~80). A procedural first touch never delivers the
+process: it orients in one or two sentences naming the decision factors (an advance organizer, per
+Mayer's pre-training principle), then closes with a single question offering to outline the whole
+process — which also renders as a clickable chip. Saying yes, in any words, classifies as
+acceptance and unlocks full depth (up to 200 words); "just give me everything" is honored the same
+way. The full essay is the summary move of tutoring dialogue — legitimate on request, never as the
+opener. Two universal rules regardless of form: at most one question is asked of the visitor per
+reply, never a compound ask (users answer only the last question of a stacked one), and nothing
+the visitor already said is asked again. Misrouting a form is deliberately cheap: form shapes
+depth only, never grounding or the safety behaviors, so the worst case is a wrong-length reply
+recoverable with one chip tap. Depth checks in the eval are deterministic per-form word bins,
+question counts, and offer-presence keyed off each golden case's authored form tag — never an
+LLM judge, whose documented verbosity bias would prefer exactly the essays this policy removes.
+
+**What the reader sees: prose, real papers, and no internals.** The model still cites concepts as
+bracketed ids — that grounding signal feeds citation extraction, the covered set, follow-up offers,
+and the eval's behavior classifier — but the markers are internal plumbing, scrubbed from the
+stream server-side before any text reaches the page. There are no numeric citation chips and no
+panel of internal document titles; instead, the `done` payload carries up to three published
+sources resolved from the cited concepts' frontmatter `sources` URLs, rendered as plain links.
+Answers grounded only in IPI-authored concepts (the framework files) legitimately show no sources
+row — IPI's own position is not attributed to external papers. Framework precedence follows the
+same reader-facing rule: Abbie presents the four-dimensional framework, and the field's five-pillar
+framework is background knowledge that surfaces only when a visitor explicitly asks
+(`corpus/README.md` records the corpus-side rules; the `no_unprompted_mention` property check
+enforces it).
 
 **Both `leads_to` and `requires` are filtered by clearance before rendering or expansion.** A public
 concept may legitimately point at a pre-publication one — `five-pillars-iwgav` is public and leads to
@@ -408,6 +441,53 @@ concepts from follow-up offers and stops prerequisite expansion re-defining a te
 already been given. That is the minimum needed to stop the two failures that most make a teaching
 tool feel broken — re-offering what was just covered, and re-explaining what was just explained. No
 persistence, no accounts, no cross-session memory.
+
+## Web search (planned, not yet built)
+
+Web search is the path to answers citing live public sources beyond the corpus frontmatter. It is
+deliberately designed before it is built, because the failure mode it invites — an open-ended tool
+loop spending API credit on a public endpoint — is exactly the class of mistake the rest of this
+document exists to prevent. Nothing below ships until the demo's answer pipeline is stable and the
+rollout gate passes; this section is the approved design that any implementation must match.
+
+**Shape: a server-side tool on the existing single call, never an agent loop.** The pipeline stays
+one routed `answer` call; OpenAI's native server-side web search tool is declared on that call and
+the provider runs the bounded search loop internally. No client-side tool-runner, no multi-step
+agent, no model-directed iteration on a public endpoint — per the industry guidance that single-call
+retrieval is usually enough and agents trade cost and latency for compounding error risk.
+
+**Per-request hard caps.** Search calls capped at 2-3 per request at the tool level; a domain
+allowlist of vetted public scientific sources (major journals, NCBI, publisher DOIs — the list is
+reviewed like corpus content); output tokens bounded. Search results enter the conversation as
+delimited untrusted data under the Stage 5 rule above: quotable, citable, never instruction, never
+in the system-prompt region.
+
+**Citations.** Only web results ever surface as user-visible sources; they carry real URLs into the
+existing sources UI. The output guardrail (scrub plus leak scan) runs unchanged on every reply.
+
+**Cost controls, platform side.** The widget gets its own OpenAI project with a project-scoped API
+key, a monthly budget cap with threshold alerts, and project-level rate limits — so a runaway or an
+abuse burst is bounded by configuration that lives outside the codebase.
+
+**Cost controls, application side, shipped before enablement.** Per-IP rate limiting on `/chat`
+(slowapi, on the order of 10/minute), a maximum message length, a cap on history turns sent to the
+model (search results re-bill as input tokens on every subsequent turn), a per-session search
+budget, and a server-side feature flag that doubles as a kill switch. Every limit trip degrades to
+corpus-only answering — the widget never errors because a budget ran out. This is the OWASP
+"unbounded consumption" playbook applied to a public widget.
+
+**Observability.** Per-response logging of search counts and token usage; an hourly watchdog on the
+provider's usage/cost reporting with alerts at 50, 80, and 95 percent of the monthly budget.
+
+**Staged rollout.** (1) Log-only: record when the model would have searched, spend nothing. (2)
+Staff-only: enabled for internal use with 1-2 searches per request and a minimal allowlist. (3)
+Public: only after at least a week of clean cost-per-conversation data. Each stage is a separate
+decision with the spend data in hand.
+
+**Eval gate before enablement.** A citation partition — every emitted URL must resolve, sit on the
+allowlist, and never match an internal identifier; budget-exhaustion cases proving graceful
+degradation; and a re-audit of abstain cases, since the standing policy requires one whenever what
+is answerable changes, and web search changes it.
 
 ## AI-engineering rationale
 
@@ -465,6 +545,27 @@ Quote-first generation anchors quoted spans to real source text, which makes fab
 impossible. A syntactic check flags uncited sentences rather than removing them. A small local NLI
 verifier scores sentence-level support, driving a confidence indicator and whole-response
 abstention when coverage is poor. The rule is flag or abstain, never rewrite.
+
+**The no-corpus-exposure rule is enforced by an output stage, not by the prompt.** Prompt
+instructions are asked-for behavior; `packages/guardrail` is the control of record, per the OWASP
+guidance that system-prompt rules are never a security boundary. Three layers: the system prompt
+frames the corpus as confidential background knowledge; `assemble_context` gives the model ids but
+no bibliographic labels; and the API path scrubs bracket-marker groups from every streamed delta,
+then runs a deterministic leak scan over the assembled reply, follow-up labels, and source labels
+before the done frame. The scan matches, on normalized text with zero-width characters stripped:
+surviving marker groups, internal source-label phrases, and hyphenated slugs used as identifiers —
+where a two-word compound modifier followed by a noun ("antibody-validation expertise") counts as
+ordinary prose, and a slug terminated by punctuation, standing alone, or carrying two or more
+hyphens always flags. Single-word concept names like "selectivity" are legitimate vocabulary and
+are never scanned for. A scan hit fails closed: the server withdraws the reply with a
+body-replacing error frame and logs the finding, leaving the session as if the turn never happened.
+The inline scrubber is the primary control; the done-scan is a backstop and tolerates a brief flash
+for leak shapes the scrubber does not recognize. The same scrub-then-scan functions run inside the
+eval as the `no_slug_leak` property check on all four behaviors, and the red-team partition in
+`packages/eval/golden.yaml` (extraction, injection, and benign meta questions) regression-tests the
+guarantee on every run. Extraction-shaped questions are additionally routed to the corpus-free
+redirect path by the router. Scope: user-facing surfaces only — `apps/cli/chat.py` is a staff tool
+and intentionally prints raw markers.
 
 **Evaluation and the eval gate.** A golden question set curated with IPI scientists, scored for
 groundedness, citation correctness, retrieval recall@k, and abstention correctness. Wired into CI

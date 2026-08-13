@@ -5,12 +5,19 @@ aliases:
   - what is a reagent
   - why is an antibody called a reagent
   - fit for purpose reagent
+ask: What makes an antibody a reagent?
 provenance: established
 sources:
   - label: "Ayoubi R, Ryan J, Gonzalez Bolivar S, et al. A consensus platform for antibody characterization. Nat Protoc. 2025;20(6):1509-1545. Source of the field's fit-for-purpose reagent framing."
     url: https://doi.org/10.1038/s41596-024-01095-8
+    short: "Ayoubi 2025"
+    journal: "Nat Protoc"
+    title: "A consensus platform for antibody characterization"
   - label: "Uhlén M, Bandrowski A, Carr S, et al. A proposal for validation of antibodies. Nat Methods. 2016;13(10):823-827. Source for protocol parameters altering reagent performance."
     url: https://doi.org/10.1038/nmeth.3995
+    short: "Uhlén 2016"
+    journal: "Nat Methods"
+    title: "A proposal for validation of antibodies"
 status: draft
 reviewed_by:
 clearance: public

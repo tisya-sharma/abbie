@@ -6,14 +6,23 @@ aliases:
   - what is an antigen
   - what is an epitope
   - what does an antibody actually bind
+ask: What is a target?
 provenance: summarized
 sources:
   - label: "Kumar N, Bajiya N, Patiyal S, Raghava GPS. Multi-perspectives and challenges in identifying B-cell epitopes. Protein Sci. 2023;32(11):e4785."
     url: https://doi.org/10.1002/pro.4785
+    short: "Kumar 2023"
+    journal: "Protein Sci"
+    title: "Multi-perspectives and challenges in identifying B-cell epitopes"
   - label: "Janeway CA Jr, Travers P, Walport M, Shlomchik MJ. Immunobiology, 5th ed., section 3-8. NCBI Bookshelf NBK27160."
     url: https://www.ncbi.nlm.nih.gov/books/NBK27160/
+    short: "Janeway 2001"
+    title: "Immunobiology: The Immune System in Health and Disease, 5th edition"
   - label: "Van Regenmortel MHV. The concept and operational definition of protein epitopes. Philos Trans R Soc Lond B Biol Sci. 1989;323(1217):451-466."
     url: https://doi.org/10.1098/rstb.1989.0023
+    short: "Van Regenmortel 1989"
+    journal: "Philos Trans R Soc Lond B Biol Sci"
+    title: "The concept and operational definition of protein epitopes"
 status: draft
 reviewed_by:
 clearance: public

@@ -5,6 +5,7 @@ aliases:
   - integrity
   - reagent integrity
   - is the antibody what it claims to be
+ask: What is Molecular Integrity?
 provenance: ipi-authored
 sources:
   - label: D. Moshinsky, chatbot kickoff notes, 14 July 2026

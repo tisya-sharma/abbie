@@ -6,10 +6,13 @@ aliases:
   - what are antibodies
   - immunoglobulin
   - what does an antibody do
+ask: What is an antibody?
 provenance: established
 sources:
   - label: "Janeway CA Jr, Travers P, Walport M, Shlomchik MJ. Immunobiology. NCBI Bookshelf NBK27160. Reference work, further reading rather than a claim-level citation."
     url: https://www.ncbi.nlm.nih.gov/books/NBK27160/
+    short: "Janeway 2001"
+    title: "Immunobiology: The Immune System in Health and Disease, 5th edition"
 status: draft
 reviewed_by:
 clearance: public

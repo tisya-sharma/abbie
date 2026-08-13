@@ -5,6 +5,7 @@ aliases:
   - engagement
   - does the antibody bind its target
   - binding
+ask: What is Target Engagement?
 provenance: ipi-authored
 sources:
   - label: D. Moshinsky, chatbot kickoff notes, 14 July 2026

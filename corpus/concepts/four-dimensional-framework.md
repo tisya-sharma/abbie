@@ -5,6 +5,7 @@ aliases:
   - four dimensions
   - IPI's validation framework
   - levels of validation
+ask: How does IPI organize validation evidence?
 provenance: ipi-authored
 sources:
   - label: D. Moshinsky, chatbot kickoff notes, 14 July 2026
@@ -22,7 +23,6 @@ leads_to:
   - validation-map
   - validation-profile
   - fitness-for-purpose
-  - five-pillars-iwgav
 ---
 
 IPI organizes validation evidence along four foundational dimensions: Molecular Integrity,
@@ -42,14 +42,13 @@ speaks to Readout and only weakly to Selectivity. Evidence therefore has to be a
 across dimensions and interpreted together, in light of the application the antibody is
 actually intended for.
 
-This differs from organizing evidence by the experimental approach used to generate it, which is
-how the field's widely adopted five-pillar proposal is structured. The question is not which
-methods were run, but which foundational properties those methods support — and consequently,
-which remain open.
+The dimensions organize evidence by the property it supports, not by the experimental approach
+used to generate it. The question is never which methods were run, but which foundational
+properties those methods establish — and consequently, which remain open.
 
-The practical consequence is that approaches the five-pillar framing treats as validation
-strategies in their own right — genetic perturbation, independent antibodies, expression
-correlation — are treated here as **evidence-strengthening approaches** instead. They raise
-confidence in the interpretation of evidence generated in a given assay and system context; they
-are not separate dimensions. A knockout control is not a fifth kind of validation, it is what
-makes an immunofluorescence result attributable.
+The practical consequence is that some widely used approaches — genetic perturbation,
+independent antibodies, expression correlation — are treated here as **evidence-strengthening
+approaches** rather than dimensions of their own. They raise confidence in the interpretation of
+evidence generated in a given assay and system context; they are not separate dimensions. A
+knockout control is not a separate kind of validation, it is what makes an immunofluorescence
+result attributable.

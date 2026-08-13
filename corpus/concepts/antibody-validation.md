@@ -5,6 +5,7 @@ aliases:
   - what is antibody validation
   - define antibody validation
   - validating an antibody
+ask: What does it mean to validate an antibody?
 provenance: ipi-authored
 sources:
   - label: D. Moshinsky, chatbot kickoff notes, 14 July 2026
@@ -16,7 +17,6 @@ requires:
   - what-is-an-antibody
   - what-is-a-target
 leads_to:
-  - five-pillars-iwgav
   - application-specificity
   - what-is-binding
   - paralogs-and-isoforms

@@ -6,10 +6,14 @@ aliases:
   - related proteins
   - how do I know the signal is my protein
   - cross-reactivity with family members
+ask: How do I know a signal comes from my protein?
 provenance: summarized
 sources:
   - label: "Uhlén M, Bandrowski A, Carr S, et al. A proposal for validation of antibodies. Nat Methods. 2016;13(10):823-827."
     url: https://doi.org/10.1038/nmeth.3995
+    short: "Uhlén 2016"
+    journal: "Nat Methods"
+    title: "A proposal for validation of antibodies"
 status: draft
 reviewed_by:
 clearance: public
@@ -19,7 +23,6 @@ requires:
 leads_to:
   - selectivity
   - genetic-perturbation-controls
-  - five-pillars-iwgav
 ---
 
 A band on a blot or a glow in a cell is a signal. It does not arrive labeled with which protein
@@ -36,7 +39,7 @@ protein and repeating the experiment provides a direct link between the gene, th
 what the antibody detects, and the approach is described as particularly useful for examining
 specificity for proteins that come from related genes — that is, members of multigene families.
 
-**A known limit worth stating plainly.** Attribution among *isoforms* or splice variants of the
+A known limit worth stating plainly. Attribution among *isoforms* or splice variants of the
 same gene is a harder problem than attribution among paralogs, and it is not solved by the same
 evidence. Deleting a gene removes all of its isoforms at once, so a knockout cannot distinguish
 which isoform an antibody was detecting. This corpus does not currently carry a sourced account

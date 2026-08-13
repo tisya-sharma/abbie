@@ -5,6 +5,7 @@ aliases:
   - cross-reactivity
   - specificity across paralogs
   - is the signal really my target
+ask: What does Selectivity add beyond binding?
 provenance: ipi-authored
 sources:
   - label: D. Moshinsky, chatbot kickoff notes, 14 July 2026

@@ -6,10 +6,14 @@ aliases:
   - what is affinity
   - is a strong binder a specific binder
   - how tightly does it bind
+ask: What does it mean for an antibody to bind?
 provenance: summarized
 sources:
   - label: "Uhlén M, Bandrowski A, Carr S, et al. A proposal for validation of antibodies. Nat Methods. 2016;13(10):823-827."
     url: https://doi.org/10.1038/nmeth.3995
+    short: "Uhlén 2016"
+    journal: "Nat Methods"
+    title: "A proposal for validation of antibodies"
 status: draft
 reviewed_by:
 clearance: public

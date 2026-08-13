@@ -11,8 +11,14 @@ provenance: summarized
 sources:
   - label: "Uhlén M, Bandrowski A, Carr S, et al. A proposal for validation of antibodies. Nat Methods. 2016;13(10):823-827."
     url: https://doi.org/10.1038/nmeth.3995
+    short: "Uhlén 2016"
+    journal: "Nat Methods"
+    title: "A proposal for validation of antibodies"
   - label: "Ayoubi R, Ryan J, Gonzalez Bolivar S, et al. A consensus platform for antibody characterization. Nat Protoc. 2025;20(6):1509-1545."
     url: https://doi.org/10.1038/s41596-024-01095-8
+    short: "Ayoubi 2025"
+    journal: "Nat Protoc"
+    title: "A consensus platform for antibody characterization"
   - label: "IPI 4D framework, internal draft — grounds the statements of IPI's own position. No manuscript text is reproduced."
 status: draft
 reviewed_by:
@@ -40,7 +46,7 @@ followed by mass spectrometry**. The stated minimum is that at least one should 
 claiming an antibody is validated for a specific application — a floor rather than a ceiling, since
 the proposal adds that multiple strategies strengthen the conclusion.
 
-**The two frameworks answer different questions.** The five pillars organize evidence by the
+The two frameworks answer different questions. The five pillars organize evidence by the
 *experimental approach* used to generate it. IPI's four dimensions organize evidence by the
 *foundational property* that evidence supports — is the reagent what it claims to be, does it bind
 the target, is the binding attributable, does it produce an interpretable result in this

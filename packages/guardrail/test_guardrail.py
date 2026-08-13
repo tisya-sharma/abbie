@@ -142,8 +142,15 @@ class LeakScanTests(unittest.TestCase):
         # the API scans every one of them. A field the scan skips is a field
         # that reaches the visitor unchecked.
         for field in ("D. Moshinsky", "chatbot kickoff notes",
-                      "IPI 4D framework, internal draft"):
+                      "IPI 4D framework, internal draft",
+                      "IPI-CHR-001, internal antibody QC standard"):
             self.assertTrue(leak_scan(field, SLUGS), field)
+
+    def test_internal_sop_identifier_detected_in_prose(self):
+        # The assay concepts are grounded in IPI's release-gate SOP, so its
+        # identifier is now reachable from the model's context and has to be
+        # caught in a reply, not only in a source field.
+        self.assertTrue(leak_scan("Batches are released under IPI-CHR-001.", SLUGS))
 
     def test_slug_hidden_in_a_source_title_detected(self):
         self.assertTrue(leak_scan("adapted from five-pillars-iwgav", SLUGS))

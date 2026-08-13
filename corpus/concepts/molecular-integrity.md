@@ -22,7 +22,6 @@ leads_to:
   - reagent-reproducibility
   - assay-mass-spectrometry
   - assay-sec
-  - recombinant-vs-conventional
 ---
 
 Molecular integrity asks the plainest question in validation: is the material in the tube

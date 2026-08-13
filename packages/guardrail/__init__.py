@@ -40,6 +40,7 @@ INTERNAL_LABEL_MARKERS = (
     "chatbot kickoff notes",
     "d. moshinsky",
     "ipi 4d framework, internal draft",
+    "ipi-chr-001",
 )
 
 # Longest bracket group still treated as a citation marker. The worst

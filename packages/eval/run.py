@@ -61,6 +61,7 @@ DRY_RUN_ROUTER_OUTPUT_GUESS = 40
 ROUTER_RESULT_KEYS = (
     "router_behavior",
     "router_subject",
+    "router_form",
     "router_fallback",
     "router_model",
     "router_prompt_tokens",
@@ -81,16 +82,21 @@ def _text_hash(text: str) -> str:
 
 
 def cache_key(fingerprint: str, model: str, question: str, reasoning_effort: str,
-              max_output_tokens: int, trial: int) -> str:
+              max_output_tokens: int, trial: int,
+              history: list[dict] | None = None) -> str:
     """Key one sampled call. Trial-aware so repeats stay independent samples.
 
     The cache exists for resumability and free reruns of unchanged
     configurations, never to deduplicate the samples a variance estimate
-    depends on — each trial index is its own cache entry.
+    depends on — each trial index is its own cache entry. History joins the
+    key only when a case carries one, so history-less entries keep their
+    existing keys and N+1 conversation-prefix cases can never collide with
+    the single-turn case sharing their question text.
     """
-    payload = json.dumps(
-        [fingerprint, model, question, reasoning_effort, max_output_tokens, trial]
-    )
+    fields = [fingerprint, model, question, reasoning_effort, max_output_tokens, trial]
+    if history:
+        fields.append(history)
+    payload = json.dumps(fields)
     return hashlib.sha256(payload.encode("utf-8")).hexdigest()
 
 
@@ -122,9 +128,11 @@ class SingleCallStrategy:
         self.fingerprint = _text_hash(system)
         self._system = system
 
-    def run_case(self, client, model, question, max_output_tokens, reasoning_effort):
+    def run_case(self, client, model, question, max_output_tokens, reasoning_effort,
+                 history=None):
         """Measure one single-call turn."""
-        return ask(client, model, self._system, question, max_output_tokens, reasoning_effort)
+        return ask(client, model, self._system, question, max_output_tokens,
+                   reasoning_effort, history)
 
     def dry_run_tokens(self, cases: list[dict]) -> tuple[int, int]:
         """Projected prompt and completion tokens for one model pass."""
@@ -149,12 +157,30 @@ class RoutedStrategy:
         self._router_tokens = estimate_tokens(router_prompt)
         self._router_model = router_model
 
-    def run_case(self, client, model, question, max_output_tokens, reasoning_effort):
-        """Measure one routed turn: classify, then compose per behavior."""
-        route = classify(client, question, self._router_model, self._router_prompt)
+    def run_case(self, client, model, question, max_output_tokens, reasoning_effort,
+                 history=None):
+        """Measure one routed turn: classify, then compose per behavior.
+
+        The pending offer passed to the router is the closing line of the
+        history's last assistant turn, mirroring the API server, so N+1
+        conversation-prefix cases exercise acceptance classification.
+        """
+        offer = None
+        if history:
+            assistant_turns = [m for m in history if m.get("role") == "assistant"]
+            if assistant_turns:
+                lines = [
+                    line.strip()
+                    for line in assistant_turns[-1].get("content", "").splitlines()
+                    if line.strip()
+                ]
+                offer = lines[-1] if lines else None
+        route = classify(
+            client, question, self._router_model, self._router_prompt, context=offer
+        )
         result = respond(
             client, route, question, self._prompts, model,
-            reasoning_effort, max_output_tokens=max_output_tokens,
+            reasoning_effort, max_output_tokens=max_output_tokens, history=history,
         )
         return {
             "reply": result.text,
@@ -165,6 +191,7 @@ class RoutedStrategy:
             "latency_ms": result.latency_ms + route.latency_ms,
             "router_behavior": route.behavior,
             "router_subject": route.subject,
+            "router_form": route.form,
             "router_fallback": route.fallback,
             "router_model": route.model,
             "router_prompt_tokens": route.prompt_tokens,
@@ -268,7 +295,7 @@ def case_cost(model: str, measured: dict) -> float | None:
 
 
 def ask(client, model: str, system: str, question: str, max_output_tokens: int,
-        reasoning_effort: str) -> dict:
+        reasoning_effort: str, history: list[dict] | None = None) -> dict:
     """One non-streaming completion, returning the reply plus measurements.
 
     Reasoning effort is pinned rather than left to the model default because
@@ -279,10 +306,11 @@ def ask(client, model: str, system: str, question: str, max_output_tokens: int,
     start = time.perf_counter()
     response = client.chat.completions.create(
         model=model,
-        messages=[
-            {"role": "system", "content": system},
-            {"role": "user", "content": question},
-        ],
+        messages=(
+            [{"role": "system", "content": system}]
+            + (history or [])
+            + [{"role": "user", "content": question}]
+        ),
         max_completion_tokens=max_output_tokens,
         reasoning_effort=reasoning_effort,
     )
@@ -350,6 +378,12 @@ def summarize(cases: list[dict]) -> dict:
             ),
             "fallbacks": sum(1 for c in routed if c.get("router_fallback")),
         }
+        formed = [c for c in routed if c.get("form_expected")]
+        if formed:
+            summary["router"]["form_accuracy"] = round(
+                sum(c.get("router_form") == c["form_expected"] for c in formed)
+                / len(formed), 3,
+            )
     return summary
 
 
@@ -403,6 +437,7 @@ def aggregate_trials(case: dict, trials: list[dict]) -> dict:
     record = {
         "id": case["id"],
         "behavior_expected": case["behavior"],
+        "form_expected": case.get("form"),
         "behavior_observed": trials[0]["behavior_observed"],
         "citations": trials[0]["citations"],
         "checks": trials[0]["checks"],
@@ -452,15 +487,16 @@ def run_matrix(
             for case in cases:
                 trials = []
                 for trial in range(repeats):
+                    history = case.get("history")
                     key = cache_key(
                         strategy.fingerprint, model, case["question"],
-                        reasoning_effort, max_output_tokens, trial,
+                        reasoning_effort, max_output_tokens, trial, history,
                     )
                     measured = cache_get(key) if use_cache else None
                     if measured is None:
                         measured = strategy.run_case(
                             client, model, case["question"],
-                            max_output_tokens, reasoning_effort,
+                            max_output_tokens, reasoning_effort, history,
                         )
                         if use_cache:
                             cache_put(key, measured)

@@ -17,6 +17,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Callable
 
+from packages.guardrail import scrub_text
 from packages.router import Route
 
 # wording pairs with the {subject} slot in apps/api/prompts/abstain.md
@@ -24,6 +25,10 @@ DEFAULT_ABSTAIN_SUBJECT = "that antibody or product"
 
 MAX_SUBJECT_WORDS = 12
 HEADER_COMMENT = re.compile(r"\A\s*<!--.*?-->\s*", re.S)
+
+# One exchange is enough to resolve a pronoun in a follow-up redirect and short
+# enough that the redirect path stays close to context-free.
+REDIRECT_CONTEXT_TURNS = 2
 
 
 def strip_header_comment(text: str) -> str:
@@ -78,6 +83,35 @@ def _clean_subject(subject: str | None) -> str:
     if not cleaned or len(cleaned.split()) > MAX_SUBJECT_WORDS:
         return DEFAULT_ABSTAIN_SUBJECT
     return cleaned
+
+
+def _redirect_context(history: list[dict] | None) -> list[dict]:
+    """The last exchange only, with assistant text scrubbed of citation markers.
+
+    An off-topic follow-up like "do you have a resource for that?" is a
+    non-sequitur without the turn it refers to, so the redirect path gets one
+    exchange rather than nothing. It stays one exchange because this path is
+    the corpus-free one and every message added to it widens what an injection
+    carried in history could reach. Scrubbing matters for the same reason the
+    answer path scrubs on the way out: history holds raw replies, and a marker
+    echoed here would be a leak from a path that is supposed to have no corpus
+    to leak.
+    """
+    if not history:
+        return []
+    recent = history[-REDIRECT_CONTEXT_TURNS:]
+    return [
+        {
+            "role": message["role"],
+            "content": (
+                scrub_text(message["content"])
+                if message["role"] == "assistant"
+                else message["content"]
+            ),
+        }
+        for message in recent
+        if message.get("content")
+    ]
 
 
 def _template_result(
@@ -160,6 +194,44 @@ def _complete(
     )
 
 
+SHAPE_HINTS = {
+    "definitional": (
+        "Shape this reply as a definition: about 110 words. Say what the thing"
+        " is and why it matters, one concrete image, then the closing question."
+    ),
+    "conceptual": (
+        "Shape this reply as an explanation: about 150 words. One idea developed"
+        " properly, its boundary, then the closing question."
+    ),
+    "comparative": (
+        "Shape this reply as a comparison: about 150 words. Contrast on the two"
+        " or three criteria that actually separate the things, then the closing"
+        " question."
+    ),
+    "procedural": (
+        "Shape this reply as a procedural answer: about 150 words, and the"
+        " process is in this reply. Give the three or four moves that matter,"
+        " in the order they happen, carried by ordinary connectives rather"
+        " than a numbered list. Where the question left something open, name"
+        " the assumption you took instead of asking first, and say in one"
+        " clause where your knowledge stops. Close with a single question"
+        " about the one decision that determines their next move."
+    ),
+    "deepening": (
+        "The user asked for depth. The full picture is welcome, up to the"
+        " 200-word ceiling; still end with a door."
+    ),
+    "acceptance": (
+        "The user is responding to the question that closed your last reply."
+        " If that question offered a topic, deliver it in full. If it asked"
+        " about their situation, treat their answer as the fact it gives you"
+        " and give the guidance it unlocks, rather than restating the general"
+        " case. Either way, up to the 200-word ceiling, never repeat what you"
+        " already covered, and still end with a door."
+    ),
+}
+
+
 def respond(
     client,
     route: Route,
@@ -174,10 +246,12 @@ def respond(
     """Dispatch one turn to the routed behavior with per-behavior context.
 
     refuse and abstain return deterministic text with no model call. redirect
-    runs with redirect instructions only and reasoning effort pinned to
-    minimal, the one place the caller's effort is ignored, since a
-    two-sentence deflection gains nothing from more. answer runs the
-    full-context path with conversation history at the caller's effort. When
+    runs with redirect instructions and the last exchange only, never the
+    corpus, so it cannot cite or lecture from it. answer runs the full-context
+    path with conversation history. Both model paths use the caller's reasoning
+    effort: a redirect is two sentences, but landing warmth and wit in two
+    sentences is not the cheap problem it looks like, and pinning that path to
+    minimal is what made every deflection read from the same template. When
     on_delta is provided, model paths stream deltas through it and template
     paths invoke it once with the whole text.
     """
@@ -191,21 +265,28 @@ def respond(
         return _template_result("abstain", text, on_delta)
 
     if route.behavior == "redirect":
-        messages = [
-            {"role": "system", "content": prompts.redirect_system},
-            {"role": "user", "content": question},
-        ]
+        messages = (
+            [{"role": "system", "content": prompts.redirect_system}]
+            + _redirect_context(history)
+            + [{"role": "user", "content": question}]
+        )
         text, finish, prompt_toks, completion_toks, reasoning_toks, ms = _complete(
-            client, model, messages, "minimal", max_output_tokens, on_delta
+            client, model, messages, reasoning_effort, max_output_tokens, on_delta
         )
         return TurnResult(
             "redirect", text, True, model, finish,
             prompt_toks, completion_toks, reasoning_toks, ms,
         )
 
+    # The shape hint is per-turn steering from the router's form prediction.
+    # It sits after history so it never enters what later turns replay, and a
+    # missing or unrecognized form simply omits it, reproducing the default
+    # shape from the system prompt.
+    shape_hint = SHAPE_HINTS.get(route.form) if route.form else None
     messages = (
         [{"role": "system", "content": prompts.answer_system}]
         + (history or [])
+        + ([{"role": "system", "content": shape_hint}] if shape_hint else [])
         + [{"role": "user", "content": question}]
     )
     text, finish, prompt_toks, completion_toks, reasoning_toks, ms = _complete(

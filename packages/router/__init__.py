@@ -16,6 +16,15 @@ from dataclasses import dataclass
 
 BEHAVIORS = ("answer", "abstain", "refuse", "redirect")
 
+FORMS = (
+    "definitional",
+    "conceptual",
+    "comparative",
+    "procedural",
+    "deepening",
+    "acceptance",
+)
+
 ROUTE_SCHEMA = {
     "type": "json_schema",
     "json_schema": {
@@ -32,8 +41,16 @@ ROUTE_SCHEMA = {
                         "verbatim from the question. Null unless behavior is abstain."
                     ),
                 },
+                "form": {
+                    "type": ["string", "null"],
+                    "enum": list(FORMS) + [None],
+                    "description": (
+                        "The question's form, driving answer shape. Null unless "
+                        "behavior is answer."
+                    ),
+                },
             },
-            "required": ["behavior", "subject"],
+            "required": ["behavior", "subject", "form"],
             "additionalProperties": False,
         },
     },
@@ -42,7 +59,12 @@ ROUTE_SCHEMA = {
 
 @dataclass(frozen=True)
 class Route:
-    """Outcome of one routing call, including fallback and cost metadata."""
+    """Outcome of one routing call, including fallback and cost metadata.
+
+    form shapes the answer's depth only — it never affects grounding or the
+    refuse/abstain/redirect safety paths, so a misrouted form costs at most a
+    wrong-length reply. None means the default shape, today's behavior.
+    """
 
     behavior: str
     subject: str | None
@@ -52,6 +74,7 @@ class Route:
     prompt_tokens: int
     completion_tokens: int
     latency_ms: int
+    form: str | None = None
 
 
 def _fallback(
@@ -74,24 +97,33 @@ def _fallback(
     )
 
 
-def classify(client, question: str, model: str, prompt_text: str) -> Route:
+def classify(
+    client, question: str, model: str, prompt_text: str, context: str | None = None
+) -> Route:
     """Classify one question into a behavior with one minimal-effort call.
 
     Uses strict structured output so the reply is schema-conformant JSON. On
     any API error, truncated output, unparseable content, or out-of-enum
     behavior, returns a fallback Route with behavior "answer" rather than
     raising, so a router problem degrades to the baseline instead of failing
-    the turn.
+    the turn. context carries Abbie's most recent offer to the user (the
+    closing line of the previous reply) so a bare "yes please" is classifiable
+    as acceptance of that offer.
     """
     from openai import OpenAIError
 
+    content = (
+        f"Abbie's previous offer to the user: {context}\n\nQuestion: {question}"
+        if context
+        else question
+    )
     start = time.perf_counter()
     try:
         response = client.chat.completions.create(
             model=model,
             messages=[
                 {"role": "system", "content": prompt_text},
-                {"role": "user", "content": question},
+                {"role": "user", "content": content},
             ],
             reasoning_effort="minimal",
             max_completion_tokens=250,
@@ -120,6 +152,9 @@ def classify(client, question: str, model: str, prompt_text: str) -> Route:
     subject = parsed.get("subject") if behavior == "abstain" else None
     if subject is not None and not isinstance(subject, str):
         subject = None
+    form = parsed.get("form") if behavior == "answer" else None
+    if form not in FORMS:
+        form = None
     return Route(
         behavior=behavior,
         subject=subject,
@@ -129,4 +164,5 @@ def classify(client, question: str, model: str, prompt_text: str) -> Route:
         prompt_tokens=prompt_tokens,
         completion_tokens=completion_tokens,
         latency_ms=latency_ms,
+        form=form,
     )

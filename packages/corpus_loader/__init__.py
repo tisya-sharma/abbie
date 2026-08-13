@@ -18,7 +18,12 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 CONCEPTS_DIR = REPO_ROOT / "corpus" / "concepts"
 
 FRONTMATTER = re.compile(r"^---\n(.*?)\n---\n(.*)$", re.S)
-CITATION = re.compile(r"\[([a-z0-9-]+)\]")
+
+# Citation markers arrive both as single ids and as separator-joined groups
+# like [a; b, c]. Matching whole groups and splitting inside keeps every id
+# the model actually cited; unknown tokens are filtered against the corpus.
+CITATION = re.compile(r"\[([a-z0-9\-;,.\s]+)\]")
+CITATION_SEPARATOR = re.compile(r"[;,\s]+")
 
 
 @dataclass
@@ -34,6 +39,13 @@ class Concept:
     sources: list[dict] = field(default_factory=list)
     requires: list[str] = field(default_factory=list)
     leads_to: list[str] = field(default_factory=list)
+    ask: str | None = None
+    # Bench-actionable items, present only on concepts that have them. This is
+    # the one part of a concept that is structured rather than prose, because
+    # it is rendered into a document rather than read by the model: the export
+    # composes a fixed template from these pairs, so the model chooses which
+    # concepts apply and never writes the artifact itself.
+    checklist: list[dict] = field(default_factory=list)
 
 
 def load_corpus(include_pre_publication: bool = False) -> dict[str, "Concept"]:
@@ -60,6 +72,8 @@ def load_corpus(include_pre_publication: bool = False) -> dict[str, "Concept"]:
             sources=meta.get("sources") or [],
             requires=meta.get("requires") or [],
             leads_to=meta.get("leads_to") or [],
+            ask=meta.get("ask"),
+            checklist=meta.get("checklist") or [],
         )
         if concept.id != path.stem:
             raise ValueError(f"{path.name}: id {concept.id!r} does not match filename")
@@ -86,6 +100,15 @@ def validate(concepts: dict[str, Concept]) -> list[str]:
                 errors.append(f"{concept.id}: requires {req!r}, absent from this build")
         if concept.provenance == "summarized" and not concept.sources:
             errors.append(f"{concept.id}: summarized without sources")
+        if concept.ask is not None and not concept.ask.strip().endswith("?"):
+            errors.append(f"{concept.id}: ask is not phrased as a question")
+        for index, entry in enumerate(concept.checklist):
+            missing = [k for k in ("item", "proves") if not str(entry.get(k, "")).strip()]
+            if missing:
+                errors.append(
+                    f"{concept.id}: checklist entry {index} is missing "
+                    + ", ".join(missing)
+                )
         if not [t for t in concept.leads_to if t in ids]:
             errors.append(f"{concept.id}: no follow-up target resolves in this build")
     return errors
@@ -121,12 +144,11 @@ def assemble_context(concepts: dict[str, Concept]) -> str:
     blocks: list[str] = []
     for cid in reading_order(concepts):
         concept = concepts[cid]
-        sources = "; ".join(s.get("label", "") for s in concept.sources)
         follow_ups = ", ".join(t for t in concept.leads_to if t in ids) or "none"
         blocks.append(
             f'<concept id="{concept.id}" title="{concept.title}" '
-            f'level="{concept.level}" follow_ups="{follow_ups}" '
-            f'sources="{sources}">\n{concept.body}\n</concept>'
+            f'level="{concept.level}" follow_ups="{follow_ups}">'
+            f"\n{concept.body}\n</concept>"
         )
     return "<corpus>\n" + "\n\n".join(blocks) + "\n</corpus>"
 
@@ -150,9 +172,10 @@ def build_system_message(
 def extract_citations(text: str, concepts: dict[str, Concept]) -> list[str]:
     """Return concept ids the model cited, in order of first appearance."""
     seen: list[str] = []
-    for cited in CITATION.findall(text):
-        if cited in concepts and cited not in seen:
-            seen.append(cited)
+    for group in CITATION.findall(text):
+        for cited in CITATION_SEPARATOR.split(group):
+            if cited in concepts and cited not in seen:
+                seen.append(cited)
     return seen
 
 

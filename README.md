@@ -82,7 +82,7 @@ does not exist) — the file is gitignored and read automatically on startup, an
 `OPENAI_API_KEY` always wins over it. The key never goes in a tracked file.
 
 ```bash
-python3 apps/cli/chat.py
+.venv/bin/python apps/cli/chat.py
 ```
 
 By default each question is first routed to one of the four behaviors by a cheap classifier
@@ -99,7 +99,7 @@ The same pipeline over HTTP, with the widget mounted into a mock site backdrop s
 corner framing is visible while developing.
 
 ```bash
-uvicorn apps.api.main:app --reload --port 8811
+.venv/bin/uvicorn apps.api.main:app --reload --port 8811
 ```
 
 Then open http://127.0.0.1:8811. Port 8811 rather than uvicorn's default 8000, which collides
@@ -109,11 +109,13 @@ no accounts: session state lives in the process and goes away with it.
 
 ## Checks
 
-Everything here runs without an API key, and runs in CI on every push.
+Everything here runs without an API key, and runs in CI on every push. Use the project
+virtualenv rather than a system interpreter — `fpdf2` and `fastapi` live there:
 
 ```bash
-find packages apps -name 'test_*.py' | sed 's|/|.|g; s|\.py$||' | xargs python3 -m unittest
-python3 scripts/check_corpus.py
+python3 -m venv .venv && .venv/bin/pip install -e .   # first time only
+find packages apps -name 'test_*.py' | sed 's|/|.|g; s|\.py$||' | xargs .venv/bin/python -m unittest
+.venv/bin/python scripts/check_corpus.py
 ```
 
 The corpus gate covers the graph invariants, the clearance vocabulary, the review status and
@@ -121,8 +123,8 @@ its sign-off, the antibody-identifier rule, and the rule that an internal source
 carry a url. The eval is not in CI, because it spends OpenAI credit on every push:
 
 ```bash
-python3 packages/eval/run.py --dry-run --configs routed --include-holdout   # cost projection
-python3 packages/eval/run.py --configs routed --repeats 3 --include-holdout # the gate run
+.venv/bin/python packages/eval/run.py --dry-run --configs routed --include-holdout   # cost projection
+.venv/bin/python packages/eval/run.py --configs routed --repeats 3 --include-holdout # the gate run
 ```
 
 ## Warehouse audit tooling

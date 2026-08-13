@@ -1,0 +1,444 @@
+"""Serve the routed Abbie pipeline over HTTP with streamed SSE turns.
+
+This is the CLI's turn re-expressed as a localhost web endpoint: the same
+classify -> respond -> cite -> follow-up sequence as apps/cli/chat.py, with
+the same per-session history and covered-set state, streamed to one static
+page. The composer's on_delta callback is synchronous, so each turn runs on
+a worker thread that feeds a queue the SSE generator drains — that queue is
+the whole bridge. Demo transport only: no persistence, no accounts, and
+nothing here is deployment configuration.
+"""
+
+from __future__ import annotations
+
+import json
+import os
+import queue
+import sys
+import threading
+from dataclasses import dataclass, field
+from datetime import date
+from pathlib import Path
+from typing import Iterator
+from urllib.parse import urlparse
+
+REPO_ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(REPO_ROOT))
+
+from fastapi import FastAPI, HTTPException, Request
+from fastapi.responses import FileResponse, Response, StreamingResponse
+from pydantic import BaseModel
+
+from packages.composer import ComposerPrompts, read_prompt_file, respond
+from packages.corpus_loader import build_system_message, extract_citations
+from packages.export import checklist_concepts, render_checklist
+from packages.envfile import load_env_file
+from packages.guardrail import (
+    INTERNAL_LABEL_MARKERS,
+    StreamScrubber,
+    leak_scan,
+    scrub_text,
+)
+from packages.router import classify
+
+load_env_file()
+
+PROMPTS_DIR = REPO_ROOT / "apps" / "api" / "prompts"
+STATIC_DIR = REPO_ROOT / "apps" / "api" / "static"
+MODEL = os.environ.get("ABBIE_MODEL", "gpt-5-mini")
+ROUTER_MODEL = os.environ.get("ABBIE_ROUTER_MODEL", "gpt-5-mini")
+REASONING_EFFORT = "low"
+MAX_FOLLOW_UPS = 4
+
+
+def read_prompt(name: str) -> str:
+    """Read one prompt file, failing fast with a clear message if missing."""
+    path = PROMPTS_DIR / name
+    try:
+        return read_prompt_file(path)
+    except FileNotFoundError:
+        raise SystemExit(f"missing prompt file: {path}")
+
+
+def make_client():
+    """Build the shared OpenAI client from the environment.
+
+    The import lives inside the function so the module can be read without
+    the SDK installed, matching the CLI. One client is shared across worker
+    threads because the underlying httpx client is thread-safe and pools
+    connections; every per-turn datum travels as call arguments.
+    """
+    from openai import OpenAI
+
+    return OpenAI()
+
+
+if not os.environ.get("OPENAI_API_KEY"):
+    raise SystemExit(
+        "OPENAI_API_KEY is not set. Paste IPI's key into .env at the repo root,"
+        " or export it in this shell."
+    )
+
+client = make_client()
+try:
+    ANSWER_SYSTEM, CONCEPTS = build_system_message(read_prompt("system.md"))
+except ValueError as exc:
+    raise SystemExit(f"{exc}\nrefusing to start")
+
+ROUTER_PROMPT = read_prompt("router.md")
+PROMPTS = ComposerPrompts(
+    answer_system=ANSWER_SYSTEM,
+    redirect_system=read_prompt("redirect.md"),
+    refuse_text=read_prompt("refuse.md"),
+    abstain_template=read_prompt("abstain.md"),
+)
+
+
+@dataclass
+class Session:
+    """One browser session's conversation state, the CLI's locals per id.
+
+    history and covered mirror apps/cli/chat.py exactly: history is appended
+    for all four behaviors and never trimmed, covered records cited concept
+    ids to keep follow-up offers fresh. The lock serializes turns within a
+    session, which is the concurrency the CLI actually has — its input loop
+    blocks until a turn finishes. Nothing is persisted.
+    """
+
+    history: list[dict] = field(default_factory=list)
+    covered: set[str] = field(default_factory=set)
+    lock: threading.Lock = field(default_factory=threading.Lock)
+    # Cited ids per answered turn, kept here rather than sent to the page. The
+    # export needs to know which concepts a reply drew on, and concept ids are
+    # internal identifiers the leak scan treats as a release-blocking failure
+    # if they reach a user surface, so the page refers to a turn by index and
+    # the ids never leave the server.
+    turn_concepts: list[list[str]] = field(default_factory=list)
+
+
+SESSIONS: dict[str, Session] = {}
+
+
+class ChatRequest(BaseModel):
+    """One turn's input from the page."""
+
+    message: str
+    session_id: str
+
+
+class ChecklistRequest(BaseModel):
+    """Which answered turn to build the downloadable checklist from.
+
+    A turn index rather than a list of concepts, because concept ids are
+    internal identifiers and the page must never hold them. The server looks
+    up what that turn actually cited.
+    """
+
+    session_id: str
+    turn_index: int
+
+
+def follow_ups_for(cited: list[str], concepts: dict, covered: set[str]) -> list[str]:
+    """Graph-derived next topics: leads_to of cited concepts, minus covered.
+
+    Duplicated from apps/cli/chat.py rather than imported, because the CLI
+    is a script with import-time side effects, not a library.
+    """
+    offers: list[str] = []
+    for cid in cited:
+        for target in concepts[cid].leads_to:
+            if target in concepts and target not in covered and target not in offers:
+                offers.append(target)
+    return offers
+
+
+MAX_SOURCES = 3
+
+OUTLINE_OFFER_LABEL = "Outline the whole process"
+
+FALLBACK_MESSAGE = (
+    "I had trouble putting that reply together. Could you try asking another way?"
+)
+
+
+def pending_offer(history: list[dict]) -> str | None:
+    """The closing line of the last assistant reply, scrubbed for the router.
+
+    This is the offer a bare "yes please" would be accepting. Scrubbing keeps
+    citation markers out of the router's context.
+    """
+    for message in reversed(history):
+        if message.get("role") == "assistant":
+            lines = [
+                line.strip()
+                for line in scrub_text(message.get("content", "")).splitlines()
+                if line.strip()
+            ]
+            return lines[-1] if lines else None
+    return None
+
+
+SOURCE_DISPLAY_FIELDS = ("short", "journal", "title")
+
+
+def is_publishable(source: dict) -> bool:
+    """Whether a frontmatter source may be shown to a visitor.
+
+    Two independent conditions, both required. A public URL is what makes a
+    source citable at all. The internal-label check is the deliberate half:
+    IPI's unpublished material grounds answers but is never itself cited, and
+    leaning on the absent URL alone would publish it the day someone adds one.
+    """
+    if not source.get("url"):
+        return False
+    label = source.get("label", "").lower()
+    return not any(marker in label for marker in INTERNAL_LABEL_MARKERS)
+
+
+def sources_for(cited: list[str], concepts: dict) -> list[dict]:
+    """Public further-reading links for the concepts an answer drew on.
+
+    IPI-authored concepts ground answers without producing a visible source,
+    which is expected. Ordered by first-cited concept then frontmatter order,
+    deduped by URL. The display fields are optional by design: a source that
+    lacks one still renders, just with that line short.
+    """
+    links: list[dict] = []
+    seen: set[str] = set()
+    for cid in cited:
+        for source in concepts[cid].sources:
+            if not is_publishable(source):
+                continue
+            url = source["url"]
+            if url in seen:
+                continue
+            seen.add(url)
+            link = {"label": source.get("label", url), "url": url}
+            for field in SOURCE_DISPLAY_FIELDS:
+                if source.get(field):
+                    link[field] = source[field]
+            links.append(link)
+    return links[:MAX_SOURCES]
+
+
+def origin_is_local(origin: str) -> bool:
+    """Return whether a browser Origin header names localhost itself.
+
+    This is a refusal, not CORS: nothing is relaxed. Browsers attach Origin
+    to cross-site POSTs, and a page on any other site can fire a
+    no-preflight POST at a localhost port and spend the OpenAI key blind.
+    Requests without an Origin header (curl, same-origin GET) never reach
+    this check.
+    """
+    return urlparse(origin).hostname in ("localhost", "127.0.0.1", "::1")
+
+
+def sse(event: str, payload: dict) -> str:
+    """Format one SSE frame.
+
+    json.dumps escapes newlines, so every frame is exactly three lines and a
+    delta carrying paragraph breaks cannot desync the event framing.
+    """
+    return f"event: {event}\ndata: {json.dumps(payload)}\n\n"
+
+
+def run_turn(
+    session: Session, question: str, out: queue.Queue[tuple[str, dict] | None]
+) -> None:
+    """Run one routed turn on a worker thread, emitting frames to the queue.
+
+    The composer blocks on the OpenAI SDK, so the whole turn lives on this
+    thread and the endpoint's generator just drains the queue. The route
+    frame goes out before generation so the page can badge the reply early.
+    State is mutated before the done frame is built because its follow-ups
+    depend on the updated covered set, and the only call that can raise
+    precedes the first history append, so a failed turn leaves the session
+    as if the question was never asked. The sentinel is emitted in finally
+    so a failure can never leave the stream waiting.
+    """
+    try:
+        with session.lock:
+            route = classify(
+                client,
+                question,
+                ROUTER_MODEL,
+                ROUTER_PROMPT,
+                context=pending_offer(session.history),
+            )
+            out.put(
+                (
+                    "route",
+                    {
+                        "behavior": route.behavior,
+                        "subject": route.subject,
+                        "fallback": route.fallback,
+                        "form": route.form,
+                    },
+                )
+            )
+            # One scrubber per turn: citation markers are stripped from the
+            # deltas the browser sees, while result.text stays raw for
+            # citation extraction and history. flush() must run after the
+            # stream ends or a reply ending in a marker loses its tail.
+            scrubber = StreamScrubber()
+
+            def emit_delta(delta: str) -> None:
+                visible = scrubber.feed(delta)
+                if visible:
+                    out.put(("delta", {"text": visible}))
+
+            result = respond(
+                client,
+                route,
+                question,
+                PROMPTS,
+                MODEL,
+                REASONING_EFFORT,
+                history=session.history,
+                on_delta=emit_delta,
+            )
+            tail = scrubber.flush()
+            if tail:
+                out.put(("delta", {"text": tail}))
+
+            cited = extract_citations(result.text, CONCEPTS)
+            covered_after = session.covered | set(cited)
+            offers = follow_ups_for(cited, CONCEPTS, covered_after)
+            follow_ups = [
+                {"label": CONCEPTS[fid].ask or CONCEPTS[fid].title}
+                for fid in offers
+            ]
+            # A procedural first touch withholds the full process behind an
+            # offer; the chip makes that door clickable. Clicking sends the
+            # label as an ordinary message, which the router classifies as
+            # acceptance against the pending offer.
+            if route.behavior == "answer" and route.form == "procedural":
+                follow_ups.insert(0, {"label": OUTLINE_OFFER_LABEL})
+            follow_ups = follow_ups[:MAX_FOLLOW_UPS]
+            sources = sources_for(cited, CONCEPTS)
+
+            # Fail-closed backstop: nothing that names the corpus may reach
+            # the page. On a hit the frame tells the page to replace the
+            # already-streamed body, and the session is left as if the turn
+            # never happened.
+            surfaces = [scrub_text(result.text)]
+            surfaces.extend(f["label"] for f in follow_ups)
+            # Every string a source puts on the page, not just its label —
+            # the scan is the backstop, so a field it does not read is a field
+            # that reaches the visitor unchecked.
+            surfaces.extend(
+                value
+                for source in sources
+                for key, value in source.items()
+                if key != "url"
+            )
+            findings = [
+                finding
+                for text in surfaces
+                for finding in leak_scan(text, set(CONCEPTS))
+            ]
+            if findings:
+                print(f"leak scan blocked a reply: {findings}", file=sys.stderr)
+                out.put(("error", {"message": FALLBACK_MESSAGE, "replace": True}))
+                return
+
+            session.history.append({"role": "user", "content": question})
+            session.history.append({"role": "assistant", "content": result.text})
+            session.covered.update(cited)
+            session.turn_concepts.append(cited)
+            out.put(
+                (
+                    "done",
+                    {
+                        "behavior": result.behavior,
+                        "subject": route.subject,
+                        "fallback": route.fallback,
+                        "sources": sources,
+                        "follow_ups": follow_ups,
+                        "latency_ms": route.latency_ms + result.latency_ms,
+                        "turn_index": len(session.turn_concepts) - 1,
+                        "checklist": bool(checklist_concepts(CONCEPTS, cited)),
+                    },
+                )
+            )
+    except Exception as exc:
+        print(f"turn failed: {exc!r}", file=sys.stderr)
+        out.put(("error", {"message": FALLBACK_MESSAGE}))
+    finally:
+        out.put(None)
+
+
+def stream_frames(out: queue.Queue[tuple[str, dict] | None]) -> Iterator[str]:
+    """Yield SSE frames from the queue until the worker's sentinel arrives."""
+    while True:
+        item = out.get()
+        if item is None:
+            return
+        event, payload = item
+        yield sse(event, payload)
+
+
+app = FastAPI(title="abbie")
+
+
+@app.get("/")
+def index() -> FileResponse:
+    """Serve the demo page."""
+    return FileResponse(STATIC_DIR / "index.html")
+
+
+@app.post("/chat")
+def chat(req: ChatRequest, request: Request) -> StreamingResponse:
+    """Stream one routed turn as SSE: route, deltas, then done or error.
+
+    The endpoint is sync on purpose: Starlette iterates the generator in a
+    threadpool, so its blocking queue reads never touch the event loop.
+    Cross-origin POSTs are refused before any work — see origin_is_local.
+    """
+    origin = request.headers.get("origin")
+    if origin is not None and not origin_is_local(origin):
+        raise HTTPException(status_code=403, detail="cross-origin requests are refused")
+    question = req.message.strip()
+    if not question:
+        raise HTTPException(status_code=400, detail="message must not be empty")
+    session = SESSIONS.setdefault(req.session_id, Session())
+    out: queue.Queue[tuple[str, dict] | None] = queue.Queue()
+    threading.Thread(
+        target=run_turn, args=(session, question, out), daemon=True
+    ).start()
+    return StreamingResponse(stream_frames(out), media_type="text/event-stream")
+
+
+@app.post("/export/checklist")
+def export_checklist(req: ChecklistRequest, request: Request) -> Response:
+    """Return the bench checklist for one answered turn as a PDF.
+
+    Nothing the model wrote reaches this document. The turn's cited concepts
+    select which reviewed frontmatter blocks are laid into a fixed template,
+    so the same turn always produces the same bytes and the wording is
+    something a scientist signed off on rather than something regenerated per
+    request.
+    """
+    origin = request.headers.get("origin")
+    if origin is not None and not origin_is_local(origin):
+        raise HTTPException(status_code=403, detail="cross-origin requests are refused")
+    session = SESSIONS.get(req.session_id)
+    if session is None or not 0 <= req.turn_index < len(session.turn_concepts):
+        raise HTTPException(status_code=404, detail="no such turn in this session")
+
+    document = render_checklist(
+        CONCEPTS,
+        session.turn_concepts[req.turn_index],
+        generated_on=date.today().strftime("%d %B %Y"),
+    )
+    if document is None:
+        raise HTTPException(
+            status_code=404, detail="that answer has no checklist behind it"
+        )
+    return Response(
+        content=document.body,
+        media_type="application/pdf",
+        headers={
+            "Content-Disposition": f'attachment; filename="{document.filename}"'
+        },
+    )

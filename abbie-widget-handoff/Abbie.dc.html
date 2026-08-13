@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+@keyframes abbie-pop {
+  0%   { transform: scale(0) translateY(26px); opacity: 0; }
+  55%  { transform: scale(1.1) translateY(0);  opacity: 1; }
+  78%  { transform: scale(0.94); }
+  100% { transform: scale(1); }
+}
+@keyframes abbie-bob {
+  0%   { transform: translateY(0) rotate(-1.4deg); }
+  100% { transform: translateY(-7px) rotate(1.4deg); }
+}
+@keyframes abbie-blink {
+  0%, 92%, 100% { transform: scaleY(1); }
+  95%           { transform: scaleY(0.08); }
+  98%           { transform: scaleY(1); }
+}
+@keyframes abbie-greet {
+  0%   { transform: scale(1, 1) rotate(0); }
+  14%  { transform: scale(1.14, 0.86) rotate(0); }
+  34%  { transform: scale(0.9, 1.12) rotate(-5deg); }
+  54%  { transform: scale(1.07, 0.95) rotate(4deg); }
+  74%  { transform: scale(0.98, 1.02) rotate(-2deg); }
+  100% { transform: scale(1, 1) rotate(0); }
+}
+</style>
+</helmet>
+<div style="width:100%;height:100%;min-width:var(--abbie-minw,210px);min-height:var(--abbie-minh,240px);display:flex;align-items:center;justify-content:center;cursor:pointer;-webkit-tap-highlight-color:transparent;user-select:none" onClick="{{ onGreet }}" title="Click me!">
+  <div style="{{ frameStyle }}">
+    <div style="width:80%;max-width:240px;animation:abbie-pop .72s cubic-bezier(.34,1.56,.64,1) both">
+      <div style="animation:abbie-bob 2.9s ease-in-out infinite alternate">
+        <svg viewBox="0 0 220 254" width="100%" style="display:block;overflow:visible">
+          <defs>
+            <linearGradient id="abbieBody" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#ffffff"/>
+              <stop offset="1" stop-color="#E9ECF1"/>
+            </linearGradient>
+            <linearGradient id="abbieRed" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#ff5158"/>
+              <stop offset="1" stop-color="#c4151b"/>
+            </linearGradient>
+            <linearGradient id="abbieOrange" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#ffae4d"/>
+              <stop offset="1" stop-color="#ef730a"/>
+            </linearGradient>
+            <radialGradient id="abbieGloss" cx="0.5" cy="0.5" r="0.5">
+              <stop offset="0" stop-color="#ffffff" stop-opacity="0.9"/>
+              <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+            </radialGradient>
+          </defs>
+
+          <g style="{{ greetStyle }}" onAnimationEnd="{{ onEnd }}">
+            <!-- die-cut sticker rim -->
+            <g style="filter:var(--abbie-sticker-shadow, none)">
+              <g fill="none" stroke="var(--abbie-sticker, transparent)" stroke-width="83" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M110 98 L52 44"/>
+                <path d="M110 98 L168 44"/>
+                <path d="M110 98 L110 216"/>
+              </g>
+            </g>
+            <!-- shadow + silhouette -->
+            <g style="filter:var(--abbie-shadow, drop-shadow(0 10px 16px rgba(15,17,21,.12)))">
+              <g fill="none" stroke="var(--abbie-outline, #F2CDD0)" stroke-width="65" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M110 98 L52 44"/>
+                <path d="M110 98 L168 44"/>
+                <path d="M110 98 L110 216"/>
+              </g>
+              <g fill="none" stroke="var(--abbie-body, #ffffff)" stroke-width="58" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M110 98 L52 44"/>
+                <path d="M110 98 L168 44"/>
+                <path d="M110 98 L110 216"/>
+              </g>
+            </g>
+
+            <!-- glossy specular highlight -->
+            <ellipse cx="90" cy="66" rx="22" ry="34" fill="url(#abbieGloss)" opacity="var(--abbie-gloss, 0)"/>
+
+            <!-- domain pills (antibody chains) -->
+            <g transform="translate(81,71) rotate(-137)">
+              <rect x="-25" y="-14" width="50" height="12" rx="6" fill="var(--abbie-red, #ec1d24)"/>
+              <rect x="-25" y="1"  width="50" height="12" rx="6" fill="var(--abbie-orange, #F97316)"/>
+            </g>
+            <g transform="translate(139,71) rotate(-43)">
+              <rect x="-25" y="-14" width="50" height="12" rx="6" fill="var(--abbie-orange, #F97316)"/>
+              <rect x="-25" y="1"  width="50" height="12" rx="6" fill="var(--abbie-red, #ec1d24)"/>
+            </g>
+            <rect x="88"  y="156" width="13" height="48" rx="6.5" fill="var(--abbie-red, #ec1d24)"/>
+            <rect x="119" y="156" width="13" height="48" rx="6.5" fill="var(--abbie-red, #ec1d24)"/>
+
+            <!-- eyebrows -->
+            <g style="display:var(--abbie-brow, inline)" fill="none" stroke="#2A2E34" stroke-width="4.2" stroke-linecap="round">
+              <path d="M76 84 Q90 77 103 83"/>
+              <path d="M117 83 Q130 77 144 84"/>
+            </g>
+
+            <!-- eyes -->
+            <g style="transform:scale(var(--abbie-eye, 1));transform-box:fill-box;transform-origin:center">
+              <g style="animation:abbie-blink 4.2s 1.1s infinite;transform-box:fill-box;transform-origin:center">
+                <circle cx="88" cy="108" r="15" fill="#ffffff"/>
+                <circle cx="88" cy="110" r="8.2" fill="#23262B"/>
+                <circle cx="91.5" cy="105" r="3" fill="#ffffff"/>
+                <circle cx="85" cy="113" r="1.7" fill="#ffffff" opacity="0.8"/>
+              </g>
+              <g style="animation:abbie-blink 4.2s 1.1s infinite;transform-box:fill-box;transform-origin:center">
+                <circle cx="132" cy="108" r="15" fill="#ffffff"/>
+                <circle cx="132" cy="110" r="8.2" fill="#23262B"/>
+                <circle cx="135.5" cy="105" r="3" fill="#ffffff"/>
+                <circle cx="129" cy="113" r="1.7" fill="#ffffff" opacity="0.8"/>
+              </g>
+            </g>
+
+            <!-- nerdy glasses -->
+            <g style="display:var(--abbie-glasses, inline)" fill="none" stroke="var(--abbie-frame, #ec1d24)" stroke-width="3.6" stroke-linecap="round">
+              <circle cx="88" cy="108" r="18"/>
+              <circle cx="132" cy="108" r="18"/>
+              <path d="M106 107 Q110 102 114 107"/>
+              <path d="M70 105 L61 102"/>
+              <path d="M150 105 L159 102"/>
+            </g>
+
+            <!-- blush -->
+            <g style="transform:scale(var(--abbie-blush, 1));transform-box:fill-box;transform-origin:center">
+              <ellipse cx="67" cy="138" rx="9" ry="6" fill="#FF8F96" opacity="0.5"/>
+              <ellipse cx="153" cy="138" rx="9" ry="6" fill="#FF8F96" opacity="0.5"/>
+            </g>
+
+            <!-- smile -->
+            <path d="M95 134 Q110 141 125 134 Q122 150 110 150 Q98 150 95 134 Z" fill="#46282B"/>
+            <path d="M103 146 Q110 151 117 146 Q117 143 110 143 Q103 143 103 146 Z" fill="#FF818A"/>
+          </g>
+        </svg>
+      </div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:240,&quot;height&quot;:260},&quot;variant&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;flat&quot;,&quot;glossy&quot;,&quot;kawaii&quot;,&quot;bold&quot;,&quot;sticker&quot;,&quot;pastel&quot;,&quot;scholar&quot;],&quot;default&quot;:&quot;flat&quot;,&quot;tsType&quot;:&quot;\&quot;flat\&quot;|\&quot;glossy\&quot;|\&quot;kawaii\&quot;|\&quot;bold\&quot;|\&quot;sticker\&quot;|\&quot;pastel\&quot;|\&quot;scholar\&quot;&quot;},&quot;name&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Abbie&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  state = { greeting: false };
+
+  componentDidMount() {
+    this._t = setTimeout(() => this.greet(), 980);
+  }
+  componentWillUnmount() {
+    clearTimeout(this._t);
+  }
+  greet() {
+    if (this.state.greeting) return;
+    this.setState({ greeting: true });
+  }
+
+  themeVars() {
+    const v = this.props.variant || "flat";
+    if (v === "glossy") {
+      return {
+        "--abbie-body": "url(#abbieBody)",
+        "--abbie-outline": "transparent",
+        "--abbie-red": "url(#abbieRed)",
+        "--abbie-orange": "url(#abbieOrange)",
+        "--abbie-frame": "#d11820",
+        "--abbie-gloss": "0.9",
+        "--abbie-shadow": "drop-shadow(0 16px 24px rgba(15,17,21,.22))",
+      };
+    }
+    if (v === "kawaii") {
+      return {
+        "--abbie-body": "#FFF4F4",
+        "--abbie-outline": "#FBD2D4",
+        "--abbie-red": "#FB3D44",
+        "--abbie-orange": "#FF8A3D",
+        "--abbie-glasses": "none",
+        "--abbie-brow": "none",
+        "--abbie-eye": "1.22",
+        "--abbie-blush": "1.55",
+        "--abbie-shadow": "drop-shadow(0 11px 16px rgba(236,29,36,.16))",
+      };
+    }
+    if (v === "bold") {
+      return {
+        "--abbie-body": "#ffffff",
+        "--abbie-outline": "#1B1E23",
+        "--abbie-red": "#ec1d24",
+        "--abbie-orange": "#F97316",
+        "--abbie-frame": "#1B1E23",
+        "--abbie-shadow": "drop-shadow(0 10px 16px rgba(15,17,21,.14))",
+      };
+    }
+    if (v === "sticker") {
+      return {
+        "--abbie-body": "#ffffff",
+        "--abbie-outline": "#ffffff",
+        "--abbie-sticker": "#ffffff",
+        "--abbie-sticker-shadow": "drop-shadow(0 10px 16px rgba(15,17,21,.20))",
+        "--abbie-red": "#ec1d24",
+        "--abbie-orange": "#F97316",
+        "--abbie-frame": "#ec1d24",
+        "--abbie-shadow": "none",
+      };
+    }
+    if (v === "scholar") {
+      return {
+        "--abbie-body": "#ffffff",
+        "--abbie-outline": "#F2CDD0",
+        "--abbie-red": "#D91920",
+        "--abbie-orange": "#E86A12",
+        "--abbie-frame": "#2A2E34",
+        "--abbie-eye": "0.88",
+        "--abbie-blush": "0",
+        "--abbie-shadow": "drop-shadow(0 8px 14px rgba(15,17,21,.10))",
+      };
+    }
+    if (v === "pastel") {
+      return {
+        "--abbie-body": "#ffffff",
+        "--abbie-outline": "#FBD9DC",
+        "--abbie-red": "#FF7A85",
+        "--abbie-orange": "#FFB877",
+        "--abbie-frame": "#FF8A95",
+        "--abbie-blush": "1.3",
+        "--abbie-shadow": "drop-shadow(0 11px 16px rgba(255,122,133,.20))",
+      };
+    }
+    // flat (default)
+    return {
+      "--abbie-body": "#ffffff",
+      "--abbie-outline": "#F2CDD0",
+      "--abbie-red": "#ec1d24",
+      "--abbie-orange": "#F97316",
+      "--abbie-frame": "#ec1d24",
+      "--abbie-shadow": "drop-shadow(0 10px 16px rgba(15,17,21,.12))",
+    };
+  }
+
+  renderVals() {
+    const frameStyle = Object.assign(
+      {
+        width: "100%",
+        height: "100%",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      },
+      this.themeVars()
+    );
+    const greetStyle = {
+      animation: this.state.greeting
+        ? "abbie-greet .9s cubic-bezier(.34,1.4,.5,1)"
+        : "none",
+      transformBox: "fill-box",
+      transformOrigin: "50% 92%",
+    };
+    return {
+      frameStyle,
+      greetStyle,
+      name: this.props.name || "Abbie",
+      onGreet: () => this.greet(),
+      onEnd: () => this.setState({ greeting: false }),
+    };
+  }
+}
+</script>
+</body>
+</html>

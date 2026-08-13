@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+<style>
+  body { font-family: 'Hanken Grotesk', 'Helvetica Neue', Arial, sans-serif; margin: 0; background: #F4F4F1; }
+  a { color: #B3161C; } a:hover { color: #ec1d24; }
+  .k-cap { font-size: 13px; line-height: 1.55; color: #4B5058; }
+  .k-tag { font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; }
+  .k-serif { font-family: 'Source Serif 4', Georgia, serif; }
+  .k-mono { font-family: ui-monospace, Menlo, monospace; font-size: 11px; background: #F4F4F1; border-radius: 3px; padding: 1px 4px; }
+  @keyframes ab-breathe { 0%,100% { transform: scale(1); opacity: .62 } 50% { transform: scale(1.13); opacity: 1 } }
+  @keyframes ab-sway { 0%,100% { transform: rotate(-7deg) } 50% { transform: rotate(7deg) } }
+  @keyframes ab-nod { 0%,55% { transform: rotate(0) } 65% { transform: rotate(-9deg) } 80% { transform: rotate(6deg) } 92% { transform: rotate(-2deg) } 100% { transform: rotate(0) } }
+  @keyframes ab-pop { 0% { transform: scale(0); opacity: 0 } 60% { transform: scale(1.08); opacity: 1 } 100% { transform: scale(1) } }
+  @keyframes ab-caret { 0%,45% { opacity: 1 } 50%,100% { opacity: 0 } }
+</style>
+</helmet>
+
+<div style="max-width:1120px;margin:0 auto;padding:44px 40px 80px;display:flex;flex-direction:column;gap:32px">
+
+  <div style="background:#fff;border-radius:6px;box-shadow:0 1px 3px rgba(15,17,21,.08);padding:32px 34px">
+    <div style="display:flex;align-items:flex-start;gap:20px">
+      <div style="flex:1">
+        <div class="k-tag" style="color:#6E737B;margin-bottom:12px">Institute for Protein Innovation</div>
+        <div class="k-serif" style="font-size:40px;color:#0F1115;line-height:1.05">The Abbie chat widget</div>
+        <div style="width:40px;height:4px;background:#ec1d24;border-radius:2px;margin:16px 0 16px"></div>
+        <div class="k-cap" style="font-size:14px;color:#2A2E34;max-width:640px">Final specification. Every decision below is settled — the rejected explorations now live in <b style="font-weight:600">Abbie Widget Explorations.dc.html</b>. On the website, <b style="font-weight:600">the antibody mark is Abbie</b>: her silhouette as the launcher and avatar, her name in the header, motion instead of a face. The illustrated cartoon Abbie is a marketing-only asset and never appears on the site.</div>
+      </div>
+      <div style="flex:none;width:96px;height:96px;border-radius:50%;background:#ec1d24;box-shadow:0 8px 22px rgba(236,29,36,.26);display:flex;align-items:center;justify-content:center">
+        <svg width="45" height="45" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round"><path d="M12 12.4 L9.1 8.4" stroke-width="3.4"/><path d="M9.1 8.4 L6.4 4.9" stroke-width="3.4" opacity=".62"/><path d="M12 12.4 L14.9 8.4" stroke-width="3.4"/><path d="M14.9 8.4 L17.6 4.9" stroke-width="3.4" opacity=".62"/><path d="M12 12.2 L12 19.4" stroke-width="5"/></svg>
+      </div>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:22px">
+      <div style="border:1px solid #E7E9EE;border-radius:3px;padding:5px 11px;font-size:11.5px;font-weight:600;color:#2A2E34">Hinged antibody mark</div>
+      <div style="border:1px solid #E7E9EE;border-radius:3px;padding:5px 11px;font-size:11.5px;font-weight:600;color:#2A2E34">Hanken Grotesk · 15 px</div>
+      <div style="border:1px solid #E7E9EE;border-radius:3px;padding:5px 11px;font-size:11.5px;font-weight:600;color:#2A2E34">Label → nudge → icon-only</div>
+      <div style="border:1px solid #E7E9EE;border-radius:3px;padding:5px 11px;font-size:11.5px;font-weight:600;color:#2A2E34">Motion as state</div>
+      <div style="border:1px solid #E7E9EE;border-radius:3px;padding:5px 11px;font-size:11.5px;font-weight:600;color:#2A2E34">Route-keyed status</div>
+      <div style="border:1px solid #E7E9EE;border-radius:3px;padding:5px 11px;font-size:11.5px;font-weight:600;color:#2A2E34">Byline-over-title sources</div>
+      <div style="border:1px solid #A9D5B6;background:#F6FAF7;border-radius:3px;padding:5px 11px;font-size:11.5px;font-weight:600;color:#1B7A3E">Ready to build</div>
+    </div>
+  </div>
+
+  <div style="background:#fff;border-radius:6px;box-shadow:0 1px 3px rgba(15,17,21,.08);padding:28px 34px 32px">
+    <div class="k-tag" style="color:#B3161C;margin-bottom:6px">01 · The mark</div>
+    <div style="font-weight:700;font-size:17px;color:#0F1115">One geometry, two treatments, split at 48 px</div>
+    <div class="k-cap" style="margin-top:8px;max-width:660px">An immunoglobulin drawn with a hinge bend and a heavier Fc stem. Upright always — that is what makes it legible as an antibody rather than a letter; rotating loses the reference without gaining another. The two-tone light chains are a large-size treatment of the same paths, not a second mark.</div>
+    <div style="display:grid;grid-template-columns:1fr 1px 1fr;gap:28px;margin-top:26px;align-items:start">
+      <div>
+        <div style="display:flex;align-items:flex-end;gap:16px;height:104px">
+          <span style="width:96px;height:96px;border-radius:50%;background:#ec1d24;display:flex;align-items:center;justify-content:center"><svg width="45" height="45" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round"><path d="M12 12.4 L9.1 8.4" stroke-width="3.4"/><path d="M9.1 8.4 L6.4 4.9" stroke-width="3.4" opacity=".62"/><path d="M12 12.4 L14.9 8.4" stroke-width="3.4"/><path d="M14.9 8.4 L17.6 4.9" stroke-width="3.4" opacity=".62"/><path d="M12 12.2 L12 19.4" stroke-width="5"/></svg></span>
+          <span style="width:60px;height:60px;border-radius:50%;background:#ec1d24;display:flex;align-items:center;justify-content:center"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round"><path d="M12 12.4 L9.1 8.4" stroke-width="3.4"/><path d="M9.1 8.4 L6.4 4.9" stroke-width="3.4" opacity=".62"/><path d="M12 12.4 L14.9 8.4" stroke-width="3.4"/><path d="M14.9 8.4 L17.6 4.9" stroke-width="3.4" opacity=".62"/><path d="M12 12.2 L12 19.4" stroke-width="5"/></svg></span>
+        </div>
+        <div style="font-size:13px;font-weight:600;color:#0F1115;margin-top:14px">Expressive · 48 px and up</div>
+        <div class="k-cap" style="font-size:12px;margin-top:4px">Light chains at 62 % opacity. Shown at 96 and 60 px. Use for hero art, the panel greeting, slides, stickers, print.</div>
+      </div>
+      <div style="background:#EFEFEB"></div>
+      <div>
+        <div style="display:flex;align-items:flex-end;gap:16px;height:104px">
+          <span style="width:44px;height:44px;border-radius:50%;background:#ec1d24;display:flex;align-items:center;justify-content:center"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round"><path d="M12 12.4 L9.1 8.4 L6.4 4.9" stroke-width="3.4"/><path d="M12 12.4 L14.9 8.4 L17.6 4.9" stroke-width="3.4"/><path d="M12 12.2 L12 19.4" stroke-width="5"/></svg></span>
+          <span style="width:30px;height:30px;border-radius:50%;background:#ec1d24;display:flex;align-items:center;justify-content:center"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round"><path d="M12 12.4 L9.1 8.4 L6.4 4.9" stroke-width="3.4"/><path d="M12 12.4 L14.9 8.4 L17.6 4.9" stroke-width="3.4"/><path d="M12 12.2 L12 19.4" stroke-width="5"/></svg></span>
+          <span style="width:22px;height:22px;border-radius:50%;background:#ec1d24;display:flex;align-items:center;justify-content:center"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round"><path d="M12 12.4 L9.1 8.4 L6.4 4.9" stroke-width="3.6"/><path d="M12 12.4 L14.9 8.4 L17.6 4.9" stroke-width="3.6"/><path d="M12 12.2 L12 19.4" stroke-width="5.2"/></svg></span>
+        </div>
+        <div style="font-size:13px;font-weight:600;color:#0F1115;margin-top:14px">Solid · below 48 px</div>
+        <div class="k-cap" style="font-size:12px;margin-top:4px">One colour, same paths. Shown at 44, 30 and 22 px. Use for the launcher, header avatar, activity mark, favicons, flat print.</div>
+      </div>
+    </div>
+    <div style="background:#F4F4F1;border-radius:4px;padding:12px 14px;margin-top:22px">
+      <div class="k-cap" style="font-size:12px">Below 48 px the light-chain segment is about two pixels of lighter red on red and reads as a rendering error; the hinge still reads at 22 px. Ship two SVGs, <span class="k-mono">mark-expressive</span> and <span class="k-mono">mark-solid</span>, differing only by two <span class="k-mono">opacity</span> attributes.</div>
+    </div>
+  </div>
+
+  <div style="background:#fff;border-radius:6px;box-shadow:0 1px 3px rgba(15,17,21,.08);padding:28px 34px 32px">
+    <div class="k-tag" style="color:#B3161C;margin-bottom:6px">02 · Launcher</div>
+    <div style="font-weight:700;font-size:17px;color:#0F1115">Four states, in order</div>
+    <div class="k-cap" style="margin-top:8px;max-width:660px">60 px circle, brand red, solid mark. A static label is not the annoying part — motion and repetition are — so the label sits quietly on load, the one timed nudge is dismissible, and after the first open or dismiss the launcher goes icon-only for good.</div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:24px">
+      <div>
+        <div style="position:relative;background:#FBFBF9;border-radius:6px;height:150px">
+          <div style="position:absolute;right:14px;bottom:14px;display:flex;align-items:center;gap:8px">
+            <div style="background:#fff;border:1px solid #E7E9EE;border-radius:3px;padding:5px 10px;font-size:10.5px;font-weight:500;color:#2A2E34;box-shadow:0 4px 14px rgba(15,17,21,.10)">Chat with us</div>
+            <div style="width:44px;height:44px;border-radius:50%;background:#ec1d24;box-shadow:0 6px 18px rgba(236,29,36,.30);display:flex;align-items:center;justify-content:center"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round"><path d="M12 12.4 L9.1 8.4 L6.4 4.9" stroke-width="3.4"/><path d="M12 12.4 L14.9 8.4 L17.6 4.9" stroke-width="3.4"/><path d="M12 12.2 L12 19.4" stroke-width="5"/></svg></div>
+          </div>
+        </div>
+        <div style="font-size:12.5px;font-weight:600;color:#0F1115;margin-top:10px">1 · On load</div>
+        <div class="k-cap" style="font-size:11.5px;margin-top:3px">Mark plus static label. Silent, no motion.</div>
+      </div>
+      <div>
+        <div style="position:relative;background:#FBFBF9;border-radius:6px;height:150px">
+          <div style="position:absolute;right:14px;bottom:14px;display:flex;flex-direction:column;align-items:flex-end;gap:8px">
+            <div style="position:relative;width:168px;background:#fff;border:1px solid #E7E9EE;border-radius:4px;padding:9px 22px 9px 11px;font-size:11px;line-height:1.5;color:#2A2E34;box-shadow:0 8px 22px rgba(15,17,21,.12)">Questions about our antibodies or courses? Chat with us.<svg width="8" height="8" viewBox="0 0 10 10" style="position:absolute;top:8px;right:8px" stroke="#6E737B" stroke-width="1.6" stroke-linecap="round"><path d="M1.5 1.5l7 7M8.5 1.5l-7 7"/></svg></div>
+            <div style="width:44px;height:44px;border-radius:50%;background:#ec1d24;box-shadow:0 6px 18px rgba(236,29,36,.30);display:flex;align-items:center;justify-content:center"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round"><path d="M12 12.4 L9.1 8.4 L6.4 4.9" stroke-width="3.4"/><path d="M12 12.4 L14.9 8.4 L17.6 4.9" stroke-width="3.4"/><path d="M12 12.2 L12 19.4" stroke-width="5"/></svg></div>
+          </div>
+        </div>
+        <div style="font-size:12.5px;font-weight:600;color:#0F1115;margin-top:10px">2 · After ~8 s</div>
+        <div class="k-cap" style="font-size:11.5px;margin-top:3px">Label swaps to a dismissible nudge. Once per session, never re-shown after dismissal.</div>
+      </div>
+      <div>
+        <div style="position:relative;background:#FBFBF9;border-radius:6px;height:150px">
+          <div style="position:absolute;right:76px;bottom:26px;font-size:10.5px;color:#6E737B">panel open →</div>
+          <div style="position:absolute;right:14px;bottom:14px;width:44px;height:44px;border-radius:50%;background:#0A0A0B;box-shadow:0 6px 18px rgba(15,17,21,.25);display:flex;align-items:center;justify-content:center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round"><path d="M5 5l14 14M19 5L5 19"/></svg></div>
+        </div>
+        <div style="font-size:12.5px;font-weight:600;color:#0F1115;margin-top:10px">3 · Open</div>
+        <div class="k-cap" style="font-size:11.5px;margin-top:3px">Circle turns ink with a ✕. The panel takes over.</div>
+      </div>
+      <div>
+        <div style="position:relative;background:#FBFBF9;border-radius:6px;height:150px">
+          <div style="position:absolute;right:14px;bottom:14px;width:44px;height:44px;border-radius:50%;background:#ec1d24;box-shadow:0 6px 18px rgba(236,29,36,.30);display:flex;align-items:center;justify-content:center"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round"><path d="M12 12.4 L9.1 8.4 L6.4 4.9" stroke-width="3.4"/><path d="M12 12.4 L14.9 8.4 L17.6 4.9" stroke-width="3.4"/><path d="M12 12.2 L12 19.4" stroke-width="5"/></svg></div>
+        </div>
+        <div style="font-size:12.5px;font-weight:600;color:#0F1115;margin-top:10px">4 · Afterwards</div>
+        <div class="k-cap" style="font-size:11.5px;margin-top:3px">Icon-only for good, persisted in localStorage. Visitors know the mark now.</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="background:#fff;border-radius:6px;box-shadow:0 1px 3px rgba(15,17,21,.08);padding:28px 34px 32px">
+    <div class="k-tag" style="color:#B3161C;margin-bottom:6px">03 · Panel</div>
+    <div style="font-weight:700;font-size:17px;color:#0F1115">380 px, two states</div>
+    <div class="k-cap" style="margin-top:8px;max-width:660px">Serif wordmark carries Abbie's identity; the disclaimer is permanent header copy. Answers at 15 px / 1.6 — the single biggest change from the current widget, which sets them at 13 px.</div>
+    <div style="display:flex;gap:32px;margin-top:26px;align-items:flex-start;flex-wrap:wrap">
+
+      <div style="width:380px;flex:none">
+        <div style="background:#fff;border:1px solid #ECECE8;border-radius:6px;box-shadow:0 14px 34px rgba(15,17,21,.14);overflow:hidden">
+          <div style="padding:14px 16px 12px;display:flex;align-items:center;gap:10px;border-bottom:1px solid #EFEFEB">
+            <span style="width:30px;height:30px;border-radius:50%;background:#ec1d24;flex:none;display:flex;align-items:center;justify-content:center"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round"><path d="M12 12.4 L9.1 8.4 L6.4 4.9" stroke-width="3.4"/><path d="M12 12.4 L14.9 8.4 L17.6 4.9" stroke-width="3.4"/><path d="M12 12.2 L12 19.4" stroke-width="5"/></svg></span>
+            <span><span class="k-serif" style="font-size:19px;color:#0F1115;display:block;line-height:1"><span style="color:#ec1d24">A</span>bbie</span><span style="font-size:10.5px;color:#6E737B;display:block;margin-top:3px">IPI antibody assistant · <span style="font-weight:600;letter-spacing:.05em;color:#6E737B">RESEARCH USE ONLY</span></span></span>
+            <span style="flex:1"></span>
+            <span style="display:flex;gap:11px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6E737B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6E737B" stroke-width="2" stroke-linecap="round"><path d="M4 12h16"/></svg></span>
+          </div>
+          <div style="padding:30px 22px 24px;display:flex;flex-direction:column;align-items:center;text-align:center">
+            <span style="width:64px;height:64px;border-radius:50%;background:#ec1d24;box-shadow:0 8px 22px rgba(236,29,36,.26);display:flex;align-items:center;justify-content:center;animation:ab-pop .5s cubic-bezier(.34,1.56,.64,1) both">
+              <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" style="animation:ab-nod 1.6s .4s both;transform-origin:50% 60%"><path d="M12 12.4 L9.1 8.4" stroke-width="3.4"/><path d="M9.1 8.4 L6.4 4.9" stroke-width="3.4" opacity=".62"/><path d="M12 12.4 L14.9 8.4" stroke-width="3.4"/><path d="M14.9 8.4 L17.6 4.9" stroke-width="3.4" opacity=".62"/><path d="M12 12.2 L12 19.4" stroke-width="5"/></svg>
+            </span>
+            <div class="k-serif" style="font-size:20px;color:#D8161D;margin-top:14px">Hi — I'm Abbie.</div>
+            <div style="font-size:13px;line-height:1.55;color:#6E737B;margin-top:6px;max-width:260px">Ask me about antibody validation, IPI reagents or courses. I cite my sources.</div>
+            <div style="display:flex;flex-direction:column;gap:8px;margin-top:18px;width:100%;text-align:left">
+              <div style="border:1px solid #E7E7E3;border-radius:4px;padding:10px 12px;font-size:13px;color:#2A2E34;transition:border-color .2s" style-hover="border-color:#C6CBD2">What validation data comes with each antibody?</div>
+              <div style="border:1px solid #E7E7E3;border-radius:4px;padding:10px 12px;font-size:13px;color:#2A2E34;transition:border-color .2s" style-hover="border-color:#C6CBD2">Help me pick a control for imaging</div>
+              <div style="border:1px solid #E7E7E3;border-radius:4px;padding:10px 12px;font-size:13px;color:#2A2E34;transition:border-color .2s" style-hover="border-color:#C6CBD2">Which collections cover axon guidance?</div>
+            </div>
+          </div>
+          <div style="padding:14px">
+            <div style="background:#F8F8F6;border-radius:6px;padding:12px 13px 10px;box-shadow:inset 0 0 0 1px #EDEDE9">
+              <div style="font-size:14px;color:#5C6169;line-height:1.4">Ask about antibody validation…</div>
+              <div style="display:flex;align-items:center;margin-top:12px"><span style="font-size:11px;color:#5C6169">Enter to send</span><span style="flex:1"></span><span style="width:28px;height:28px;border-radius:50%;background:#E4E4DF;display:flex;align-items:center;justify-content:center"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M6 11l6-6 6 6"/></svg></span></div>
+            </div>
+          </div>
+        </div>
+        <div style="margin-top:12px"><span class="k-tag" style="color:#0F1115">First open</span><div class="k-cap" style="margin-top:3px">The expressive mark at 64 px pops in and nods once — Abbie waving, in silhouette. Her only animated entrance.</div></div>
+      </div>
+
+      <div style="width:380px;flex:none">
+        <div style="background:#fff;border:1px solid #ECECE8;border-radius:6px;box-shadow:0 14px 34px rgba(15,17,21,.14);overflow:hidden">
+          <div style="padding:14px 16px 12px;display:flex;align-items:center;gap:10px;border-bottom:1px solid #EFEFEB">
+            <span style="width:30px;height:30px;border-radius:50%;background:#ec1d24;flex:none;display:flex;align-items:center;justify-content:center"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round"><path d="M12 12.4 L9.1 8.4 L6.4 4.9" stroke-width="3.4"/><path d="M12 12.4 L14.9 8.4 L17.6 4.9" stroke-width="3.4"/><path d="M12 12.2 L12 19.4" stroke-width="5"/></svg></span>
+            <span><span class="k-serif" style="font-size:19px;color:#0F1115;display:block;line-height:1"><span style="color:#ec1d24">A</span>bbie</span><span style="font-size:10.5px;color:#6E737B;display:block;margin-top:3px">IPI antibody assistant · <span style="font-weight:600;letter-spacing:.05em;color:#6E737B">RESEARCH USE ONLY</span></span></span>
+            <span style="flex:1"></span>
+            <span style="display:flex;gap:11px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6E737B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6E737B" stroke-width="2" stroke-linecap="round"><path d="M4 12h16"/></svg></span>
+          </div>
+          <div style="padding:16px 18px 4px">
+            <div style="text-align:right"><span style="display:inline-block;background:#F2F2F0;border-radius:4px;padding:8px 12px;font-size:14px;color:#4B5058;text-align:left;max-width:85%">How do knockout controls validate an antibody?</span></div>
+            <div style="font-size:15px;line-height:1.6;color:#1B1E23;margin-top:15px">Knockout controls are the strongest specificity test: if staining persists where the target gene is deleted, the signal isn't your antibody binding its target.<span style="display:inline-block;background:#FBEAEA;color:#B3161C;font-size:10px;font-weight:600;border-radius:4px;padding:1px 5px;margin-left:5px;vertical-align:2px">1</span></div>
+            <div style="font-size:15px;line-height:1.6;color:#1B1E23;margin-top:13px">A knockout also removes every isoform at once, so it can't tell you which one was detected.</div>
+            <div style="margin-top:14px;padding-top:12px;border-top:1px solid #F2F2EF">
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:9px"><span style="font-size:10px;font-weight:700;letter-spacing:.1em;color:#6E737B">7 SOURCES</span><span style="flex:1"></span><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#6E737B" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6"/></svg></div>
+              <div style="display:flex;gap:9px;padding:7px 0"><span style="font-size:11px;font-weight:700;color:#B3161C;flex:none;width:11px;padding-top:1px">1</span><span><span style="display:block;font-size:12px;line-height:1.3"><b style="font-weight:600;color:#1B1E23">Uhlén 2016</b><span style="color:#6E737B"> · Nature Methods</span></span><span style="display:block;font-size:12.5px;line-height:1.4;color:#1B1E23;margin-top:2px">A proposal for validation of antibodies</span></span></div>
+              <div style="display:flex;gap:9px;padding:7px 0"><span style="font-size:11px;font-weight:700;color:#B3161C;flex:none;width:11px;padding-top:1px">2</span><span><span style="display:block;font-size:12px;line-height:1.3"><b style="font-weight:600;color:#1B1E23">Edfors 2018</b><span style="color:#6E737B"> · eLife</span></span><span style="display:block;font-size:12.5px;line-height:1.4;color:#1B1E23;margin-top:2px">Antibody characterization for reproducible research</span></span></div>
+              <div style="display:flex;gap:9px;padding:7px 0"><span style="font-size:11px;font-weight:700;color:#B3161C;flex:none;width:11px;padding-top:1px">3</span><span><span style="display:block;font-size:12px;line-height:1.3"><b style="font-weight:600;color:#1B1E23">Laflamme 2019</b><span style="color:#6E737B"> · eLife</span></span><span style="display:block;font-size:12.5px;line-height:1.4;color:#1B1E23;margin-top:2px">Genetic strategies for antibody validation</span></span></div>
+              <div style="font-size:12px;font-weight:600;color:#B3161C;padding:8px 0 0;margin-left:20px">4 more</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:1px;margin-top:12px;margin-left:-6px">
+              <span style="width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;transition:background .15s" style-hover="background:#F4F4F1"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6E737B" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></span>
+              <span style="width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;transition:background .15s" style-hover="background:#F4F4F1"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6E737B" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12a8 8 0 1 1-2.3-5.6"/><path d="M20 4v4h-4"/></svg></span>
+              <span style="width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;transition:background .15s" style-hover="background:#F4F4F1"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6E737B" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M7 21H5a2 2 0 0 1-2-2v-6a2 2 0 0 1 2-2h2"/><path d="M7 11l4.5-8a2.4 2.4 0 0 1 3.4 2.9L14 9h4.6a2.4 2.4 0 0 1 2.3 3l-1.6 6.2A2.4 2.4 0 0 1 17 20H7"/></svg></span>
+              <span style="width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;transition:background .15s" style-hover="background:#F4F4F1"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6E737B" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3h2a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2h-2"/><path d="M17 13l-4.5 8a2.4 2.4 0 0 1-3.4-2.9L10 15H5.4a2.4 2.4 0 0 1-2.3-3l1.6-6.2A2.4 2.4 0 0 1 7 4h10"/></svg></span>
+              <span style="width:1px;height:14px;background:#E7E7E3;margin:0 6px"></span>
+              <span style="width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;transition:background .15s" style-hover="background:#F4F4F1"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6E737B" stroke-width="2.1" stroke-linecap="round"><path d="M5 12h.01M12 12h.01M19 12h.01"/></svg></span>
+            </div>
+          </div>
+          <div style="padding:14px">
+            <div style="background:#F8F8F6;border-radius:6px;padding:12px 13px 10px;box-shadow:inset 0 0 0 1px #EDEDE9">
+              <div style="font-size:14px;color:#5C6169;line-height:1.4">Ask about antibody validation…</div>
+              <div style="display:flex;align-items:center;margin-top:12px"><span style="font-size:11px;color:#5C6169">Enter to send</span><span style="flex:1"></span><span style="width:28px;height:28px;border-radius:50%;background:#E4E4DF;display:flex;align-items:center;justify-content:center"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M6 11l6-6 6 6"/></svg></span></div>
+            </div>
+          </div>
+        </div>
+        <div style="margin-top:12px"><span class="k-tag" style="color:#0F1115">In conversation</span><div class="k-cap" style="margin-top:3px">No mascot. Flowing cited text, sources expanded, bare action row. The read runs answer → evidence → controls without interruption.</div></div>
+      </div>
+
+    </div>
+  </div>
+
+  <div style="background:#fff;border-radius:6px;box-shadow:0 1px 3px rgba(15,17,21,.08);padding:28px 34px 32px">
+    <div class="k-tag" style="color:#B3161C;margin-bottom:6px">04 · Activity</div>
+    <div style="font-weight:700;font-size:17px;color:#0F1115">Motion means a state, not decoration</div>
+    <div class="k-cap" style="margin-top:8px;max-width:660px">Replaces the three grey dots. Each motion maps to a real change in the stream, so the change always carries information. 22 px solid mark plus one status line — never a spinner.</div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:24px">
+      <div style="background:#FBFBF9;border-radius:6px;padding:16px">
+        <div style="display:flex;align-items:center;gap:9px;height:26px">
+          <span style="width:22px;height:22px;border-radius:50%;background:#ec1d24;flex:none;display:flex;align-items:center;justify-content:center;animation:ab-breathe 1.8s ease-in-out infinite"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round"><path d="M12 12.4 L9.1 8.4 L6.4 4.9" stroke-width="3.4"/><path d="M12 12.4 L14.9 8.4 L17.6 4.9" stroke-width="3.4"/><path d="M12 12.2 L12 19.4" stroke-width="5"/></svg></span>
+          <span style="font-size:12px;color:#6E737B">Getting oriented…</span>
+        </div>
+        <div style="font-size:12.5px;font-weight:600;color:#0F1115;margin-top:13px">Breathe · waiting</div>
+        <div class="k-cap" style="font-size:11.5px;margin-top:4px">Send until the <span class="k-mono">route</span> frame. Calm and passive — listening, not working. 1.8 s scale-and-fade on the whole circle.</div>
+      </div>
+      <div style="background:#FBFBF9;border-radius:6px;padding:16px">
+        <div style="display:flex;align-items:center;gap:9px;height:26px">
+          <span style="width:22px;height:22px;border-radius:50%;background:#ec1d24;flex:none;display:flex;align-items:center;justify-content:center"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" style="animation:ab-sway 2.4s ease-in-out infinite;transform-origin:50% 62%"><path d="M12 12.4 L9.1 8.4 L6.4 4.9" stroke-width="3.4"/><path d="M12 12.4 L14.9 8.4 L17.6 4.9" stroke-width="3.4"/><path d="M12 12.2 L12 19.4" stroke-width="5"/></svg></span>
+          <span style="font-size:12px;color:#6E737B">Cross-referencing…</span>
+        </div>
+        <div style="font-size:12.5px;font-weight:600;color:#0F1115;margin-top:13px">Sway · working</div>
+        <div class="k-cap" style="font-size:11.5px;margin-top:4px"><span class="k-mono">route</span> frame until the first token. The question is understood and work is underway. 2.4 s rock, ±7°, origin 50% 62%.</div>
+      </div>
+      <div style="background:#FBFBF9;border-radius:6px;padding:16px">
+        <div style="display:flex;align-items:center;gap:9px;height:26px">
+          <span style="width:22px;height:22px;border-radius:50%;background:#ec1d24;flex:none;display:flex;align-items:center;justify-content:center"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round"><path d="M12 12.4 L9.1 8.4 L6.4 4.9" stroke-width="3.4"/><path d="M12 12.4 L14.9 8.4 L17.6 4.9" stroke-width="3.4"/><path d="M12 12.2 L12 19.4" stroke-width="5"/></svg></span>
+          <span style="font-size:12px;color:#1B1E23">Knockout controls are…</span>
+        </div>
+        <div style="font-size:12.5px;font-weight:600;color:#0F1115;margin-top:13px">Still · streaming</div>
+        <div class="k-cap" style="font-size:11.5px;margin-top:4px">First token: motion stops, indicator removed. The words are the progress signal; motion beside them is noise.</div>
+      </div>
+    </div>
+    <div style="background:#F4F4F1;border-radius:4px;padding:12px 14px;margin-top:20px">
+      <div class="k-cap" style="font-size:12px">The greeting nod is a separate one-shot — panel open only, never during a turn, so it can't be read as a working state. Under <span class="k-mono">prefers-reduced-motion</span> all three states show a static mark and keep the words.</div>
+    </div>
+  </div>
+
+  <div style="background:#fff;border-radius:6px;box-shadow:0 1px 3px rgba(15,17,21,.08);padding:28px 34px 32px">
+    <div class="k-tag" style="color:#B3161C;margin-bottom:6px">05 · Status copy</div>
+    <div style="font-weight:700;font-size:17px;color:#0F1115">The phrase describes this question, not a stock cycle</div>
+    <div class="k-cap" style="margin-top:8px;max-width:660px"><span class="k-mono">router.md</span> already classifies every question into a <b style="font-weight:600">behavior</b> and, for answers, a <b style="font-weight:600">form</b> before generation starts. The route frame carries behavior today; adding <span class="k-mono">form</span> is one line in <span class="k-mono">main.py</span>. Then the working phrase is chosen rather than cycled. Never name the corpus, retrieval, routing, tools or the model.</div>
+    <div style="display:grid;grid-template-columns:160px 1fr 1fr;margin-top:24px;font-size:12px">
+      <div class="k-tag" style="color:#6E737B;padding-bottom:9px;border-bottom:1px solid #EFEFEB">Route</div>
+      <div class="k-tag" style="color:#6E737B;padding-bottom:9px;border-bottom:1px solid #EFEFEB">Example question</div>
+      <div class="k-tag" style="color:#6E737B;padding-bottom:9px;border-bottom:1px solid #EFEFEB">Working phrase</div>
+
+      <div style="padding:10px 0;border-bottom:1px solid #F4F4F1;color:#5C6169"><span class="k-mono" style="color:#5C6169">definitional</span></div>
+      <div style="padding:10px 0;border-bottom:1px solid #F4F4F1;color:#4B5058">What is antibody validation?</div>
+      <div style="padding:10px 0;border-bottom:1px solid #F4F4F1;color:#1B1E23;font-weight:500">Gathering sources…</div>
+
+      <div style="padding:10px 0;border-bottom:1px solid #F4F4F1;color:#5C6169"><span class="k-mono" style="color:#5C6169">conceptual</span></div>
+      <div style="padding:10px 0;border-bottom:1px solid #F4F4F1;color:#4B5058">Does target engagement imply selectivity?</div>
+      <div style="padding:10px 0;border-bottom:1px solid #F4F4F1;color:#1B1E23;font-weight:500">Weighing the evidence…</div>
+
+      <div style="padding:10px 0;border-bottom:1px solid #F4F4F1;color:#5C6169"><span class="k-mono" style="color:#5C6169">comparative</span></div>
+      <div style="padding:10px 0;border-bottom:1px solid #F4F4F1;color:#4B5058">Is IPI's framework the same as the five pillars?</div>
+      <div style="padding:10px 0;border-bottom:1px solid #F4F4F1;color:#1B1E23;font-weight:500">Cross-referencing…</div>
+
+      <div style="padding:10px 0;border-bottom:1px solid #F4F4F1;color:#5C6169"><span class="k-mono" style="color:#5C6169">procedural</span></div>
+      <div style="padding:10px 0;border-bottom:1px solid #F4F4F1;color:#4B5058">Help me pick a control for imaging</div>
+      <div style="padding:10px 0;border-bottom:1px solid #F4F4F1;color:#1B1E23;font-weight:500">Lining up the evidence…</div>
+
+      <div style="padding:10px 0;border-bottom:1px solid #F4F4F1;color:#5C6169"><span class="k-mono" style="color:#5C6169">deepening / acceptance</span></div>
+      <div style="padding:10px 0;border-bottom:1px solid #F4F4F1;color:#4B5058">Tell me more · Outline the whole process</div>
+      <div style="padding:10px 0;border-bottom:1px solid #F4F4F1;color:#1B1E23;font-weight:500">Gathering sources…</div>
+
+      <div style="padding:10px 0;color:#B3161C"><span class="k-mono">abstain / redirect / refuse</span></div>
+      <div style="padding:10px 0;color:#4B5058">How good is clone 4B2? · Coke or Pepsi?</div>
+      <div style="padding:10px 0;color:#1B1E23;font-weight:500">Getting oriented…</div>
+    </div>
+    <div style="display:flex;gap:14px;margin-top:20px;flex-wrap:wrap">
+      <div style="flex:1;min-width:280px;background:#FDF6F6;border:1px solid #F3D7D8;border-radius:4px;padding:12px 14px">
+        <div class="k-cap" style="font-size:12px"><b style="font-weight:600;color:#0F1115">The rule that matters.</b> Abstain, redirect and refuse must never show evidence language. Those replies carry no sources, so "Gathering sources…" would promise something the answer cannot deliver — the one way a status line can lie. Neutral opener only.</div>
+      </div>
+      <div style="flex:1;min-width:280px;background:#F4F4F1;border-radius:4px;padding:12px 14px">
+        <div class="k-cap" style="font-size:12px"><b style="font-weight:600;color:#0F1115">Rotation as fallback.</b> If the route frame is slow or <span class="k-mono">form</span> is null, cycle the neutral openers rather than freeze — "Thinking…", "Getting oriented…". On a long working stage one second phrase may follow; never more, or it reads as stalling.</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="background:#fff;border-radius:6px;box-shadow:0 1px 3px rgba(15,17,21,.08);padding:28px 34px 32px">
+    <div class="k-tag" style="color:#B3161C;margin-bottom:6px">06 · Composer</div>
+    <div style="font-weight:700;font-size:17px;color:#0F1115">Filled block with a hint row</div>
+    <div class="k-cap" style="margin-top:8px;max-width:660px">No orange. At rest the field is a soft filled block with a hairline and a dormant grey send. On focus it goes white, takes an ink ring, and the send wakes up red — the accent means "you're typing", and it lives on the button rather than as a coloured outline. Two lines tall so the keyboard hint has somewhere to live, which is the whole reason this won: Shift + Enter has to be teachable, and a research assistant gets long multi-line questions.</div>
+    <div style="display:flex;gap:20px;align-items:flex-start;flex-wrap:wrap;margin-top:24px">
+      <div style="width:340px;flex:none">
+        <div style="background:#fff;border:1px solid #ECECE8;border-radius:6px;box-shadow:0 6px 18px rgba(15,17,21,.08);padding:12px">
+          <div style="background:#F8F8F6;border-radius:6px;padding:12px 13px 10px;box-shadow:inset 0 0 0 1px #EDEDE9">
+            <div style="font-size:14px;color:#5C6169;line-height:1.4">Ask about antibody validation…</div>
+            <div style="display:flex;align-items:center;margin-top:12px"><span style="font-size:11px;color:#5C6169">Enter to send</span><span style="flex:1"></span><span style="width:28px;height:28px;border-radius:50%;background:#E4E4DF;display:flex;align-items:center;justify-content:center"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M6 11l6-6 6 6"/></svg></span></div>
+          </div>
+        </div>
+        <div style="margin-top:10px"><span class="k-tag" style="color:#0F1115">At rest</span><div class="k-cap" style="font-size:12px;margin-top:3px">Fill #F8F8F6, hairline #EDEDE9, send #E4E4DF. Hint reads "Enter to send".</div></div>
+      </div>
+      <div style="width:340px;flex:none">
+        <div style="background:#fff;border:1px solid #ECECE8;border-radius:6px;box-shadow:0 6px 18px rgba(15,17,21,.08);padding:12px">
+          <div style="background:#fff;border-radius:6px;padding:12px 13px 10px;box-shadow:inset 0 0 0 1.5px #1B1E23, 0 0 0 3px rgba(15,17,21,.06)">
+            <div style="font-size:14px;color:#1B1E23;line-height:1.4">Which controls should I run for IF<span style="display:inline-block;width:1.5px;height:14px;background:#1B1E23;vertical-align:-2px;margin-left:1px;animation:ab-caret 1.1s steps(1) infinite"></span></div>
+            <div style="display:flex;align-items:center;margin-top:12px"><span style="font-size:11px;color:#5C6169">Shift + Enter for a new line</span><span style="flex:1"></span><span style="width:28px;height:28px;border-radius:50%;background:#ec1d24;box-shadow:0 3px 10px rgba(236,29,36,.32);display:flex;align-items:center;justify-content:center"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M6 11l6-6 6 6"/></svg></span></div>
+          </div>
+        </div>
+        <div style="margin-top:10px"><span class="k-tag" style="color:#0F1115">Focused / typing</span><div class="k-cap" style="font-size:12px;margin-top:3px">White fill, ink ring #1B1E23 at 1.5 px, send #EC1D24. Hint switches to "Shift + Enter for a new line".</div></div>
+      </div>
+      <div style="flex:1;min-width:240px;background:#F4F4F1;border-radius:6px;padding:14px 16px">
+        <div class="k-cap" style="font-size:12px">Circular send deliberately echoes the launcher — the same red circle that opened the panel is the one that sends. Send is disabled and grey until the field has content, so its colour change doubles as the "ready" signal. The field grows to a maximum of about five lines, then scrolls internally.</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="background:#fff;border-radius:6px;box-shadow:0 1px 3px rgba(15,17,21,.08);padding:28px 34px 32px">
+    <div class="k-tag" style="color:#B3161C;margin-bottom:6px">07 · Mobile</div>
+    <div style="font-weight:700;font-size:17px;color:#0F1115">Below 640 px the panel becomes a full-screen sheet</div>
+    <div class="k-cap" style="margin-top:8px;max-width:660px">A 380 px floating card on a 390 px phone is a card with no page around it, so the convention is to take the whole screen. Two technical traps are specified below — both are the kind of thing that only shows up on a real device.</div>
+
+    <div style="display:flex;gap:26px;margin-top:26px;align-items:flex-start;flex-wrap:wrap">
+
+      <div style="width:250px;flex:none">
+        <div style="background:#0A0A0B;border-radius:26px;padding:7px;box-shadow:0 14px 34px rgba(15,17,21,.18)">
+          <div style="background:#fff;border-radius:20px;overflow:hidden;height:660px;position:relative;display:flex;flex-direction:column">
+            <div style="height:26px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;flex:none">
+              <span style="font-size:9.5px;font-weight:600;color:#1B1E23">9:41</span>
+              <span style="display:flex;gap:3px;align-items:center"><span style="width:13px;height:7px;border:1px solid #1B1E23;border-radius:2px;display:block"></span></span>
+            </div>
+            <div style="padding:12px 14px 10px;display:flex;align-items:center;gap:9px;border-bottom:1px solid #EFEFEB">
+              <span style="width:28px;height:28px;border-radius:50%;background:#ec1d24;flex:none;display:flex;align-items:center;justify-content:center"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round"><path d="M12 12.4 L9.1 8.4 L6.4 4.9" stroke-width="3.4"/><path d="M12 12.4 L14.9 8.4 L17.6 4.9" stroke-width="3.4"/><path d="M12 12.2 L12 19.4" stroke-width="5"/></svg></span>
+              <span><span class="k-serif" style="font-size:18px;color:#0F1115;display:block;line-height:1"><span style="color:#ec1d24">A</span>bbie</span><span style="font-size:10px;color:#6E737B;display:block;margin-top:2px">IPI antibody assistant · <span style="font-weight:600;letter-spacing:.05em">RESEARCH USE ONLY</span></span></span>
+              <span style="flex:1"></span>
+              <span style="width:34px;height:34px;border-radius:6px;display:flex;align-items:center;justify-content:center;background:#F4F4F1"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#1B1E23" stroke-width="2.4" stroke-linecap="round"><path d="M5 5l14 14M19 5L5 19"/></svg></span>
+            </div>
+            <div style="flex:1;overflow:hidden;padding:14px">
+              <div style="text-align:right"><span style="display:inline-block;background:#F2F2F0;border-radius:4px;padding:7px 10px;font-size:13px;color:#4B5058;text-align:left;max-width:88%">How do knockout controls validate an antibody?</span></div>
+              <div style="font-size:15px;line-height:1.6;color:#1B1E23;margin-top:13px">Knockout controls are the strongest specificity test: if staining persists where the target gene is deleted, the signal isn't your antibody binding its target.<span style="display:inline-block;background:#FBEAEA;color:#B3161C;font-size:10px;font-weight:600;border-radius:4px;padding:1px 5px;margin-left:4px;vertical-align:2px">1</span></div>
+              <div style="margin-top:12px;padding-top:11px;border-top:1px solid #F2F2EF">
+                <div style="font-size:10px;font-weight:700;letter-spacing:.1em;color:#6E737B;margin-bottom:7px">7 SOURCES</div>
+                <div style="display:flex;gap:8px;padding:5px 0"><span style="font-size:11px;font-weight:700;color:#B3161C;flex:none;width:11px;padding-top:1px">1</span><span><span style="display:block;font-size:12px;line-height:1.3"><b style="font-weight:600;color:#1B1E23">Uhlén 2016</b><span style="color:#6E737B"> · Nature Methods</span></span><span style="display:block;font-size:12.5px;line-height:1.4;color:#1B1E23;margin-top:2px">A proposal for validation of antibodies</span></span></div>
+                <div style="font-size:12px;font-weight:600;color:#B3161C;padding:6px 0 0;margin-left:19px">6 more</div>
+              </div>
+              <div style="display:flex;align-items:center;margin-top:10px;margin-left:-10px">
+                <span style="width:44px;height:44px;flex:none;border-radius:6px;display:flex;align-items:center;justify-content:center"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#6E737B" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></span>
+                <span style="width:44px;height:44px;flex:none;border-radius:6px;display:flex;align-items:center;justify-content:center"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#6E737B" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12a8 8 0 1 1-2.3-5.6"/><path d="M20 4v4h-4"/></svg></span>
+                <span style="width:44px;height:44px;flex:none;border-radius:6px;display:flex;align-items:center;justify-content:center"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#6E737B" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M7 21H5a2 2 0 0 1-2-2v-6a2 2 0 0 1 2-2h2"/><path d="M7 11l4.5-8a2.4 2.4 0 0 1 3.4 2.9L14 9h4.6a2.4 2.4 0 0 1 2.3 3l-1.6 6.2A2.4 2.4 0 0 1 17 20H7"/></svg></span>
+                <span style="width:44px;height:44px;flex:none;border-radius:6px;display:flex;align-items:center;justify-content:center"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#6E737B" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3h2a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2h-2"/><path d="M17 13l-4.5 8a2.4 2.4 0 0 1-3.4-2.9L10 15H5.4a2.4 2.4 0 0 1-2.3-3l1.6-6.2A2.4 2.4 0 0 1 7 4h10"/></svg></span>
+                <span style="width:1px;height:14px;flex:none;background:#E7E7E3;margin:0 2px"></span>
+                <span style="width:44px;height:44px;flex:none;border-radius:6px;display:flex;align-items:center;justify-content:center"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#6E737B" stroke-width="2.1" stroke-linecap="round"><path d="M5 12h.01M12 12h.01M19 12h.01"/></svg></span>
+              </div>
+            </div>
+            <div style="flex:none;padding:10px 12px 14px;border-top:1px solid #EFEFEB;background:#fff">
+              <div style="background:#F8F8F6;border-radius:6px;padding:11px 12px 9px;box-shadow:inset 0 0 0 1px #EDEDE9">
+                <div style="font-size:16px;color:#5C6169;line-height:1.4">Ask about antibody validation…</div>
+                <div style="display:flex;align-items:center;margin-top:10px"><span style="flex:1"></span><span style="width:34px;height:34px;border-radius:50%;background:#E4E4DF;display:flex;align-items:center;justify-content:center"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M6 11l6-6 6 6"/></svg></span></div>
+              </div>
+              <div style="height:5px;width:96px;border-radius:3px;background:#DEDED8;margin:11px auto 0"></div>
+            </div>
+          </div>
+        </div>
+        <div style="margin-top:12px"><span class="k-tag" style="color:#0F1115">Open · full-screen sheet</span><div class="k-cap" style="font-size:12px;margin-top:3px">Header pinned, transcript scrolls, composer fixed above the home indicator. Expand and minimise are replaced by one ✕ at a 34 px target.</div></div>
+      </div>
+
+      <div style="width:250px;flex:none">
+        <div style="background:#0A0A0B;border-radius:26px;padding:7px;box-shadow:0 14px 34px rgba(15,17,21,.18)">
+          <div style="background:#fff;border-radius:20px;overflow:hidden;height:472px;position:relative">
+            <div style="height:26px;display:flex;align-items:center;justify-content:space-between;padding:0 16px">
+              <span style="font-size:9.5px;font-weight:600;color:#1B1E23">9:41</span>
+              <span style="width:13px;height:7px;border:1px solid #1B1E23;border-radius:2px;display:block"></span>
+            </div>
+            <div style="padding:12px 14px;border-bottom:1px solid #EFEFEB;display:flex;align-items:center;gap:7px">
+              <img src="assets/ipi-logo-dark.png" alt="Institute for Protein Innovation" style="height:22px;display:block">
+              <span style="flex:1"></span>
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#1B1E23" stroke-width="2.2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+            </div>
+            <div style="padding:18px 16px">
+              <div class="k-serif" style="font-size:21px;color:#0F1115;line-height:1.2">Powering protein science with <span style="color:#ec1d24">Antibodies.</span></div>
+              <div style="display:flex;gap:8px;margin-top:14px"><div style="background:#F49B0B;color:#fff;font-size:10.5px;font-weight:600;padding:7px 12px;border-radius:3px">About us</div><div style="background:#ec1d24;color:#fff;font-size:10.5px;font-weight:600;padding:7px 12px;border-radius:3px">Contact us</div></div>
+              <div style="margin-top:20px;display:flex;flex-direction:column;gap:9px">
+                <div style="height:8px;border-radius:4px;background:#EEF0F3;width:92%"></div>
+                <div style="height:8px;border-radius:4px;background:#EEF0F3;width:84%"></div>
+                <div style="height:8px;border-radius:4px;background:#EEF0F3;width:88%"></div>
+              </div>
+            </div>
+            <div style="position:absolute;right:14px;bottom:26px;width:52px;height:52px;border-radius:50%;background:#ec1d24;box-shadow:0 6px 18px rgba(236,29,36,.32);display:flex;align-items:center;justify-content:center"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round"><path d="M12 12.4 L9.1 8.4 L6.4 4.9" stroke-width="3.4"/><path d="M12 12.4 L14.9 8.4 L17.6 4.9" stroke-width="3.4"/><path d="M12 12.2 L12 19.4" stroke-width="5"/></svg></div>
+            <div style="position:absolute;left:0;right:0;bottom:0;height:22px;display:flex;align-items:center;justify-content:center"><div style="height:5px;width:96px;border-radius:3px;background:#DEDED8"></div></div>
+          </div>
+        </div>
+        <div style="margin-top:12px"><span class="k-tag" style="color:#0F1115">Closed · 52 px launcher</span><div class="k-cap" style="font-size:12px;margin-top:3px">No label pill and no timed nudge on mobile — a card covering content on a small screen is intrusive, and there is no room for it beside the button.</div></div>
+      </div>
+
+      <div style="flex:1;min-width:290px;display:flex;flex-direction:column;gap:14px">
+        <div style="background:#FDF6F6;border:1px solid #F3D7D8;border-radius:6px;padding:15px 17px">
+          <div style="font-size:13px;font-weight:600;color:#0F1115">Trap 1 · the composer must be 16 px</div>
+          <div class="k-cap" style="font-size:12px;margin-top:4px">iOS Safari zooms the whole page when a focused input is under 16 px, and it does not zoom back out. The composer input is therefore <b style="font-weight:600">16 px on mobile</b>, not the 14 px used on desktop. Everything else keeps its desktop size.</div>
+        </div>
+        <div style="background:#FDF6F6;border:1px solid #F3D7D8;border-radius:6px;padding:15px 17px">
+          <div style="font-size:13px;font-weight:600;color:#0F1115">Trap 2 · <span class="k-mono">100vh</span> is wrong on mobile</div>
+          <div class="k-cap" style="font-size:12px;margin-top:4px">Mobile browser chrome makes <span class="k-mono">100vh</span> taller than the visible area, so a <span class="k-mono">100vh</span> sheet hides its own composer behind the keyboard. Use <span class="k-mono">100dvh</span> and pad the composer with <span class="k-mono">env(safe-area-inset-bottom)</span>.</div>
+        </div>
+        <div style="background:#F4F4F1;border-radius:6px;padding:15px 17px">
+          <div style="font-size:13px;font-weight:600;color:#0F1115">Touch targets</div>
+          <div class="k-cap" style="font-size:12px;margin-top:4px">The action row's 28 px squares become <b style="font-weight:600">44 px</b> on touch, and the row is always visible — there is no hover to reveal it. Icons stay 14–15 px; only the tappable area grows. Send button goes 28 → 34 px.</div>
+        </div>
+        <div style="background:#F4F4F1;border-radius:6px;padding:15px 17px">
+          <div style="font-size:13px;font-weight:600;color:#0F1115">Everything that does not change</div>
+          <div class="k-cap" style="font-size:12px;margin-top:4px">Answers stay 15 px / 1.6, sources keep the byline-over-title row capped at three, the mark keeps the solid treatment at every mobile size, and the activity states are identical. One spec, one breakpoint at 640 px.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div style="background:#fff;border-radius:6px;box-shadow:0 1px 3px rgba(15,17,21,.08);padding:28px 34px 32px">
+    <div class="k-tag" style="color:#B3161C;margin-bottom:6px">08 · Expanded panel</div>
+    <div style="font-weight:700;font-size:17px;color:#0F1115">The state the expand icon has been promising</div>
+    <div class="k-cap" style="margin-top:8px;max-width:660px">A cited answer with seven references is cramped in 380 px. Expanded is a centred dialog at 720 px over a scrim — not a wider dock — because at that point the conversation is the task and the page behind it isn't. Reading measure is capped at 620 px so lines never get too long, and sources expand by default with room for six rows.</div>
+
+    <div style="margin-top:24px;background:#EDEDE9;border-radius:8px;padding:26px;display:flex;justify-content:center">
+      <div style="width:720px;max-width:100%;background:#fff;border:1px solid #ECECE8;border-radius:6px;box-shadow:0 24px 54px rgba(15,17,21,.20)">
+        <div style="padding:14px 18px 12px;display:flex;align-items:center;gap:10px;border-bottom:1px solid #EFEFEB">
+          <span style="width:30px;height:30px;border-radius:50%;background:#ec1d24;flex:none;display:flex;align-items:center;justify-content:center"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round"><path d="M12 12.4 L9.1 8.4 L6.4 4.9" stroke-width="3.4"/><path d="M12 12.4 L14.9 8.4 L17.6 4.9" stroke-width="3.4"/><path d="M12 12.2 L12 19.4" stroke-width="5"/></svg></span>
+          <span><span class="k-serif" style="font-size:19px;color:#0F1115;display:block;line-height:1"><span style="color:#ec1d24">A</span>bbie</span><span style="font-size:10.5px;color:#6E737B;display:block;margin-top:3px">IPI antibody assistant · <span style="font-weight:600;letter-spacing:.05em;color:#6E737B">RESEARCH USE ONLY</span></span></span>
+          <span style="flex:1"></span>
+          <span style="display:flex;gap:11px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6E737B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3H3v6M15 21h6v-6M3 9l7 7M21 15l-7-7"/></svg><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6E737B" stroke-width="2" stroke-linecap="round"><path d="M4 12h16"/></svg></span>
+        </div>
+        <div style="padding:22px 24px 6px">
+          <div style="max-width:620px;margin:0 auto">
+            <div style="text-align:right"><span style="display:inline-block;background:#F2F2F0;border-radius:4px;padding:8px 12px;font-size:14px;color:#4B5058;text-align:left;max-width:75%">How do knockout controls validate an antibody?</span></div>
+            <div style="font-size:15px;line-height:1.6;color:#1B1E23;margin-top:16px">Knockout controls are the strongest specificity test: if staining persists in cells where the target gene is deleted, the signal isn't your antibody binding its target.<span style="display:inline-block;background:#FBEAEA;color:#B3161C;font-size:10px;font-weight:600;border-radius:4px;padding:1px 5px;margin-left:5px;vertical-align:2px">1</span><span style="display:inline-block;background:#FBEAEA;color:#B3161C;font-size:10px;font-weight:600;border-radius:4px;padding:1px 5px;margin-left:3px;vertical-align:2px">2</span></div>
+            <div style="font-size:15px;line-height:1.6;color:#1B1E23;margin-top:13px">Two caveats: verify the knockout genotype before interpreting leftover signal, and remember a knockout removes every isoform at once — it can't tell you which one was detected.<span style="display:inline-block;background:#FBEAEA;color:#B3161C;font-size:10px;font-weight:600;border-radius:4px;padding:1px 5px;margin-left:5px;vertical-align:2px">3</span></div>
+            <div style="margin-top:16px;padding-top:13px;border-top:1px solid #F2F2EF">
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px"><span style="font-size:10px;font-weight:700;letter-spacing:.1em;color:#6E737B">7 SOURCES</span><span style="flex:1"></span><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#6E737B" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6"/></svg></div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px 22px">
+                <div style="display:flex;gap:9px;padding:6px 0"><span style="font-size:11px;font-weight:700;color:#B3161C;flex:none;width:11px;padding-top:1px">1</span><span><span style="display:block;font-size:12px;line-height:1.3"><b style="font-weight:600;color:#1B1E23">Uhlén 2016</b><span style="color:#6E737B"> · Nature Methods</span></span><span style="display:block;font-size:12.5px;line-height:1.4;color:#1B1E23;margin-top:2px">A proposal for validation of antibodies</span></span></div>
+                <div style="display:flex;gap:9px;padding:6px 0"><span style="font-size:11px;font-weight:700;color:#B3161C;flex:none;width:11px;padding-top:1px">2</span><span><span style="display:block;font-size:12px;line-height:1.3"><b style="font-weight:600;color:#1B1E23">Edfors 2018</b><span style="color:#6E737B"> · eLife</span></span><span style="display:block;font-size:12.5px;line-height:1.4;color:#1B1E23;margin-top:2px">Antibody characterization for reproducible research</span></span></div>
+                <div style="display:flex;gap:9px;padding:6px 0"><span style="font-size:11px;font-weight:700;color:#B3161C;flex:none;width:11px;padding-top:1px">3</span><span><span style="display:block;font-size:12px;line-height:1.3"><b style="font-weight:600;color:#1B1E23">Laflamme 2019</b><span style="color:#6E737B"> · eLife</span></span><span style="display:block;font-size:12.5px;line-height:1.4;color:#1B1E23;margin-top:2px">Genetic strategies for antibody validation</span></span></div>
+                <div style="display:flex;gap:9px;padding:6px 0"><span style="font-size:11px;font-weight:700;color:#B3161C;flex:none;width:11px;padding-top:1px">4</span><span><span style="display:block;font-size:12px;line-height:1.3"><b style="font-weight:600;color:#1B1E23">Roncador 2016</b><span style="color:#6E737B"> · Nat Biotechnol</span></span><span style="display:block;font-size:12.5px;line-height:1.4;color:#1B1E23;margin-top:2px">Reproducibility of antibody-based assays</span></span></div>
+                <div style="display:flex;gap:9px;padding:6px 0"><span style="font-size:11px;font-weight:700;color:#B3161C;flex:none;width:11px;padding-top:1px">5</span><span><span style="display:block;font-size:12px;line-height:1.3"><b style="font-weight:600;color:#1B1E23">Bordeaux 2010</b><span style="color:#6E737B"> · BioTechniques</span></span><span style="display:block;font-size:12.5px;line-height:1.4;color:#1B1E23;margin-top:2px">Antibody validation for immunohistochemistry</span></span></div>
+                <div style="display:flex;gap:9px;padding:6px 0"><span style="font-size:11px;font-weight:700;color:#B3161C;flex:none;width:11px;padding-top:1px">6</span><span><span style="display:block;font-size:12px;line-height:1.3"><b style="font-weight:600;color:#1B1E23">Weller 2018</b><span style="color:#6E737B"> · PLOS Biol</span></span><span style="display:block;font-size:12.5px;line-height:1.4;color:#1B1E23;margin-top:2px">Standards for antibody characterization</span></span></div>
+              </div>
+              <div style="font-size:12px;font-weight:600;color:#B3161C;padding:8px 0 0;margin-left:20px">1 more</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:1px;margin-top:12px;margin-left:-6px">
+              <span style="width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;transition:background .15s" style-hover="background:#F4F4F1"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6E737B" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></span>
+              <span style="width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;transition:background .15s" style-hover="background:#F4F4F1"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6E737B" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12a8 8 0 1 1-2.3-5.6"/><path d="M20 4v4h-4"/></svg></span>
+              <span style="width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;transition:background .15s" style-hover="background:#F4F4F1"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6E737B" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M7 21H5a2 2 0 0 1-2-2v-6a2 2 0 0 1 2-2h2"/><path d="M7 11l4.5-8a2.4 2.4 0 0 1 3.4 2.9L14 9h4.6a2.4 2.4 0 0 1 2.3 3l-1.6 6.2A2.4 2.4 0 0 1 17 20H7"/></svg></span>
+              <span style="width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;transition:background .15s" style-hover="background:#F4F4F1"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6E737B" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3h2a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2h-2"/><path d="M17 13l-4.5 8a2.4 2.4 0 0 1-3.4-2.9L10 15H5.4a2.4 2.4 0 0 1-2.3-3l1.6-6.2A2.4 2.4 0 0 1 7 4h10"/></svg></span>
+              <span style="width:1px;height:14px;background:#E7E7E3;margin:0 6px"></span>
+              <span style="width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;transition:background .15s" style-hover="background:#F4F4F1"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6E737B" stroke-width="2.1" stroke-linecap="round"><path d="M5 12h.01M12 12h.01M19 12h.01"/></svg></span>
+            </div>
+          </div>
+        </div>
+        <div style="padding:16px 24px 18px">
+          <div style="max-width:620px;margin:0 auto;background:#F8F8F6;border-radius:6px;padding:12px 13px 10px;box-shadow:inset 0 0 0 1px #EDEDE9">
+            <div style="font-size:14px;color:#5C6169;line-height:1.4">Ask about antibody validation…</div>
+            <div style="display:flex;align-items:center;margin-top:12px"><span style="font-size:11px;color:#5C6169">Enter to send</span><span style="flex:1"></span><span style="width:28px;height:28px;border-radius:50%;background:#E4E4DF;display:flex;align-items:center;justify-content:center"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M6 11l6-6 6 6"/></svg></span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:20px">
+      <div style="background:#F4F4F1;border-radius:6px;padding:14px 16px">
+        <div style="font-size:13px;font-weight:600;color:#0F1115">Geometry</div>
+        <div class="k-cap" style="font-size:12px;margin-top:4px">720 px wide, <span class="k-mono">min(84vh, 820px)</span> tall, centred, scrim <span class="k-mono">rgba(15,17,21,.28)</span>. Below 780 px viewport width it falls back to the mobile sheet — there is no third layout.</div>
+      </div>
+      <div style="background:#F4F4F1;border-radius:6px;padding:14px 16px">
+        <div style="font-size:13px;font-weight:600;color:#0F1115">What changes inside</div>
+        <div class="k-cap" style="font-size:12px;margin-top:4px">Only three things: text is centred in a 620 px measure, sources start expanded in two columns showing six rows, and the expand icon becomes a collapse icon. Type sizes, colours and spacing are identical.</div>
+      </div>
+      <div style="background:#F4F4F1;border-radius:6px;padding:14px 16px">
+        <div style="font-size:13px;font-weight:600;color:#0F1115">Behaviour</div>
+        <div class="k-cap" style="font-size:12px;margin-top:4px">Escape and scrim click collapse back to the docked panel, never close the conversation. The transcript is preserved across both states. Focus moves into the dialog on open and returns to the expand icon on collapse.</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="background:#fff;border-radius:6px;box-shadow:0 1px 3px rgba(15,17,21,.08);padding:28px 34px 32px">
+    <div class="k-tag" style="color:#B3161C;margin-bottom:6px">09 · Errors and notices</div>
+    <div style="font-weight:700;font-size:17px;color:#0F1115">Quiet, ink-first, never red</div>
+    <div class="k-cap" style="margin-top:8px;max-width:660px">Red is IPI's brand colour — it's on the launcher, the send button, every citation numeral. So a red error block would read as brand furniture rather than a warning, and worse, it makes an ordinary failure feel institutional. Notices are ink on a neutral fill with a single amber rule; red stays reserved for Abbie herself.</div>
+
+    <div style="display:flex;gap:20px;margin-top:24px;flex-wrap:wrap">
+
+      <div style="width:340px;flex:none">
+        <div style="background:#fff;border:1px solid #ECECE8;border-radius:6px;box-shadow:0 6px 18px rgba(15,17,21,.08);padding:16px 18px 18px">
+          <div style="text-align:right"><span style="display:inline-block;background:#F2F2F0;border-radius:4px;padding:8px 12px;font-size:14px;color:#4B5058;text-align:left;max-width:85%">How do knockout controls work?</span></div>
+          <div style="margin-top:14px;background:#FBFBF9;border-left:2px solid #C98A28;border-radius:0 4px 4px 0;padding:12px 14px">
+            <div style="font-size:13.5px;line-height:1.5;color:#1B1E23">I couldn't reach the server just now.</div>
+            <div style="display:flex;align-items:center;gap:14px;margin-top:9px">
+              <span style="display:inline-flex;align-items:center;gap:6px"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#B3161C" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12a8 8 0 1 1-2.3-5.6"/><path d="M20 4v4h-4"/></svg><span style="font-size:12.5px;font-weight:600;color:#B3161C">Try again</span></span>
+              <span style="font-size:12px;color:#5C6169">or email <span style="color:#B3161C;font-weight:500">info@ipi.org</span></span>
+            </div>
+          </div>
+        </div>
+        <div style="margin-top:10px"><span class="k-tag" style="color:#0F1115">Request failed</span><div class="k-cap" style="font-size:12px;margin-top:3px">Nothing arrived. One plain sentence, a retry that re-sends the same question, and a human fallback. No error codes, no apology paragraph.</div></div>
+      </div>
+
+      <div style="width:340px;flex:none">
+        <div style="background:#fff;border:1px solid #ECECE8;border-radius:6px;box-shadow:0 6px 18px rgba(15,17,21,.08);padding:16px 18px 18px">
+          <div style="font-size:15px;line-height:1.6;color:#1B1E23">Knockout controls are the strongest specificity test: if staining persists where the target gene is deleted, the signal isn't your</div>
+          <div style="margin-top:12px;background:#FBFBF9;border-left:2px solid #C98A28;border-radius:0 4px 4px 0;padding:11px 13px">
+            <div style="font-size:13px;line-height:1.5;color:#1B1E23">This answer stopped early — the connection dropped.</div>
+            <div style="display:inline-flex;align-items:center;gap:6px;margin-top:8px"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#B3161C" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12a8 8 0 1 1-2.3-5.6"/><path d="M20 4v4h-4"/></svg><span style="font-size:12.5px;font-weight:600;color:#B3161C">Ask again</span></div>
+          </div>
+        </div>
+        <div style="margin-top:10px"><span class="k-tag" style="color:#0F1115">Stream interrupted</span><div class="k-cap" style="font-size:12px;margin-top:3px">Partial text is kept, not discarded — it may still be useful — but it is explicitly marked incomplete so nobody quotes a half sentence as guidance. Sources and the action row are suppressed on an incomplete answer.</div></div>
+      </div>
+
+      <div style="flex:1;min-width:290px;display:flex;flex-direction:column;gap:14px">
+        <div style="background:#FDF6F6;border:1px solid #F3D7D8;border-radius:6px;padding:15px 17px">
+          <div style="font-size:13px;font-weight:600;color:#0F1115">Abstain, redirect and refuse are not errors</div>
+          <div class="k-cap" style="font-size:12px;margin-top:4px">Those three routes are Abbie working correctly — declining a named-reagent question, steering back on topic, refusing clinical use. They render as <b style="font-weight:600">ordinary answers</b> in normal ink, with no notice styling and no sources block. Styling them as errors would tell visitors the product is broken when it is behaving exactly as designed.</div>
+        </div>
+        <div style="background:#F4F4F1;border-radius:6px;padding:15px 17px">
+          <div style="font-size:13px;font-weight:600;color:#0F1115">Notice anatomy</div>
+          <div class="k-cap" style="font-size:12px;margin-top:4px">Fill <span class="k-mono">#FBFBF9</span>, 2 px left rule <span class="k-mono">#C98A28</span>, radius 0 4 4 0, padding 12/14. Body 13.5 px ink. Action in 12.5 px/600 <span class="k-mono">#B3161C</span> with a 12 px icon. One sentence, one action, optional human fallback.</div>
+        </div>
+        <div style="background:#F4F4F1;border-radius:6px;padding:15px 17px">
+          <div style="font-size:13px;font-weight:600;color:#0F1115">Copy rules</div>
+          <div class="k-cap" style="font-size:12px;margin-top:4px">Say what happened in one plain sentence and what to do next. Never show status codes, stack traces, model names or the word "unexpected". Announce every notice through the existing live region so it isn't silent for screen readers.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div style="background:#fff;border-radius:6px;box-shadow:0 1px 3px rgba(15,17,21,.08);padding:28px 34px 32px">
+    <div class="k-tag" style="color:#B3161C;margin-bottom:6px">10 · Decisions and gaps</div>
+    <div style="font-weight:700;font-size:17px;color:#0F1115">Decisions log and remaining gaps</div>
+    <div class="k-cap" style="margin-top:8px;max-width:660px">All three blocking questions are answered, so the design is complete enough to build. What remains are product defaults a developer can pick, and two states that were never drawn.</div>
+
+    <div style="margin-top:24px">
+      <div class="k-tag" style="color:#1B7A3E;margin-bottom:12px">Resolved · confirmed by IPI</div>
+      <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:26px">
+        <div style="display:flex;gap:12px;align-items:flex-start;background:#F6FAF7;border-radius:6px;padding:13px 15px">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1B7A3E" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" style="flex:none;margin-top:2px"><path d="M4 12.5l5 5L20 6.5"/></svg>
+          <div class="k-cap" style="font-size:12.5px"><b style="font-weight:600;color:#0F1115">The corpus holds author, year and journal per source.</b> The byline-over-title row is buildable as specified; add <span class="k-mono">short</span>, <span class="k-mono">journal</span> and <span class="k-mono">title</span> to each <span class="k-mono">done.sources</span> item.</div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:flex-start;background:#F6FAF7;border-radius:6px;padding:13px 15px">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1B7A3E" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" style="flex:none;margin-top:2px"><path d="M4 12.5l5 5L20 6.5"/></svg>
+          <div class="k-cap" style="font-size:12.5px"><b style="font-weight:600;color:#0F1115">Composer A is chosen</b> — filled block with the hint row, section 06.</div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:flex-start;background:#F6FAF7;border-radius:6px;padding:13px 15px">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1B7A3E" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" style="flex:none;margin-top:2px"><path d="M4 12.5l5 5L20 6.5"/></svg>
+          <div class="k-cap" style="font-size:12.5px"><b style="font-weight:600;color:#0F1115">The route → phrase mapping is approved</b>, including adding <span class="k-mono">form</span> to the route frame.</div>
+        </div>
+      </div>
+      <div class="k-tag" style="color:#6E737B;margin-bottom:12px">Product calls · pick a default, none block the build</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+        <div style="background:#FBFBF9;border-radius:6px;padding:14px 16px">
+          <div style="font-size:13px;font-weight:600;color:#0F1115">Thumbs up / down — store where?</div>
+          <div class="k-cap" style="font-size:12px;margin-top:4px">No feedback endpoint exists. Either keep it local per turn (visual only, no data) or add one. Don't invent an endpoint silently.</div>
+        </div>
+        <div style="background:#FBFBF9;border-radius:6px;padding:14px 16px">
+          <div style="font-size:13px;font-weight:600;color:#0F1115">Retry — replace or append?</div>
+          <div class="k-cap" style="font-size:12px;margin-top:4px">Re-asking the same question can overwrite the previous answer or add a second one below it. Appending is safer; replacing is tidier.</div>
+        </div>
+        <div style="background:#FBFBF9;border-radius:6px;padding:14px 16px">
+          <div style="font-size:13px;font-weight:600;color:#0F1115">Raise <span class="k-mono">MAX_SOURCES</span> above 3?</div>
+          <div class="k-cap" style="font-size:12px;margin-top:4px">The design handles any count. Leaving it at 3 means the "N more" state never appears — build it anyway, don't hardcode three.</div>
+        </div>
+        <div style="background:#FBFBF9;border-radius:6px;padding:14px 16px">
+          <div style="font-size:13px;font-weight:600;color:#0F1115">Font delivery</div>
+          <div class="k-cap" style="font-size:12px;margin-top:4px">Hanken Grotesk and Source Serif 4 are both free. Self-host or Google CDN — self-hosting avoids a third-party request on every page of the site.</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:26px">
+      <div class="k-tag" style="color:#1B7A3E;margin-bottom:12px">Previously missing · now specified</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px">
+        <div style="background:#F6FAF7;border-radius:6px;padding:14px 16px">
+          <div style="font-size:13px;font-weight:600;color:#1B7A3E">Mobile · §07</div>
+          <div class="k-cap" style="font-size:12px;margin-top:4px">Full-screen sheet below 640 px, 52 px launcher, 16 px input, <span class="k-mono">100dvh</span>, 44 px touch targets, no nudge.</div>
+        </div>
+        <div style="background:#F6FAF7;border-radius:6px;padding:14px 16px">
+          <div style="font-size:13px;font-weight:600;color:#1B7A3E">Expanded panel · §08</div>
+          <div class="k-cap" style="font-size:12px;margin-top:4px">720 px centred dialog over a scrim, 620 px reading measure, sources expanded in two columns.</div>
+        </div>
+        <div style="background:#F6FAF7;border-radius:6px;padding:14px 16px">
+          <div style="font-size:13px;font-weight:600;color:#1B7A3E">Errors and notices · §09</div>
+          <div class="k-cap" style="font-size:12px;margin-top:4px">Ink-first notice with an amber rule, never red. Abstain, redirect and refuse render as ordinary answers.</div>
+        </div>
+      </div></div>
+  </div>
+
+  <div style="display:flex;gap:32px;align-items:stretch;flex-wrap:wrap">
+    <div style="flex:1;min-width:420px;background:#fff;border-radius:6px;box-shadow:0 1px 3px rgba(15,17,21,.08);padding:28px 30px">
+      <div class="k-tag" style="color:#B3161C;margin-bottom:6px">11 · Tokens</div>
+      <div style="font-weight:700;font-size:17px;color:#0F1115;margin-bottom:16px">Taken from the live site</div>
+      <div style="display:flex;gap:8px;margin-bottom:16px">
+        <div style="flex:1;height:44px;border-radius:4px;background:#ec1d24"></div>
+        <div style="flex:1;height:44px;border-radius:4px;background:#B3161C"></div>
+        <div style="flex:1;height:44px;border-radius:4px;background:#F49B0B"></div>
+        <div style="flex:1;height:44px;border-radius:4px;background:#0A0A0B"></div>
+        <div style="flex:1;height:44px;border-radius:4px;background:#6E737B"></div>
+        <div style="flex:1;height:44px;border-radius:4px;background:#F4F4F1;border:1px solid #E7E9EE"></div>
+      </div>
+      <div style="display:grid;grid-template-columns:auto 1fr;gap:7px 16px;font-size:12px;color:#2A2E34;align-items:baseline">
+        <span style="color:#6E737B">Red</span><span>#EC1D24 · deep #B3161C for links, citations, numerals</span>
+        <span style="color:#6E737B">Orange</span><span>Site CTA colour only — not used anywhere in the widget</span>
+        <span style="color:#6E737B">Ink</span><span>#0A0A0B · text #1B1E23 · secondary #6E737B</span>
+        <span style="color:#6E737B">Lines</span><span>#ECECE8 panel · #EFEFEB header · #F2F2EF hairline</span>
+        <span style="color:#6E737B">Fills</span><span>#F8F8F6 field · #F4F4F1 hover · #FBEAEA citation</span>
+        <span style="color:#6E737B">Display</span><span>Source Serif 4 — wordmark and greeting only</span>
+        <span style="color:#6E737B">UI + body</span><span>Hanken Grotesk 400/500/600/700</span>
+        <span style="color:#6E737B">Scale</span><span>15/1.6 answers · 14 composer and user (16 on mobile) · 12.5 sources · 11 hints</span>
+        <span style="color:#6E737B">Radius</span><span>3 site buttons · 4 fields and chips · 6 panel and tiles</span>
+        <span style="color:#6E737B">Breakpoint</span><span>640 px — floating panel above, full-screen sheet below</span>
+        <span style="color:#6E737B">Motion</span><span>pop .5s spring · nod 1.6s · breathe 1.8s · sway 2.4s</span>
+      </div>
+      <div style="background:#F4F4F1;border-radius:4px;padding:11px 13px;margin-top:18px">
+        <div class="k-cap" style="font-size:12px"><b style="font-weight:600;color:#0F1115">Contrast floor.</b> On white, text at 12 px or below uses #6E737B or darker. <b style="font-weight:600;color:#0F1115">On a tinted fill</b> (#F8F8F6, #F4F4F1) that is not enough — use #5C6169 or darker, placeholders included. #9099A4 is for borders and larger non-essential text only. Small red text uses #B3161C, never #EC1D24 — including section labels. <b style="font-weight:600;color:#0F1115">Non-text cues</b> — focus rings, state boundaries, control outlines — need 3:1 against their own background, so a focused field takes an ink #1B1E23 ring, not a pale grey one.</div>
+      </div>
+    </div>
+
+    <div style="width:320px;flex:none;background:#fff;border-radius:6px;box-shadow:0 1px 3px rgba(15,17,21,.08);overflow:hidden">
+      <div style="padding:28px 30px 0">
+        <div class="k-tag" style="color:#6E737B;margin-bottom:6px">12 · Marketing only</div>
+        <div style="font-weight:700;font-size:17px;color:#0F1115">Cartoon Abbie</div>
+      </div>
+      <div style="height:190px;margin:18px 0 0;background:radial-gradient(120% 100% at 50% 18%, #F8F8F6 0%, #EDEDE9 100%);display:flex;align-items:center;justify-content:center;--abbie-minw:0;--abbie-minh:0">
+        <dc-import name="Abbie" variant="flat" style="width:150px;height:170px" hint-size="150px,170px"></dc-import>
+      </div>
+      <div style="padding:18px 30px 28px;border-top:1px solid #EFEFEB">
+        <div class="k-cap" style="font-size:12px">Same silhouette with a face. LinkedIn, event slides, stickers, internal decks. <b style="font-weight:600;color:#0F1115">Never rendered on proteininnovation.org</b> and not part of the widget build — she is why the mark stays upright, so the two remain one character.</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</x-dc>
+</body>
+</html>

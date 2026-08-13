@@ -258,8 +258,10 @@ is and shape it accordingly.
 
 ## The concept map
 
-Seventeen concepts written. Status reflects the August 7 sourcing pass, with three concepts
-added on August 12 to close the bench-controls gap described below.
+Thirty concepts written, and no `leads_to` edge points at an unwritten file — every follow-up
+the widget can offer resolves. Status reflects the August 7 sourcing pass, three concepts added
+on August 12 to close the bench-controls gap described below, and thirteen added on August 13
+covering the framework and the assays.
 
 ### Written
 
@@ -282,14 +284,35 @@ added on August 12 to close the bench-controls gap described below.
 | `experimental-readout` | core | public | 4D draft, kickoff notes |
 | `controls-in-validation` | core | public | Pillai-Kastoori 2020, Ayoubi 2023/2025 |
 | `application-western-blot` | core | public | Pillai-Kastoori 2020, Ghosh 2014, Tsuji 2020 |
+| `why-validation-matters` | foundational | public | Uhlen 2016, Taussig 2018, Biddle 2024 |
+| `antibody-characterization` | core | public | Ayoubi 2025, Uhlen 2016, 4D draft |
+| `validation-vs-characterization` | core | public | Ayoubi 2025, Taussig 2018, 4D draft |
+| `validation-map` | core | public | 4D draft |
+| `validation-profile` | core | public | 4D draft |
+| `fitness-for-purpose` | core | public | 4D draft |
+| `interpretive-principles` | core | public | 4D draft |
+| `evidence-strengthening-approaches` | core | public | 4D draft |
+| `orthogonal-validation` | advanced | public | Uhlen 2016, Ayoubi 2025, 4D draft |
+| `assay-sec` | advanced | public | IPI QC standard, internal |
+| `assay-mass-spectrometry` | advanced | public | IPI QC standard, internal |
+| `assay-spr-bli` | advanced | public | IPI QC standard, internal |
+| `assay-cell-display` | advanced | public | IPI QC standard, internal |
 
-### Still to write, sourcing available
+The four assay concepts carry no pass/fail criteria. The numeric bands live in IPI's internal
+release-gate standard, and what "good" means per application is recorded below as deferred
+pending a scientist. Describing what an assay establishes needs no threshold.
 
-`antibody-characterization`, `validation-vs-characterization`, `why-validation-matters`,
-`validation-map`, `validation-profile`, `fitness-for-purpose`, `interpretive-principles`,
-`evidence-strengthening-approaches`, `orthogonal-validation`, the five remaining
-per-application concepts, and the assay concepts (`assay-sec`, `assay-mass-spectrometry`,
-`assay-spr-bli`, `assay-cell-display`).
+### Still to write
+
+The five remaining per-application concepts: immunofluorescence, immunohistochemistry, flow
+cytometry, ELISA, and immunoprecipitation. These are the open half of the sourcing gap below —
+`application-western-blot` closed the Western blot entry on August 12 and is the template for
+the rest. None is a dangling `leads_to` target, so the graph is complete without them; they are
+coverage rather than repair.
+
+`recombinant-vs-conventional` was dropped rather than written. `reagent-reproducibility` already
+covers monoclonal, polyclonal, and recombinant with verified figures, down to its aliases, so a
+separate file would have duplicated it.
 
 ## Known sourcing gaps
 

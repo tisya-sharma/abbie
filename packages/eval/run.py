@@ -37,6 +37,7 @@ from packages.composer import ComposerPrompts, read_prompt_file, respond
 from packages.corpus_loader import build_system_message, estimate_tokens
 from packages.envfile import load_env_file
 from packages.eval.checks import score_case
+from packages.pricing import PRICING, estimate_cost
 from packages.router import classify
 
 load_env_file()
@@ -47,13 +48,6 @@ RESULTS_DIR = REPO_ROOT / "packages" / "eval" / "results"
 CACHE_DIR = REPO_ROOT / "packages" / "eval" / ".cache"
 DEFAULT_MODEL = os.environ.get("ABBIE_MODEL", "gpt-5-mini")
 DEFAULT_ROUTER_MODEL = os.environ.get("ABBIE_ROUTER_MODEL", "gpt-5-mini")
-
-# USD per million input/output tokens, checked against published rates 2026-08-11.
-# Reasoning tokens bill as output. Unknown models report cost as null, never a guess.
-PRICING = {
-    "gpt-5-mini": (0.125, 1.00),
-    "gpt-5": (0.625, 5.00),
-}
 
 DRY_RUN_OUTPUT_GUESS = 800
 DRY_RUN_ROUTER_OUTPUT_GUESS = 40
@@ -267,16 +261,6 @@ def percentile(values: list[float], p: float) -> float | None:
     ordered = sorted(values)
     index = min(len(ordered) - 1, max(0, round(p / 100 * (len(ordered) - 1))))
     return ordered[index]
-
-
-def estimate_cost(model: str, prompt_tokens: int, completion_tokens: int) -> float | None:
-    """Dollar cost of one call, or None when the model is not in the table."""
-    if model not in PRICING:
-        return None
-    input_rate, output_rate = PRICING[model]
-    return round(
-        (prompt_tokens * input_rate + completion_tokens * output_rate) / 1_000_000, 6
-    )
 
 
 def case_cost(model: str, measured: dict) -> float | None:

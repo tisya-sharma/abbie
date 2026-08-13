@@ -40,6 +40,7 @@ from packages.guardrail import (
     scrub_text,
 )
 from packages.router import classify
+from packages import telemetry
 
 load_env_file()
 
@@ -105,6 +106,10 @@ class Session:
     blocks until a turn finishes. Nothing is persisted.
     """
 
+    # Only ever used to group a conversation's spans on the trace. It is a
+    # browser-supplied opaque string, never an identity: there are no accounts
+    # here and nothing links a session to a person.
+    session_id: str = ""
     history: list[dict] = field(default_factory=list)
     covered: set[str] = field(default_factory=set)
     lock: threading.Lock = field(default_factory=threading.Lock)
@@ -243,14 +248,25 @@ def run_turn(
     so a failure can never leave the stream waiting.
     """
     try:
-        with session.lock:
-            route = classify(
-                client,
-                question,
-                ROUTER_MODEL,
-                ROUTER_PROMPT,
-                context=pending_offer(session.history),
-            )
+        with session.lock, telemetry.turn_span(
+            session.session_id, len(session.turn_concepts)
+        ) as turn:
+            with telemetry.llm_span("abbie.router", ROUTER_MODEL) as span:
+                route = classify(
+                    client,
+                    question,
+                    ROUTER_MODEL,
+                    ROUTER_PROMPT,
+                    context=pending_offer(session.history),
+                )
+                telemetry.record_usage(
+                    span, route.model, route.prompt_tokens, route.completion_tokens
+                )
+                span.set_attribute("abbie.behavior", route.behavior)
+                span.set_attribute("abbie.fallback", route.fallback)
+                if route.form:
+                    span.set_attribute("abbie.form", route.form)
+                telemetry.record_content(span, question, None)
             out.put(
                 (
                     "route",
@@ -273,16 +289,32 @@ def run_turn(
                 if visible:
                     out.put(("delta", {"text": visible}))
 
-            result = respond(
-                client,
-                route,
-                question,
-                PROMPTS,
-                MODEL,
-                REASONING_EFFORT,
-                history=session.history,
-                on_delta=emit_delta,
-            )
+            with telemetry.llm_span("abbie.composer", MODEL) as span:
+                result = respond(
+                    client,
+                    route,
+                    question,
+                    PROMPTS,
+                    MODEL,
+                    REASONING_EFFORT,
+                    history=session.history,
+                    on_delta=emit_delta,
+                )
+                # Refuse and abstain are templates with no model call, so they
+                # carry no model or usage to report.
+                if result.llm_called and result.model:
+                    telemetry.record_usage(
+                        span,
+                        result.model,
+                        result.prompt_tokens,
+                        # Reasoning tokens bill as output, so they belong in the
+                        # output count or the span understates what the turn cost.
+                        result.completion_tokens + result.reasoning_tokens,
+                        result.finish_reason,
+                    )
+                    telemetry.record_content(span, None, result.text)
+                span.set_attribute("abbie.llm_called", result.llm_called)
+                span.set_attribute("abbie.behavior", result.behavior)
             tail = scrubber.flush()
             if tail:
                 out.put(("delta", {"text": tail}))
@@ -318,13 +350,24 @@ def run_turn(
                 for key, value in source.items()
                 if key != "url"
             )
-            findings = [
-                finding
-                for text in surfaces
-                for finding in leak_scan(text, set(CONCEPTS))
-            ]
+            with telemetry.step_span("abbie.guardrail") as span:
+                findings = [
+                    finding
+                    for text in surfaces
+                    for finding in leak_scan(text, set(CONCEPTS))
+                ]
+                span.set_attribute("abbie.leak_findings", len(findings))
+                if findings:
+                    span.set_attribute("abbie.leak_reasons", findings)
             if findings:
                 print(f"leak scan blocked a reply: {findings}", file=sys.stderr)
+                # Withdrawn from the visitor, kept on the trace. A blocked turn
+                # is both the highest-signal security event this system produces
+                # and its most valuable eval case, so the session forgets it and
+                # the trace does not.
+                turn.set_attribute("abbie.outcome", "blocked")
+                turn.set_attribute("abbie.leak_reasons", findings)
+                telemetry.record_content(turn, question, result.text)
                 out.put(("error", {"message": FALLBACK_MESSAGE, "replace": True}))
                 return
 
@@ -332,6 +375,12 @@ def run_turn(
             session.history.append({"role": "assistant", "content": result.text})
             session.covered.update(cited)
             session.turn_concepts.append(cited)
+            turn.set_attribute("abbie.outcome", "answered")
+            turn.set_attribute("abbie.behavior", result.behavior)
+            turn.set_attribute("abbie.cited_count", len(cited))
+            turn.set_attribute(
+                "abbie.latency_ms", route.latency_ms + result.latency_ms
+            )
             out.put(
                 (
                     "done",
@@ -367,6 +416,26 @@ def stream_frames(out: queue.Queue[tuple[str, dict] | None]) -> Iterator[str]:
 app = FastAPI(title="abbie")
 
 
+@app.on_event("startup")
+def start_telemetry() -> None:
+    """Install tracing, reporting to stderr whether an exporter was found.
+
+    Absence is normal rather than an error: with no backend configured the
+    pipeline runs identically and spans are discarded, so a laptop needs no
+    account and no keys.
+    """
+    if telemetry.configure():
+        print("tracing: exporting spans", file=sys.stderr)
+    else:
+        print("tracing: no exporter configured, spans discarded", file=sys.stderr)
+
+
+@app.on_event("shutdown")
+def stop_telemetry() -> None:
+    """Flush buffered spans, which are otherwise lost on exit."""
+    telemetry.shutdown()
+
+
 @app.get("/")
 def index() -> FileResponse:
     """Serve the demo page."""
@@ -387,7 +456,9 @@ def chat(req: ChatRequest, request: Request) -> StreamingResponse:
     question = req.message.strip()
     if not question:
         raise HTTPException(status_code=400, detail="message must not be empty")
-    session = SESSIONS.setdefault(req.session_id, Session())
+    session = SESSIONS.setdefault(
+        req.session_id, Session(session_id=req.session_id)
+    )
     out: queue.Queue[tuple[str, dict] | None] = queue.Queue()
     threading.Thread(
         target=run_turn, args=(session, question, out), daemon=True

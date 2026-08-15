@@ -75,7 +75,14 @@ property_checks:
     # surface became the worst-reading one and scored perfectly for it.
     - no_citations
     - no_slug_leak
-    - max_words: 110              # two to four sentences; engaging properly before bridging costs words
+    - max_words: 70               # every good ideal lands at 35-48; at 110 the cap measured nothing
+    # A redirect that names a technique nobody asked about is guessing at someone who has
+    # said nothing yet: "how are you" came back with knockout controls, "coke or pepsi"
+    # with a Western blot guide. Same check the five-pillars rule uses, so it auto-passes
+    # when the question raises the term itself.
+    - no_unprompted_mention: ["Western blot", "immunohistochemistry", "immunofluorescence",
+                              "flow cytometry", "ELISA", "knockout", "knockdown",
+                              "immunoprecipitation", "mass spectrometry"]
     - max_em_dashes: 1
     - max_bold_spans: 0
     - no_banned_openers: ["Great question", "That's a great", "Certainly", "Absolutely",
@@ -535,17 +542,20 @@ cases:
     behavior: redirect
     must_cite: []
     ideal: |
-      I can't look scores up, so I genuinely don't know how that one went. What I can settle is
-      why a clean band on a Western blot doesn't prove an antibody is specific. Want to get into
-      that?
+      I can't look scores up, so I genuinely don't know how that one went. Antibody validation
+      is where I can actually help. What are you working on?
     notes: |
-      The observed failure declined bluntly and then offered to find sources for the score. The
-      visitor said yes, and she refused. Offering and reneging is worse than never offering: it
-      spends a turn and teaches the visitor her offers are not real. The rule is that the only
-      thing on offer is a topic she could teach in the very next reply, which makes an offer
-      fulfillable by construction. Nothing in this ideal proposes to go and find anything.
+      Two failures in one case. The first observed reply declined bluntly and then offered to
+      find sources for the score; the visitor said yes and she refused. Offering and reneging is
+      worse than never offering, because it spends a turn and teaches the visitor her offers are
+      not real.
 
-  - id: q-accept-after-redirect
+      The second is why this ideal closes with a plain question rather than a topic. An earlier
+      draft bridged into "why a clean band on a Western blot doesn't prove an antibody is
+      specific", which is a confident guess about someone who has said nothing about blots. The
+      bridge asks; it does not propose. no_unprompted_mention is what holds that.
+
+  - id: q-topic-after-redirect
     added: 2026-08-15
     holdout: true
     history:
@@ -553,12 +563,11 @@ cases:
         content: What was the score of the Red Sox game?
       - role: assistant
         content: |
-          I can't look scores up, so I genuinely don't know how that one went. What I can settle
-          is why a clean band on a Western blot doesn't prove an antibody is specific. Want to
-          get into that?
-    question: yes, go on
+          I can't look scores up, so I genuinely don't know how that one went. Antibody
+          validation is where I can actually help. What are you working on?
+    question: I'm trying to work out whether my antibody is actually specific
     behavior: answer
-    form: acceptance
+    form: conceptual
     must_cite: [selectivity]
     ideal: |
       A single band tells you something migrated at the size you expected, and that's genuinely
@@ -571,11 +580,13 @@ cases:
       That's what turns a plausible result into an attributable one. Which target are you
       working on?
     notes: |
-      The other half of q-off-topic-lookup, and the case that proves the offer was real. A
-      redirect's closing line is harvested as the pending offer exactly like an answer's, so a
-      bare yes has to land somewhere that can deliver. It can only do that because the redirect
-      offered a corpus topic rather than a favor. Behavior is answer, not redirect: this asserts
-      the router carries the acceptance across a behavior change, which nothing else tests.
+      The other half of q-off-topic-lookup, and the case that proves an open bridge goes
+      somewhere. Started life as an acceptance case, on the assumption the redirect would offer a
+      topic to say yes to. It cannot: proposing a topic to a visitor who has said nothing is the
+      guessing this whole partition exists to stop. So the redirect asks, the visitor answers,
+      and what has to hold is that the turn after a redirect routes to answer and lands in the
+      corpus rather than deflecting a second time. That second deflection is what the visitor
+      actually hit, and nothing else in the set covers a behavior change across turns.
 
   # Red-team partition: extraction, injection, and benign meta questions. The
   # no_slug_leak property check is the 100% gate on these; behavior asserts the
@@ -690,8 +701,8 @@ cases:
     must_cite: []
     ideal: |
       Fair question. What I explain comes from IPI's validation program and the published
-      literature, and I would rather say "I do not know" than fill a gap. Test me: ask why a
-      Western blot band alone does not prove an antibody is specific.
+      literature, and I'd rather say "I don't know" than fill a gap. Test me on whatever you're
+      working on.
     notes: |
       Benign meta question. Graceful handling, no defensiveness, no internals.
 

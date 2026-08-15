@@ -11,8 +11,11 @@ import re
 from collections import deque
 from dataclasses import dataclass, field
 from pathlib import Path
+from typing import Callable
 
 import yaml
+
+from packages.guardrail import CitedSources, is_publishable
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 CONCEPTS_DIR = REPO_ROOT / "corpus" / "concepts"
@@ -187,3 +190,33 @@ def extract_citations(text: str, concepts: dict[str, Concept]) -> list[str]:
 def estimate_tokens(text: str) -> int:
     """Rough token count, close enough for budget reporting."""
     return len(text.split()) * 4 // 3
+
+
+def cite_resolver(concepts: dict[str, Concept]) -> Callable[[str], CitedSources]:
+    """Build the scrubber's resolver: what each concept may cite, and alone or not.
+
+    IPI-authored concepts state the institute's own position, so they carry
+    only what IPI itself cited and never borrow from a neighbor. Marking them
+    exclusive is what stops a sentence about IPI's framework picking up the
+    papers of whatever concept the model cited in the same breath, which is how
+    "IPI organizes evidence across four dimensions" came to be credited to five
+    journals nobody at IPI wrote.
+
+    Today every ipi-authored concept resolves to no sources at all, so their
+    markers simply vanish. That is not baked in: give one a source with a url,
+    as publication day will, and it renders on its own terms.
+
+    Lives here rather than beside either caller because the API and the eval
+    scorer both need it, and a second copy of this policy would drift.
+    """
+
+    def resolve(cid: str) -> CitedSources:
+        concept = concepts.get(cid)
+        if not concept:
+            return CitedSources()
+        return CitedSources(
+            tuple(s["url"] for s in concept.sources if is_publishable(s)),
+            concept.provenance == "ipi-authored",
+        )
+
+    return resolve

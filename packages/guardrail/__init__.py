@@ -19,7 +19,21 @@ Two stages, used together:
 from __future__ import annotations
 
 import re
-from typing import Callable, Sequence
+from typing import Callable, NamedTuple, Sequence
+
+
+class CitedSources(NamedTuple):
+    """What one concept contributes to a citation group.
+
+    ``exclusive`` marks a concept whose own sources are the only ones allowed
+    to stand beside it. When one is cited, the group renders its sources alone
+    and drops whatever was co-cited. This module takes no view on which
+    concepts earn that; it is a rule about whose evidence may sit next to
+    whose, and the caller supplies the judgment.
+    """
+
+    urls: Sequence[str] = ()
+    exclusive: bool = False
 
 # Characters that appear inside citation-marker groups the model emits:
 # single ids, semicolon/comma-joined id lists, and title-form groups. A group
@@ -86,17 +100,21 @@ class StreamScrubber:
     over the same reply always yields the same numbering, so scrub_and_number
     can safely reproduce it from finished text.
 
-    The resolver maps a concept id to the source keys backing it, in the order
-    they should be numbered, and returns nothing for a concept with no citable
-    source. That case is ordinary rather than exceptional: IPI's own framework
-    grounds many answers and publishes no source, and those markers drop out
-    exactly as they did before numbering existed.
+    The resolver maps a concept id to a CitedSources: the keys backing it, in
+    the order they should be numbered, plus whether those keys stand alone. It
+    returns an empty one for a concept with no citable source, which is
+    ordinary rather than exceptional: IPI's own framework grounds many answers
+    and publishes no source, and those markers drop out exactly as they did
+    before numbering existed.
     """
 
-    def __init__(self, resolve: Callable[[str], Sequence[str]] | None = None) -> None:
+    def __init__(
+        self, resolve: Callable[[str], CitedSources] | None = None
+    ) -> None:
         self._buffer = ""
         self._resolve = resolve
         self._ordinals: dict[str, int] = {}
+        self._exclusive_run = False
 
     @property
     def keys(self) -> list[str]:
@@ -107,12 +125,30 @@ class StreamScrubber:
         """The visible replacement for one marker group, empty to drop it."""
         if self._resolve is None:
             return ""
+        resolved = [
+            self._resolve(slug)
+            for slug in (token.strip() for token in _GROUP_SEPARATOR.split(inner))
+            if slug
+        ]
+        # A concept that speaks for itself does not borrow the evidence of
+        # whatever was cited alongside it. A sentence stating IPI's own
+        # framework picked up the five papers of a neighbor cited in the same
+        # breath, which credited the wrong people for IPI's ideas.
+        #
+        # The run, not just this group, is what carries the rule: [a] [b] and
+        # [a; b] have to behave the same way, and the model overwhelmingly
+        # writes the first form because system.md asks it to. What this cannot
+        # undo is a neighbor cited *before* the exclusive concept in the same
+        # run, since those ordinals are already on the wire. The prompt rule
+        # about citing the concept the claim actually rests on is what covers
+        # that direction.
+        if any(entry.exclusive for entry in resolved):
+            self._exclusive_run = True
+        if self._exclusive_run:
+            resolved = [entry for entry in resolved if entry.exclusive]
         ordinals: list[int] = []
-        for token in _GROUP_SEPARATOR.split(inner):
-            slug = token.strip()
-            if not slug:
-                continue
-            for key in self._resolve(slug):
+        for entry in resolved:
+            for key in entry.urls:
                 ordinal = self._ordinals.setdefault(key, len(self._ordinals) + 1)
                 if ordinal not in ordinals:
                     ordinals.append(ordinal)
@@ -150,6 +186,13 @@ class StreamScrubber:
             while lead > 0 and buffer[lead - 1] in " \t":
                 lead -= 1
             out.append(buffer[:lead])
+            if lead:
+                # Prose between two groups ends the citation run, so the next
+                # group starts a fresh one. Runs matter because the model is
+                # told to give each id its own brackets and does: the last run
+                # produced 64 adjacent pairs against 1 combined group, so a
+                # rule scoped to a single group would almost never fire.
+                self._exclusive_run = False
             spaces = buffer[lead:start]
             rest = buffer[start:]
             close = rest.find("]")
@@ -197,7 +240,7 @@ def scrub_text(text: str) -> str:
 
 
 def scrub_and_number(
-    text: str, resolve: Callable[[str], Sequence[str]]
+    text: str, resolve: Callable[[str], CitedSources]
 ) -> tuple[str, list[str]]:
     """Number a complete reply, returning visible text and its source keys.
 

@@ -6,6 +6,7 @@
 import unittest
 
 from packages.guardrail import (
+    CitedSources,
     StreamScrubber,
     is_publishable,
     leak_scan,
@@ -105,20 +106,24 @@ class StreamScrubberTests(unittest.TestCase):
         self.assertEqual(scrubber.flush(), "")
 
 
-# Four concepts covering the shapes the numbering has to survive: IPI's own
-# framework, which publishes nothing citable; a concept with one paper; one
-# with two; and a fourth sharing a paper with the third.
+# Shapes the numbering has to survive. A fixture, not the real corpus: the ids
+# are borrowed for readability and the sources are invented. exclusive marks a
+# concept that speaks for the institute, citing only its own sources and never
+# a neighbor's.
 SOURCES = {
-    "four-dimensional-framework": [],
-    "what-is-binding": ["https://example.org/a"],
-    "selectivity": ["https://example.org/b", "https://example.org/c"],
-    "molecular-integrity": ["https://example.org/b"],
+    # IPI's framework as it stands: speaks for itself, publishes nothing.
+    "four-dimensional-framework": CitedSources((), True),
+    # The publication-day shape: IPI's, carrying a paper Deb cited herself.
+    "validation-map": CitedSources(("https://example.org/deb",), True),
+    "what-is-binding": CitedSources(("https://example.org/a",)),
+    "selectivity": CitedSources(("https://example.org/b", "https://example.org/c")),
+    "molecular-integrity": CitedSources(("https://example.org/b",)),
 }
 
 
 class NumberedScrubberTests(unittest.TestCase):
     def collect(self, chunks):
-        scrubber = StreamScrubber(lambda cid: SOURCES.get(cid, []))
+        scrubber = StreamScrubber(lambda cid: SOURCES.get(cid, CitedSources()))
         parts = [scrubber.feed(chunk) for chunk in chunks]
         parts.append(scrubber.flush())
         return "".join(parts), scrubber
@@ -177,6 +182,40 @@ class NumberedScrubberTests(unittest.TestCase):
             scrubber.keys,
             ["https://example.org/b", "https://example.org/c", "https://example.org/a"],
         )
+
+    def test_ipi_claim_drops_a_paper_cited_in_the_same_group(self):
+        out = self.scrub("IPI reads it this way [four-dimensional-framework; selectivity].")
+        self.assertEqual(out, "IPI reads it this way.")
+
+    def test_ipi_claim_drops_a_paper_cited_in_the_next_group(self):
+        # The shape that actually occurs: system.md asks for one id per pair of
+        # brackets, and the last run wrote 64 adjacent pairs against 1 combined
+        # group. A rule scoped to a single group would miss every one of them.
+        out = self.scrub("IPI reads it this way [four-dimensional-framework] [selectivity].")
+        self.assertEqual(out, "IPI reads it this way.")
+
+    def test_prose_between_groups_starts_a_new_run(self):
+        # Two separate claims, so the second is free to cite its own evidence.
+        out = self.scrub(
+            "IPI reads it this way [four-dimensional-framework]."
+            " Binding is separate [what-is-binding]."
+        )
+        self.assertEqual(out, "IPI reads it this way. Binding is separate [1].")
+
+    def test_an_ipi_concept_with_its_own_paper_still_cites_it(self):
+        # What publication day looks like: Deb cited it, so it renders.
+        out = self.scrub("The map orders the evidence [validation-map].")
+        self.assertEqual(out, "The map orders the evidence [1].")
+
+    def test_an_ipi_concept_with_a_paper_still_drops_a_neighbor(self):
+        out = self.scrub("Both at once [validation-map] [selectivity].")
+        self.assertEqual(out, "Both at once [1].")
+
+    def test_external_concepts_together_are_unaffected(self):
+        # Still one pill per group, so a run of ordinary citations renders
+        # exactly as it did before exclusivity existed.
+        out = self.scrub("Ordinary evidence [what-is-binding] [selectivity].")
+        self.assertEqual(out, "Ordinary evidence [1] [2, 3].")
 
     def test_no_resolver_still_deletes(self):
         # History scrubbing and the eval scorer pass no resolver and must keep

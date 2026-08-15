@@ -133,7 +133,9 @@ Collapsed to a count by default; expanded on click; **capped at three visible ro
 
 **Amended 2026-08-15, both clauses.** Inline citation pills now sit in the reply itself, and two rules above had to give way.
 
-*Chips are back, on the condition that killed them.* The objection was never the shape, it was the label: a journal name is not unique. The pill carries `short` instead — "Uhlén 2016", which this section already argues for one paragraph down, "author + year is unique where a journal name is not". Two eLife papers render as "Edfors 2018" and "Laflamme 2019". A claim resting on several papers shows the first plus `+N`. The pill reuses this section's own collapsed-control tokens, so the two read as one system rather than two.
+*Chips are back.* The objection was never the shape, it was the label. The pill carries the **journal**, falling back through `short` to `title` for a work with no journal, such as a book. A claim resting on several papers shows the first plus `+N`. The pill reuses this section's own collapsed-control tokens, so the two read as one system rather than two.
+
+This was decided against the argument one paragraph down, that "author + year is unique where a journal name is not". That argument still holds, and it is the known cost: two papers from one journal do render identical pills, and the byline in the expanded rows is what separates them. Both labels were built and read side by side in the running demo, and the journal was chosen on that evidence. Do not revert it on the strength of the earlier paragraph alone.
 
 *The three-row cap is gone.* Every pill indexes into the expanded list, so a row the layout hides is a citation the reader cannot follow. Expanding now shows every source and the block's height varies with the count. `MAX_SOURCES` is removed server-side for the same reason, which also settles the open call in section 14: with no cap, the "N more" state that section asked for never occurs and its control has been removed.
 

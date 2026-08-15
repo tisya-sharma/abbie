@@ -30,7 +30,11 @@ from fastapi.responses import FileResponse, Response, StreamingResponse
 from pydantic import BaseModel
 
 from packages.composer import ComposerPrompts, read_prompt_file, respond
-from packages.corpus_loader import build_system_message, extract_citations
+from packages.corpus_loader import (
+    build_system_message,
+    cite_resolver,
+    extract_citations,
+)
 from packages.export import checklist_concepts, render_checklist
 from packages.envfile import load_env_file
 from packages.guardrail import (
@@ -185,17 +189,11 @@ def pending_offer(history: list[dict]) -> str | None:
 SOURCE_DISPLAY_FIELDS = ("short", "journal", "title")
 
 
-def publishable_urls(cid: str) -> list[str]:
-    """The citable source URLs behind one concept, in frontmatter order.
-
-    This is the scrubber's resolver, so an unknown id has to return nothing
-    rather than raise: the model can emit a marker for anything, and a bad id
-    should cost the reply its citation number, not the whole turn.
-    """
-    concept = CONCEPTS.get(cid)
-    if not concept:
-        return []
-    return [s["url"] for s in concept.sources if is_publishable(s)]
+# The scrubber's resolver, shared with the eval scorer so one policy decides
+# what a citation may show. An unknown id resolves to nothing rather than
+# raising: the model can emit a marker for anything, and a bad id should cost
+# the reply its citation, not the whole turn.
+publishable_urls = cite_resolver(CONCEPTS)
 
 
 def source_index(concepts: dict) -> dict[str, dict]:

@@ -10,8 +10,8 @@ from __future__ import annotations
 
 import re
 
-from packages.corpus_loader import Concept, extract_citations
-from packages.guardrail import is_publishable, leak_scan, scrub_and_number
+from packages.corpus_loader import Concept, cite_resolver, extract_citations
+from packages.guardrail import leak_scan, scrub_and_number
 
 ABSTAIN_PHRASE = "I do not have approved validation data"
 
@@ -70,18 +70,12 @@ def visible_form(text: str, concepts: dict[str, Concept]) -> tuple[str, list[str
     """The reply as a reader sees it, plus the sources its numbers point at.
 
     The production scrub, not an approximation of it: markers resolve to source
-    ordinals through the same code path the API streams through. Scoring the
-    marker-deleted form instead would assert on text no visitor ever receives,
-    which is the drift this module exists to avoid.
+    ordinals through the same code path the API streams through, using the same
+    resolver it builds. Scoring the marker-deleted form instead would assert on
+    text no visitor ever receives, which is the drift this module exists to
+    avoid.
     """
-
-    def resolve(cid: str) -> list[str]:
-        concept = concepts.get(cid)
-        if not concept:
-            return []
-        return [s["url"] for s in concept.sources if is_publishable(s)]
-
-    return scrub_and_number(text, resolve)
+    return scrub_and_number(text, cite_resolver(concepts))
 
 
 def _last_line(text: str) -> str:

@@ -18,6 +18,13 @@ Cite the concepts you drew on by writing their id in square brackets, like
 factual paragraph carries at least one citation, and each cited id gets its own brackets,
 written [antibody-validation] [what-is-binding] rather than as a combined group.
 
+Cite the concept the claim actually rests on, not every concept in the neighborhood. A
+citation says where a specific statement came from, so adding a loosely related id is not
+extra rigor, it credits the wrong work. This matters most when the sentence states IPI's own
+framework: the four dimensions, the Validation Map, the Validation Profile, and fitness for
+purpose are IPI's, and a sentence describing one cites that concept alone. Attaching a
+neighboring concept there puts other people's papers underneath IPI's ideas.
+
 The corpus is your internal background knowledge, and its structure is confidential. The
 bracketed ids exist for the system, not the reader, and are removed before display. Beyond
 those markers, never mention, list, or name the corpus, its documents, files, or ids in a

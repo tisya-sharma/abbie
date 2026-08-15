@@ -1343,14 +1343,9 @@ button { font-family: var(--abbie-sans); }
         markSeen();
         rootEl.classList.add("abbie--greeted");
       }
-      refreshSources();
       if (focusTarget) focusTarget.focus();
       scrollBottom();
     }
-
-    // Sources start expanded in the dialog and collapsed in the docked panel,
-    // so crossing the 780px floor has to reapply that.
-    DIALOG_QUERY.addEventListener("change", refreshSources);
 
     refs.launcher.addEventListener("click", function () {
       if (widgetState === "closed") setWidget("panel", refs.input);
@@ -1533,9 +1528,12 @@ button { font-family: var(--abbie-sans); }
     /* A citation pill. The server replaces each concept marker with the
        ordinals of the papers behind it and sends those papers ahead of the
        delta that cites them, so by the time this runs the numbers resolve.
-       The label is author and year rather than the journal, because two papers
-       from one journal would otherwise render identical pills, which is why
-       SPEC section 7 rejected chips the first time.
+
+       The label is the journal, chosen over author and year after seeing both
+       live. Two papers from the same journal do render identical pills, which
+       is the duplication SPEC section 7 first rejected chips over; the byline
+       in the sources block is what separates them. Falling back through short
+       to title matters because a book has no journal at all.
 
        Only the first paper is linked; a claim resting on several shows +N and
        the rest sit a click away in the sources block, which the same numbering
@@ -1549,7 +1547,8 @@ button { font-family: var(--abbie-sans); }
       var extra = found.length - 1;
       return '<a class="abbie-cite" href="' + escapeHtml(found[0].url) + '"' +
         ' target="_blank" rel="noopener noreferrer">' + ICONS.doc + "<span>" +
-        escapeHtml(found[0].short || found[0].title || found[0].label) +
+        escapeHtml(found[0].journal || found[0].short || found[0].title
+          || found[0].label) +
         (extra ? " +" + extra : "") + "</span></a>";
     }
 
@@ -1865,28 +1864,6 @@ button { font-family: var(--abbie-sans); }
       toggle.setAttribute("aria-expanded", "false");
       toggle.addEventListener("click", function () { setOpen(true); });
       head.addEventListener("click", function () { setOpen(false); });
-
-      applySourcesCap(block);
-    }
-
-    /* Collapsed by default, and expanding shows every source rather than the
-       first few. SPEC section 7 caps the expanded list at three rows to hold
-       the block at a constant height, which this deliberately departs from:
-       once each pill in the prose indexes into this list, a row the layout
-       chose to hide is a citation the reader cannot follow. Height varies;
-       reachability does not.
-
-       Open/closed is still a layout question, so it is recomputed whenever the
-       panel changes shape rather than fixed at render time. */
-    function applySourcesCap(block) {
-      // The dialog has room to show the evidence without asking, so sources
-      // start expanded there and collapse again back in the docked panel.
-      var dialog = widgetState === "expanded" && DIALOG_QUERY.matches;
-      if (block.setOpen) block.setOpen(dialog, true);
-    }
-
-    function refreshSources() {
-      refs.col.querySelectorAll(".abbie-src").forEach(applySourcesCap);
     }
 
     /* Message actions. Icons carry the meaning, so every button gets both an

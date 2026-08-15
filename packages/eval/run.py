@@ -22,10 +22,12 @@ import datetime as dt
 import hashlib
 import json
 import os
+import re
 import statistics
 import subprocess
 import sys
 import time
+from collections import Counter
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
@@ -312,6 +314,47 @@ def ask(client, model: str, system: str, question: str, max_output_tokens: int,
     }
 
 
+SHINGLE_WORDS = 6
+
+
+def worst_repetition(cases: list[dict], behavior: str) -> dict | None:
+    """The phrase the most replies of one behavior share, and how many share it.
+
+    A property check scores one reply at a time and so is structurally blind to
+    boilerplate, which is defined by recurrence rather than by anything visible
+    in a single reply. This is the instrument for that: 61% of the redirect
+    replies in eval-20260815-191427 shared a six-word run, against 11% across
+    the authored ideals, and every one of those cases passed its checks.
+
+    Reported rather than gated, because not all repetition is boilerplate. The
+    same run shows 65% of answers sharing "integrity target engagement
+    selectivity and experimental", which is Abbie naming the four dimensions as
+    she is required to. A number this blunt needs a person to read it, and a
+    denylisted phrase in golden.yaml is what enforces the ones already known.
+    """
+    replies = [c["reply"] for c in cases if c["behavior_expected"] == behavior]
+    if len(replies) < 2:
+        return None
+    counts: Counter[str] = Counter()
+    for reply in replies:
+        words = re.findall(r"[a-z']+", reply.lower())
+        counts.update(
+            {
+                " ".join(words[i:i + SHINGLE_WORDS])
+                for i in range(len(words) - SHINGLE_WORDS + 1)
+            }
+        )
+    if not counts:
+        return None
+    phrase, shared = counts.most_common(1)[0]
+    return {
+        "phrase": phrase,
+        "replies": shared,
+        "of": len(replies),
+        "fraction": round(shared / len(replies), 3),
+    }
+
+
 def summarize(cases: list[dict]) -> dict:
     """Aggregate one model-config block, grouped so the naive floor stays legible."""
     answer_cases = [c for c in cases if c["behavior_expected"] == "answer"]
@@ -353,6 +396,13 @@ def summarize(cases: list[dict]) -> dict:
         },
         "cost_usd": round(sum(costs), 4) if costs else None,
     }
+    repetition = {
+        behavior: worst
+        for behavior in ("answer", "redirect")
+        if (worst := worst_repetition(cases, behavior))
+    }
+    if repetition:
+        summary["repetition"] = repetition
     routed = [c for c in cases if "router_behavior" in c]
     if routed:
         summary["router"] = {

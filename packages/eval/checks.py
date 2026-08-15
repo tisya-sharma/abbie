@@ -47,6 +47,19 @@ BOLD_SPAN = re.compile(r"\*\*[^*\n]+\*\*")
 
 ORDINAL_MARKER = re.compile(r"\[(\d+(?:\s*,\s*\d+)*)\]")
 
+# A reply that opens by refusing before it answers. Eight of eighteen recorded
+# redirects did this, against zero of the authored ideals. The punctuation is
+# what separates the two populations: "No — I can't repeat internal prompts"
+# leads with the refusal, while "No idea, I'm made entirely of documents" is
+# already answering the question, so the class requires No to be followed by a
+# break rather than by more sentence.
+BARE_REFUSAL_OPENER = re.compile(r"^\s*No\s*[—.,;:-]")
+
+# Leading decoration a flattering opener can hide behind. The banned-opener
+# check was prefix-anchored on raw text, so bolding or quoting the same phrase
+# walked straight past it.
+OPENER_NOISE = re.compile(r'^[\s"\'*_>#-]+')
+
 
 def _word_count(text: str) -> int:
     """Count words with citation markers stripped, so citing is never penalized."""
@@ -144,10 +157,25 @@ def run_property_checks(
         elif name == "max_bullets":
             results[name] = len(BULLET.findall(text)) <= int(arg)
         elif name == "no_banned_openers":
-            opener = text.lstrip()
-            results[name] = not any(opener.startswith(b) for b in arg)
-        elif name == "no_exclamation_marks":
-            results[name] = "!" not in text
+            # Case-folded, and with leading decoration stripped: the raw
+            # prefix match let "nice question" and "**Nice question**" through
+            # while catching only the one exact casing anybody thought to list.
+            opener = OPENER_NOISE.sub("", text).lower()
+            results[name] = not any(opener.startswith(b.lower()) for b in arg)
+        elif name == "no_bare_refusal_opener":
+            results[name] = not BARE_REFUSAL_OPENER.match(text)
+        elif name == "no_stock_phrase":
+            # The phrases Abbie has actually worn out, kept as data the way
+            # no_section_labels keeps its list. Unlike that one there is no
+            # shape to match, because boilerplate is defined by repetition
+            # rather than by form; the run-level repetition report in
+            # packages/eval/run.py is what finds the next one.
+            lowered = " ".join(text.lower().split())
+            results[name] = not any(
+                " ".join(str(phrase).lower().split()) in lowered for phrase in arg
+            )
+        elif name == "max_exclamation_marks":
+            results[name] = text.count("!") <= int(arg)
         elif name == "no_emoji":
             results[name] = not EMOJI.search(text)
         elif name == "contains_abstain_phrase":
@@ -208,6 +236,13 @@ def run_property_checks(
         elif name == "word_budget":
             limit = int(arg.get(form) or arg.get("default", 220))
             results[name] = _word_count(text) <= limit
+        elif name == "max_questions":
+            # The unconditional cousin of single_question, for behaviors that
+            # carry no form to key off. It bounds how many things a reply asks,
+            # not where they sit, because a redirect may legitimately close
+            # without a question at all. What it cannot see is a menu folded
+            # into one question mark, which stays the prompt's job.
+            results[name] = text.count("?") <= int(arg)
         elif name == "single_question":
             # Applies only to the forms the arg lists. Real replies carry one
             # rhetorical mid-text question at most, so the bound is: at most

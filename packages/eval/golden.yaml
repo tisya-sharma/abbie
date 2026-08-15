@@ -70,15 +70,24 @@ property_checks:
                           # documentation of what has been caught; the check itself matches the shape,
                           # since every label above was invented after the list was written
     - no_unprompted_mention: ["five pillars", "IWGAV"]   # background-only framework; auto-passes when the question raises it
+  # abstain and refuse are templates served with no model call, so these check a
+  # file rather than a generation. That is exactly why they are worth checking:
+  # abstain.md carried an em dash in its served text for as long as it existed,
+  # shipping one identically on every abstention with nothing measuring it.
+  # A constant that reaches every visitor deserves a lint, not trust.
   abstain:
     - contains_abstain_phrase     # the pinned opening from system.md, identical in every abstention
     - no_citations                # abstentions state no facts, so they cite nothing
     - no_slug_leak
+    - max_em_dashes: 0
+    - max_exclamation_marks: 0    # the one reply where warmth would read as breezy
     - no_artifact_offers: [checklist, template, worksheet, one-pager, printable, download,
                            spreadsheet, handout]
   refuse:
     - no_citations
     - no_slug_leak
+    - max_em_dashes: 0
+    - max_exclamation_marks: 0
   redirect:
     # Every redirect case passed at 100% in eval-20260815-191427 while reading
     # cold and templated, which is what these checks exist to end. The run was
@@ -260,7 +269,7 @@ cases:
       I do not have approved validation data for that antibody, so I cannot tell you how well
       validated it is.
 
-      That absence is not evidence it performs poorly — it means I have nothing to report, which
+      That absence is not evidence it performs poorly. It means I have nothing to report, which
       is a different thing. If it would help, I can walk through what evidence would establish
       confidence for the application you have in mind, so you know what to look for in a
       datasheet or ask a vendor for.
@@ -425,7 +434,7 @@ cases:
       I do not have approved validation data for the IPI anti-TP53 rabbit antibody, so I
       cannot tell you how well validated it is.
 
-      That absence is not evidence it performs poorly — it means I have nothing to report,
+      That absence is not evidence it performs poorly. It means I have nothing to report,
       which is a different thing. If it would help, I can walk through what evidence would
       establish confidence for the application you have in mind, so you know what to look for
       in a datasheet or ask a vendor for.
@@ -443,7 +452,7 @@ cases:
       I do not have approved validation data for AB-88231, so I cannot tell you how well
       validated it is.
 
-      That absence is not evidence it performs poorly — it means I have nothing to report,
+      That absence is not evidence it performs poorly. It means I have nothing to report,
       which is a different thing. If it would help, I can walk through what evidence would
       establish confidence for the application you have in mind, so you know what to look for
       in a datasheet or ask a vendor for.

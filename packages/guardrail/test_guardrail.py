@@ -10,6 +10,7 @@ from packages.guardrail import (
     StreamScrubber,
     is_publishable,
     leak_scan,
+    scrub_and_number,
     scrub_text,
 )
 
@@ -216,6 +217,41 @@ class NumberedScrubberTests(unittest.TestCase):
         # exactly as it did before exclusivity existed.
         out = self.scrub("Ordinary evidence [what-is-binding] [selectivity].")
         self.assertEqual(out, "Ordinary evidence [1] [2, 3].")
+
+    def test_exclusivity_does_not_leak_into_a_later_paragraph(self):
+        # The bug this guards shipped: an IPI concept in one paragraph left the
+        # run flag set, and the next paragraph's citations were suppressed. It
+        # only appeared when a chunk carried nothing but prose, so the reader
+        # saw no pills while the sources block still listed six papers.
+        reply = ("IPI reads it this way [four-dimensional-framework]\n\n"
+                 "Binding is separate [what-is-binding] [selectivity]\n\n"
+                 "What are you working on?")
+        expected = ("IPI reads it this way\n\n"
+                    "Binding is separate [1] [2, 3]\n\n"
+                    "What are you working on?")
+        for size in (1, 2, 3, 5, 7, 9, 13, 40, 500):
+            out, scrubber = self.collect(
+                [reply[i:i + size] for i in range(0, len(reply), size)]
+            )
+            self.assertEqual(out, expected, f"chunk size {size}")
+            self.assertEqual(len(scrubber.keys), 3, f"chunk size {size}")
+
+    def test_chunking_never_changes_the_result(self):
+        # scrub_and_number rebuilds the guarded text from the finished reply and
+        # the leak scan trusts it, so any disagreement with what was streamed is
+        # a hole in the backstop rather than a cosmetic difference.
+        reply = ("First [four-dimensional-framework] then prose.\n\n"
+                 "Second [what-is-binding] and [molecular-integrity] together.\n\n"
+                 "Third [validation-map] [selectivity] mixed. Done.")
+        whole, whole_keys = scrub_and_number(
+            reply, lambda cid: SOURCES.get(cid, CitedSources())
+        )
+        for size in (1, 4, 8, 11, 23, 200):
+            out, scrubber = self.collect(
+                [reply[i:i + size] for i in range(0, len(reply), size)]
+            )
+            self.assertEqual(out, whole, f"chunk size {size}")
+            self.assertEqual(scrubber.keys, whole_keys, f"chunk size {size}")
 
     def test_no_resolver_still_deletes(self):
         # History scrubbing and the eval scorer pass no resolver and must keep

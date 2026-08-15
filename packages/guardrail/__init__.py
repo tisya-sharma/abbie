@@ -121,6 +121,27 @@ class StreamScrubber:
         """Cited source keys in reading order; a key's ordinal is its index plus one."""
         return list(self._ordinals)
 
+    def _emit(self, out: list[str], text: str) -> None:
+        """Emit prose, ending any citation run it interrupts.
+
+        Every path that writes prose goes through here, and that is the whole
+        point. The run flag used to be cleared only where a group was found
+        with prose before it, so a chunk carrying nothing but prose left it
+        set: exclusivity from one paragraph then suppressed the next
+        paragraph's citations, but only when the chunk boundaries happened to
+        fall that way. The reply a reader saw and the reply scrub_and_number
+        reconstructs disagreed, which is the one thing this class promises
+        cannot happen.
+
+        Spaces and tabs alone do not end a run, because "[a] [b]" is one run
+        written the way system.md asks for it. A newline does.
+        """
+        if not text:
+            return
+        out.append(text)
+        if text.strip(" \t"):
+            self._exclusive_run = False
+
     def _render_group(self, inner: str) -> str:
         """The visible replacement for one marker group, empty to drop it."""
         if self._resolve is None:
@@ -170,7 +191,7 @@ class StreamScrubber:
             start = buffer.find("[")
             if start == -1:
                 if final:
-                    out.append(buffer)
+                    self._emit(out, buffer)
                     buffer = ""
                     break
                 # Trailing spaces might precede a bracket in the next chunk,
@@ -178,21 +199,14 @@ class StreamScrubber:
                 keep = len(buffer)
                 while keep > 0 and buffer[keep - 1] in " \t":
                     keep -= 1
-                out.append(buffer[:keep])
+                self._emit(out, buffer[:keep])
                 buffer = buffer[keep:]
                 break
 
             lead = start
             while lead > 0 and buffer[lead - 1] in " \t":
                 lead -= 1
-            out.append(buffer[:lead])
-            if lead:
-                # Prose between two groups ends the citation run, so the next
-                # group starts a fresh one. Runs matter because the model is
-                # told to give each id its own brackets and does: the last run
-                # produced 64 adjacent pairs against 1 combined group, so a
-                # rule scoped to a single group would almost never fire.
-                self._exclusive_run = False
+            self._emit(out, buffer[:lead])
             spaces = buffer[lead:start]
             rest = buffer[start:]
             close = rest.find("]")
@@ -211,7 +225,7 @@ class StreamScrubber:
                     buffer = ""
                     break
                 # Literal bracket, emit it and keep scanning after it.
-                out.append(spaces + "[")
+                self._emit(out, spaces + "[")
                 buffer = rest[1:]
                 continue
 
@@ -226,7 +240,7 @@ class StreamScrubber:
                     out.append(spaces + rendered)
                 buffer = rest[close + 1 :]
                 continue
-            out.append(spaces + rest[: close + 1])
+            self._emit(out, spaces + rest[: close + 1])
             buffer = rest[close + 1 :]
 
         self._buffer = buffer

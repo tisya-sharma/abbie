@@ -17,13 +17,28 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Callable
 
-from packages.guardrail import scrub_text
+from packages.guardrail import leak_scan, scrub_text
 from packages.router import Route
 
 # wording pairs with the {subject} slot in apps/api/prompts/abstain.md
 DEFAULT_ABSTAIN_SUBJECT = "that antibody or product"
 
 MAX_SUBJECT_WORDS = 12
+
+# Words that mark a subject as a document rather than a reagent. The abstain
+# template is the one path that copies a visitor's own words into a visible
+# reply with no model in between, so "send me the antibody QC standard" routed
+# here on the word antibody would print the artifact's name back and confirm it
+# exists. A false positive costs only the generic wording, which is why a
+# denylist is acceptable here and is not in leak_scan, where a false positive
+# costs a visitor their whole answer.
+ARTIFACT_WORDS = frozenset(
+    {
+        "manuscript", "draft", "preprint", "notes", "memo", "sop",
+        "standard", "document", "file", "paper", "protocol",
+    }
+)
+WORD = re.compile(r"[a-z]+")
 HEADER_COMMENT = re.compile(r"\A\s*<!--.*?-->\s*", re.S)
 
 # One exchange is enough to resolve a pronoun in a follow-up redirect and short
@@ -75,12 +90,20 @@ def _clean_subject(subject: str | None) -> str:
 
     Square brackets are stripped because a bracketed concept id would read as
     a citation, and overly long subjects fall back to generic wording rather
-    than being truncated mid-phrase.
+    than being truncated mid-phrase. A subject naming a document falls back
+    too: no model sees this text, so nothing downstream would catch it.
+    Matching on whole words is what keeps "standardize" from tripping
+    "standard", and the empty slug set makes leak_scan a marker-only check,
+    which catches an internal identifier without a second copy of that list.
     """
     if not subject:
         return DEFAULT_ABSTAIN_SUBJECT
     cleaned = subject.replace("[", "").replace("]", "").replace("\n", " ").strip()
     if not cleaned or len(cleaned.split()) > MAX_SUBJECT_WORDS:
+        return DEFAULT_ABSTAIN_SUBJECT
+    if leak_scan(cleaned, set()) or ARTIFACT_WORDS.intersection(
+        WORD.findall(cleaned.lower())
+    ):
         return DEFAULT_ABSTAIN_SUBJECT
     return cleaned
 

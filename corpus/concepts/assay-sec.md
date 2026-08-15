@@ -22,8 +22,8 @@ leads_to:
   - reagent-reproducibility
 ---
 
-Size-exclusion chromatography separates molecules by hydrodynamic size as they pass through a
-porous column. Larger species travel a shorter path through the pores and elute first, so a
+Size-exclusion chromatography (SEC) separates molecules by hydrodynamic size as they pass through
+a porous column. Larger species travel a shorter path through the pores and elute first, so a
 preparation's composition appears as a series of peaks ordered by size. For an antibody
 preparation the question it answers is what fraction of the material is the intended monomer and
 what fraction is something else.

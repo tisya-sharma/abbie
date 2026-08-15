@@ -1,4 +1,4 @@
-"""Minimal loader for the repo-root .env file.
+"""Minimal loader for the repo-root credentials file.
 
 Reads KEY=VALUE lines, skipping comments, blanks, and empty values, and sets
 only variables the environment does not already define, so an exported shell
@@ -10,11 +10,21 @@ from __future__ import annotations
 import os
 from pathlib import Path
 
-ENV_PATH = Path(__file__).resolve().parents[1] / ".env"
+REPO_ROOT = Path(__file__).resolve().parents[1]
+
+# keys.env is preferred because it matches the name datasheet_generator uses,
+# and .env is still read so existing checkouts keep working. Both are gitignored.
+CANDIDATE_PATHS = (REPO_ROOT / "keys.env", REPO_ROOT / ".env")
+
+ENV_PATH = CANDIDATE_PATHS[0]
 
 
-def load_env_file(path: Path = ENV_PATH) -> None:
+def load_env_file(path: Path | None = None) -> None:
     """Apply KEY=VALUE pairs from a local env file without overriding the shell."""
+    if path is None:
+        path = next((candidate for candidate in CANDIDATE_PATHS if candidate.exists()), None)
+        if path is None:
+            return
     if not path.exists():
         return
     for line in path.read_text(encoding="utf-8").splitlines():

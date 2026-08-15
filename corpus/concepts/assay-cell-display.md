@@ -31,7 +31,7 @@ The reason to do this rather than rely on purified antigen is context. A membran
 displayed on a cell sits in a lipid bilayer, is glycosylated as the cell glycosylates it, and
 adopts a conformation that a purified fragment may not reproduce. Antibodies that bind purified
 antigen sometimes fail against the same antigen on a cell, and the reverse also happens.
-Cell display therefore sits further along the biological-relevance axis of the Validation Map
+Cell display therefore sits further along the biological-relevance axis of IPI's Validation Map
 than a biochemical binding measurement does, while remaining an engineered expression system
 rather than a native one.
 

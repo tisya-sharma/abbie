@@ -27,7 +27,7 @@ leads_to:
   - four-dimensional-framework
 ---
 
-Antibody validation is the experimental process of demonstrating that an antibody
+IPI views antibody validation as the experimental process of demonstrating that an antibody
 specifically recognizes its intended target and performs reliably for a defined application,
 species, and set of experimental conditions. It is not a property an antibody either has or
 lacks in the abstract. An antibody is validated *for something* — for Western blotting in

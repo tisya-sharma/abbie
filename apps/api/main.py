@@ -37,6 +37,7 @@ from packages.guardrail import (
     StreamScrubber,
     is_publishable,
     leak_scan,
+    scrub_and_number,
     scrub_text,
 )
 from packages.router import classify
@@ -76,7 +77,7 @@ def make_client():
 
 if not os.environ.get("OPENAI_API_KEY"):
     raise SystemExit(
-        "OPENAI_API_KEY is not set. Paste IPI's key into .env at the repo root,"
+        "OPENAI_API_KEY is not set. Paste IPI's key into keys.env at the repo root,"
         " or export it in this shell."
     )
 
@@ -157,8 +158,6 @@ def follow_ups_for(cited: list[str], concepts: dict, covered: set[str]) -> list[
     return offers
 
 
-MAX_SOURCES = 3
-
 OUTLINE_OFFER_LABEL = "Outline the whole process"
 
 FALLBACK_MESSAGE = (
@@ -186,30 +185,57 @@ def pending_offer(history: list[dict]) -> str | None:
 SOURCE_DISPLAY_FIELDS = ("short", "journal", "title")
 
 
-def sources_for(cited: list[str], concepts: dict) -> list[dict]:
-    """Public further-reading links for the concepts an answer drew on.
+def publishable_urls(cid: str) -> list[str]:
+    """The citable source URLs behind one concept, in frontmatter order.
 
-    IPI-authored concepts ground answers without producing a visible source,
-    which is expected. Ordered by first-cited concept then frontmatter order,
-    deduped by URL. The display fields are optional by design: a source that
-    lacks one still renders, just with that line short.
+    This is the scrubber's resolver, so an unknown id has to return nothing
+    rather than raise: the model can emit a marker for anything, and a bad id
+    should cost the reply its citation number, not the whole turn.
     """
-    links: list[dict] = []
-    seen: set[str] = set()
-    for cid in cited:
-        for source in concepts[cid].sources:
-            if not is_publishable(source):
+    concept = CONCEPTS.get(cid)
+    if not concept:
+        return []
+    return [s["url"] for s in concept.sources if is_publishable(s)]
+
+
+def source_index(concepts: dict) -> dict[str, dict]:
+    """Display fields for every citable source in the corpus, keyed by url.
+
+    One entry per paper rather than per citing concept. A url is the paper, so
+    two concepts citing it describe the same thing, and resolving the display
+    fields once is what guarantees a pill streamed mid-reply carries the same
+    wording as the row the done frame renders beneath it.
+
+    The display fields are optional by design: a source that lacks one still
+    renders, just with that line short.
+    """
+    index: dict[str, dict] = {}
+    for concept in concepts.values():
+        for source in concept.sources:
+            url = source.get("url")
+            if not is_publishable(source) or url in index:
                 continue
-            url = source["url"]
-            if url in seen:
-                continue
-            seen.add(url)
             link = {"label": source.get("label", url), "url": url}
             for field in SOURCE_DISPLAY_FIELDS:
                 if source.get(field):
                     link[field] = source[field]
-            links.append(link)
-    return links[:MAX_SOURCES]
+            index[url] = link
+    return index
+
+
+SOURCES_BY_URL = source_index(CONCEPTS)
+
+
+def sources_for(urls: list[str]) -> list[dict]:
+    """Further-reading links in the order the reply's citations numbered them.
+
+    The order is the scrubber's, because a row's position here is the number
+    its pill points at. IPI-authored concepts ground answers without producing
+    a visible source, which is expected and simply cites nothing. Nothing is
+    truncated: a cap would strand a citation pointing at a row that never
+    renders.
+    """
+    return [SOURCES_BY_URL[url] for url in urls if url in SOURCES_BY_URL]
 
 
 def origin_is_local(origin: str) -> bool:
@@ -278,14 +304,29 @@ def run_turn(
                     },
                 )
             )
-            # One scrubber per turn: citation markers are stripped from the
-            # deltas the browser sees, while result.text stays raw for
+            # One scrubber per turn: citation markers become source numbers in
+            # the deltas the browser sees, while result.text stays raw for
             # citation extraction and history. flush() must run after the
             # stream ends or a reply ending in a marker loses its tail.
-            scrubber = StreamScrubber()
+            scrubber = StreamScrubber(publishable_urls)
+            # The page cannot draw a citation pill from an ordinal alone, and
+            # the sources list only arrives with the done frame, after the text
+            # that cites it. So each source goes out as its number is assigned,
+            # which puts it on the wire ahead of the delta that references it
+            # and lets a pill render complete the moment it appears.
+            sent_sources = 0
+
+            def drain_sources() -> None:
+                nonlocal sent_sources
+                keys = scrubber.keys
+                while sent_sources < len(keys):
+                    link = SOURCES_BY_URL[keys[sent_sources]]
+                    sent_sources += 1
+                    out.put(("source", dict(link, n=sent_sources)))
 
             def emit_delta(delta: str) -> None:
                 visible = scrubber.feed(delta)
+                drain_sources()
                 if visible:
                     out.put(("delta", {"text": visible}))
 
@@ -316,6 +357,7 @@ def run_turn(
                 span.set_attribute("abbie.llm_called", result.llm_called)
                 span.set_attribute("abbie.behavior", result.behavior)
             tail = scrubber.flush()
+            drain_sources()
             if tail:
                 out.put(("delta", {"text": tail}))
 
@@ -333,13 +375,18 @@ def run_turn(
             if route.behavior == "answer" and route.form == "procedural":
                 follow_ups.insert(0, {"label": OUTLINE_OFFER_LABEL})
             follow_ups = follow_ups[:MAX_FOLLOW_UPS]
-            sources = sources_for(cited, CONCEPTS)
+            # Recomputed from the finished reply rather than read off the
+            # streaming scrubber, so the numbering and the guarded text hold
+            # even on a path that never streamed a delta.
+            visible, source_keys = scrub_and_number(result.text, publishable_urls)
+            sources = sources_for(source_keys)
 
             # Fail-closed backstop: nothing that names the corpus may reach
             # the page. On a hit the frame tells the page to replace the
             # already-streamed body, and the session is left as if the turn
-            # never happened.
-            surfaces = [scrub_text(result.text)]
+            # never happened. What gets scanned is the numbered text the
+            # visitor actually read, not a differently scrubbed variant of it.
+            surfaces = [visible]
             surfaces.extend(f["label"] for f in follow_ups)
             # Every string a source puts on the page, not just its label —
             # the scan is the backstop, so a field it does not read is a field

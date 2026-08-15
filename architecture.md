@@ -305,6 +305,42 @@ half: phospho-site notation, clone names, and free text no registry column cover
 `search_validation_docs(query)`. Federate sources behind the tools rather than adding one tool per
 database, which balloons the surface and degrades tool selection.
 
+Two tools that are not obvious from the list above earn their place. `resolve_target(query)` is
+asked by nobody directly, but every target question routes through it: without it a search for
+`p-STAT3 (Tyr705)` returns nothing and the model reports that IPI has no STAT3 antibodies, which a
+scientist reads as a factual claim rather than a miss. And `describe_data_coverage()` reports which
+assays have no data at all — on the widget the fifth interpretive principle rides on a fixed
+abstention template, and on a tool surface that template never runs, so absence reads as failure
+unless something says otherwise. The surface is read-only permanently. The publication manifest is a
+review gate with a named approver, and approval by chat message is what it exists to prevent.
+
+**The tool library is transport-free, and its constraints are cheap when it is written and a rewrite
+afterwards.** `packages/antibody` may import a Postgres driver, Pydantic, and the standard library,
+and may not import `fastapi`, `fastmcp`, `starlette`, `openai`, or `slack_bolt` — enforced by an
+import test in CI rather than left to convention. The widget calls it in process, and the MCP server
+and the Slack app are thin adapters over the same functions. Four decisions follow:
+
+- **Scope is bound to the connection handle at construction, never passed as an argument.** A
+  `scope` or `include_unpublished` parameter lands in the MCP tool schema, which makes it settable
+  by the model. The public deployment builds its handle against a database role holding no grant on
+  internal tables, so it cannot express a query that reaches them. This is the argument in the
+  section below applied to a function signature, and it mirrors the `include_pre_publication` flag
+  `packages/corpus_loader` already uses.
+- **Return types are Pydantic models with described fields**, because a tool schema derives from
+  them for free, while `dict[str, Any]` means hand-writing and then synchronizing a JSON Schema per
+  tool forever.
+- **Parameters are enums, not free strings** — application, species, dimension, assay. The allowed
+  values are known from the extract, and free text means the model sends `western`, `westernblot`,
+  and `Western Blot` and the SQL misses all three. The application enum must include applications
+  with no data behind them, so asking about IHC returns unassessed rather than a validation error. A
+  schema that rejects IHC cannot express the fifth interpretive principle.
+- **Every row carries provenance** — source URL, manifest version, and the extract's build
+  timestamp. On the widget these feed the citation UI. On a tool surface they are the only control
+  left, because nothing of ours composes the answer. See the guardrail scope note below.
+
+No module-global connection and no import-time I/O, because the library is constructed three ways —
+public API, staff surface, extract job — and mocked in tests.
+
 **Data scoping is enforced by physical separation, not query discipline.** Internal staff may see
 pre-release records; the public widget must see published data only. Rather than pointing both at
 the warehouse and trusting every query to carry the right filter, a scheduled job rebuilds an
@@ -501,7 +537,7 @@ defensible.
 | Structured tool calling | making facts exact and reproducible | `get_antibody`, `search_antibodies` | nowhere — this is the trust backbone |
 | RAG | knowing prose the model was never trained on | the validation corpus | antibody records, where SQL is available |
 | Hybrid retrieval | vector search missing exact terms | gene symbols, clone names, RRIDs | before retrieval eval shows the need |
-| MCP | letting other clients reach the tools | staff surfaces via ChatGPT and Slack | a single-client application |
+| MCP | letting clients that cannot run our code reach the tools | the staff surface in ChatGPT | before a deterministic tool surface exists |
 | Multi-agent | one model call cannot hold the task | offline profile derivation and critique | the chat request path |
 | Evaluation | knowing whether a change helped | golden set, abstention correctness | nowhere — it gates everything |
 
@@ -531,8 +567,26 @@ distinction is worth stating plainly:
   weaker — it is actively wrong, and lexical matching is what fixes it.
 - **MCP has a real second consumer.** One typed library over Postgres, served in-process to the
   public widget and over a remote MCP server to staff through ChatGPT, with a Slack app calling the
-  same tools. MCP is a vendor-neutral standard under the Linux Foundation, so committing to OpenAI
-  as the model provider does not make MCP a bet on a competitor's protocol.
+  same tools directly, since Slack is not an MCP client. MCP is a vendor-neutral standard under the
+  Linux Foundation, so committing to OpenAI as the model provider does not make MCP a bet on a
+  competitor's protocol. The test for whether it belongs is not how many clients there are but
+  whether a deterministic tool surface exists that a model cannot otherwise reach: one client
+  justifies MCP if that client is ChatGPT, and three do not if they are all our own code. That
+  surface arrives at Stage 2, which is also the earliest MCP could serve anything.
+
+  **The staff server is scoped to the approved extract, not to internal data.** The instinct is that
+  a staff surface should see staff records, and three things argue against it. Unpublished here does
+  not mean reviewed but embargoed, it means never reviewed by anyone — only 4 entries in the tenant
+  have ever completed review, so there is no curated internal dataset to serve, only raw draft rows.
+  None of the guarantees below run on a tool surface, so narrating an unchecked row through a foreign
+  model produces a fluent, citable, unreviewed answer, which is a worse failure than a hallucination
+  and is a scientific-correctness problem before it is a privacy one. And serving nothing the public
+  widget does not collapses the security posture from standing up an authorization server to a token
+  and a rate limit, which for a one-person team is the difference between a week and an afternoon.
+  If staff later need internal data, the right artifact is an internal deployment of the widget
+  behind IAP rather than a connector — that is the only shape where the guardrail, the abstention
+  template, and the cost telemetry still apply. Pointing an MCP client at internal data only changes
+  which vendor holds the conversation.
 - **Multi-agent belongs offline, in profile derivation.** A generator reads raw assay rows and
   proposes a Validation Profile against IPI-CHR-001; an adversarial critic challenges each cell for
   threshold and control violations; a scientist adjudicates before anything is published. It is
@@ -566,6 +620,24 @@ eval as the `no_slug_leak` property check on all four behaviors, and the red-tea
 guarantee on every run. Extraction-shaped questions are additionally routed to the corpus-free
 redirect path by the router. Scope: user-facing surfaces only — `apps/cli/chat.py` is a staff tool
 and intentionally prints raw markers.
+
+**These guarantees are a property of the composition path, not of the system, and they do not extend
+to a tool surface.** On MCP there is no router, no fixed abstention template, no scrubber, and no
+leak scan, because a foreign model composes the answer and no output stage of ours runs at all.
+Defense in depth drops from two layers to one, and the extract boundary becomes the only control. So
+the controls have to move into the data: a fail-closed field allowlist on every response model, which
+is the extract's column allowlist moved one layer up and aimed at the same threat, since a scientist
+adding a Benchling field creates a column with no warning. `packages/guardrail` itself does not
+transfer — `leak_scan` is tuned to distinguish slugs from English prose, and `StreamScrubber` removes
+bracket groups, which on JSON would silently eat legitimate text. The reasoning in `is_publishable`
+does transfer, and is the right frame for tool-result fields. Two consequences worth stating rather
+than leaving to be discovered. The failure policy inverts: the widget degrades to corpus-only
+answering rather than erroring, because a public visitor should never meet a budget message, while a
+tool surface fails closed and says so, because silent partial results mean a scientist cannot tell
+what was withheld. And the identical-abstention property is structural on the widget but only
+conventional here, since an agent issues many calls in a loop and aggregates client-side — so tools
+carry hard result caps and return the same empty shape for a record that does not exist and one
+outside this deployment's scope.
 
 **Evaluation and the eval gate.** A golden question set curated with IPI scientists, scored for
 groundedness, citation correctness, retrieval recall@k, and abstention correctness. Wired into CI

@@ -1,6 +1,7 @@
 # Local credentials and connection configuration
 .env
 .env.*
+*.env
 !.env.example
 *.local.env
 .pgpass

@@ -52,8 +52,18 @@ the work genuinely has none. A book has no journal, and inventing one is worse t
 
 **Unpublished IPI material is never cited.** Deb's notes and the 4D framework draft ground answers,
 and their ideas may be used freely, but they carry no `url` and must never appear as a source, on
-request or otherwise. `is_publishable()` in `apps/api/main.py` enforces this on two independent
-conditions, and `leak_scan` blocks any reply whose sources mention them.
+request or otherwise. `is_publishable()` in `packages/guardrail` enforces this on two independent
+conditions, and `leak_scan` blocks any reply whose sources mention them. The ideas are attributed
+to IPI in the prose instead, which is what `provenance: ipi-authored` means in practice: the
+concept says "IPI views validation as…" and cites nothing.
+
+**When the 4D paper publishes**, replace the `IPI 4D framework, internal draft` label in the nine
+concepts carrying it with the real Vancouver reference plus `url`, `short`, `journal` and `title`,
+then drop `internal draft` from `INTERNAL_LABEL_MARKERS` in `packages/guardrail`. Nothing else
+changes: the source becomes publishable, the sources block renders it, and the reply cites it like
+any other paper. `scripts/check_corpus.py` gates both halves, so a flip done in one direction only
+fails the build rather than shipping. Deb's notes and `IPI-CHR-001` stay internal regardless, which
+is why no prompt names the manuscript specifically.
 
 **`status`** has three values, and the middle one exists because scientist time is the scarcest
 input to this project.

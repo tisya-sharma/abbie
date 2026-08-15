@@ -21,11 +21,11 @@ leads_to:
   - orthogonal-validation
 ---
 
-Selectivity asks whose signal you are actually seeing: whether the binding you observe comes
-from the protein you meant to detect or from one of its relatives. In practice it is
-established by measuring cross-reactivity against related family members — paralogs, isoforms,
-and splice variants — which are the off-targets most likely to be mistaken for the intended
-one.
+Selectivity, the third of IPI's four dimensions, asks whose signal you are actually seeing:
+whether the binding you observe comes from the protein you meant to detect or from one of its
+relatives. In practice it is established by measuring cross-reactivity against related family
+members — paralogs, isoforms, and splice variants — which are the off-targets most likely to be
+mistaken for the intended one.
 
 Selectivity is a separate question from engagement, and evidence of one is not evidence of the
 other. An antibody may bind its target with high affinity and bind three close paralogs just

@@ -7,9 +7,10 @@ production scrub before asserting on leakage.
 
 Two stages, used together:
 
-- scrubbing removes citation-marker bracket groups from text before it is
-  shown to a user, including the malformed multi-id and title-form groups the
-  citation regexes do not recognize
+- scrubbing rewrites citation-marker bracket groups before text is shown to a
+  user, including the malformed multi-id and title-form groups the citation
+  regexes do not recognize. Given a resolver a group becomes the ordinal of
+  the source it points at; without one it is deleted outright
 - leak scanning is the fail-closed backstop: it flags any corpus slug,
   internal source label, or surviving marker group in text that is about to
   reach a user surface
@@ -18,6 +19,7 @@ Two stages, used together:
 from __future__ import annotations
 
 import re
+from typing import Callable, Sequence
 
 # Characters that appear inside citation-marker groups the model emits:
 # single ids, semicolon/comma-joined id lists, and title-form groups. A group
@@ -29,18 +31,34 @@ _GROUP_INNER = re.compile(r"[a-z0-9\-;,.\s]*", re.I)
 # fails this and is emitted rather than swallowed.
 _TRUNCATED_MARKER = re.compile(r"[a-z0-9\-.]*(?:[;,]\s*[a-z0-9\-.]*)*", re.I)
 
-_MARKER_GROUP = re.compile(r"[ \t]*\[[a-z0-9\-;,.\s]+\]", re.I)
+# The one bracket shape allowed to reach a reader: an ordinal, or a comma-
+# joined run of them, pointing into the numbered sources block. Every other
+# bracket group stays a leak, so the carve-out is written as a lookahead on
+# the whole inner rather than as a looser character class.
+_ORDINAL_INNER = r"\d+(?:\s*,\s*\d+)*"
+
+_MARKER_GROUP = re.compile(rf"[ \t]*\[(?!{_ORDINAL_INNER}\])[a-z0-9\-;,.\s]+\]", re.I)
+
+# Splits a multi-id group into its ids, mirroring corpus_loader's separator.
+_GROUP_SEPARATOR = re.compile(r"[;,]")
 
 # Zero-width and joiner characters an obfuscated leak could hide behind.
 _INVISIBLE = re.compile("[\u200b\u200c\u200d\u2060\ufeff]")
 
-# Bibliographic labels that exist only in corpus frontmatter and must never
-# appear in user-visible text. Kept here as data so the scan stays pure.
+# Fragments of the internal source labels, cut short enough to survive a
+# paraphrase: a leaked reply says "Moshinsky's notes", not the full frontmatter
+# string, and "ipi-chr" catches a sibling standard that does not exist yet.
+# Every entry has to be a phrase with no legitimate use in validation prose,
+# because leak_scan is fail-closed and a false positive costs a visitor their
+# whole answer. That rules out "manuscript", "draft", "notes", and
+# "unpublished" standing alone, since the 2016 five-pillars paper is a
+# manuscript and the corpus discusses it. Those paraphrases are the prompts'
+# job, not this list's. Kept here as data so the scan stays pure.
 INTERNAL_LABEL_MARKERS = (
-    "chatbot kickoff notes",
-    "d. moshinsky",
-    "ipi 4d framework, internal draft",
-    "ipi-chr-001",
+    "kickoff notes",
+    "moshinsky",
+    "internal draft",
+    "ipi-chr",
 )
 
 # Longest bracket group still treated as a citation marker. The worst
@@ -50,17 +68,57 @@ MAX_GROUP_CHARS = 300
 
 
 class StreamScrubber:
-    """Remove citation-marker bracket groups from streamed text.
+    """Rewrite citation-marker bracket groups in streamed text.
 
     Feed chunks as they arrive; each call returns text that is safe to emit.
     The scrubber holds back a partial bracket group (and the spaces before it)
     until the group either closes, stops looking like a marker, or exceeds
     MAX_GROUP_CHARS — so a literal ``[`` in prose can neither stall the stream
     nor be swallowed. One instance per reply; call flush() at end of stream.
+
+    Without a resolver every group is deleted, which is what history scrubbing
+    and the eval scorer want from it. With one, a group becomes the ordinals of
+    the sources it points at and ``keys`` reports those sources in the order a
+    reader met them. This is the only place that numbering is worked out: the
+    numbers in the prose and the rows in the sources block have to come from
+    one implementation, because a second one that drifts by a single position
+    silently attributes a claim to the wrong paper. Running the same resolver
+    over the same reply always yields the same numbering, so scrub_and_number
+    can safely reproduce it from finished text.
+
+    The resolver maps a concept id to the source keys backing it, in the order
+    they should be numbered, and returns nothing for a concept with no citable
+    source. That case is ordinary rather than exceptional: IPI's own framework
+    grounds many answers and publishes no source, and those markers drop out
+    exactly as they did before numbering existed.
     """
 
-    def __init__(self) -> None:
+    def __init__(self, resolve: Callable[[str], Sequence[str]] | None = None) -> None:
         self._buffer = ""
+        self._resolve = resolve
+        self._ordinals: dict[str, int] = {}
+
+    @property
+    def keys(self) -> list[str]:
+        """Cited source keys in reading order; a key's ordinal is its index plus one."""
+        return list(self._ordinals)
+
+    def _render_group(self, inner: str) -> str:
+        """The visible replacement for one marker group, empty to drop it."""
+        if self._resolve is None:
+            return ""
+        ordinals: list[int] = []
+        for token in _GROUP_SEPARATOR.split(inner):
+            slug = token.strip()
+            if not slug:
+                continue
+            for key in self._resolve(slug):
+                ordinal = self._ordinals.setdefault(key, len(self._ordinals) + 1)
+                if ordinal not in ordinals:
+                    ordinals.append(ordinal)
+        if not ordinals:
+            return ""
+        return "[" + ", ".join(str(n) for n in ordinals) + "]"
 
     def feed(self, chunk: str) -> str:
         self._buffer += chunk
@@ -120,6 +178,9 @@ class StreamScrubber:
                 and inner.strip()
                 and len(inner) <= MAX_GROUP_CHARS
             ):
+                rendered = self._render_group(inner)
+                if rendered:
+                    out.append(spaces + rendered)
                 buffer = rest[close + 1 :]
                 continue
             out.append(spaces + rest[: close + 1])
@@ -133,6 +194,22 @@ def scrub_text(text: str) -> str:
     """Remove citation-marker bracket groups from a complete text."""
     scrubber = StreamScrubber()
     return scrubber.feed(text) + scrubber.flush()
+
+
+def scrub_and_number(
+    text: str, resolve: Callable[[str], Sequence[str]]
+) -> tuple[str, list[str]]:
+    """Number a complete reply, returning visible text and its source keys.
+
+    Chunking does not change what a scrubber produces, so running this over a
+    finished reply yields exactly the text that was streamed delta by delta.
+    Deriving the guarded text this way rather than accumulating what the stream
+    callback happened to emit is what keeps the leak scan total: a reply
+    composed without streaming still gets scanned, instead of clearing the
+    backstop against an empty string.
+    """
+    scrubber = StreamScrubber(resolve)
+    return scrubber.feed(text) + scrubber.flush(), scrubber.keys
 
 
 def is_publishable(source: dict) -> bool:

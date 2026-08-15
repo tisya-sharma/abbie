@@ -23,7 +23,8 @@ leads_to:
 ---
 
 Interpreting validation evidence means asking two things of every result: what it demonstrates,
-and what it leaves unresolved. Five principles cover the errors that recur most often.
+and what it leaves unresolved. IPI works from five principles that cover the errors recurring
+most often.
 
 A working readout does not establish that the signal came from the intended target. A clean band
 or a convincing stain shows the assay produced an interpretable result; attributing that result

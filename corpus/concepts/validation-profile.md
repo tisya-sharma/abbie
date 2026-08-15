@@ -22,8 +22,8 @@ leads_to:
   - interpretive-principles
 ---
 
-A Validation Profile summarizes how strongly the available evidence supports each of the four
-dimensions, for one named application. It is a reading of the evidence organized on the
+A Validation Profile is IPI's summary of how strongly the available evidence supports each of
+the four dimensions, for one named application. It is a reading of the evidence organized on the
 Validation Map, not a new measurement.
 
 It is deliberately not a score. The profile shows the relative strength of support for

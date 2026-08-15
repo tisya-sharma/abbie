@@ -22,7 +22,7 @@ leads_to:
   - application-specificity
 ---
 
-The four dimensions describe what has to be established. The Validation Map describes where the
+The four dimensions describe what has to be established. IPI's Validation Map describes where the
 evidence for them came from. It organizes results by two independent variables: the biological
 system the experiment used, and the complexity of the assay.
 

@@ -105,6 +105,88 @@ class StreamScrubberTests(unittest.TestCase):
         self.assertEqual(scrubber.flush(), "")
 
 
+# Four concepts covering the shapes the numbering has to survive: IPI's own
+# framework, which publishes nothing citable; a concept with one paper; one
+# with two; and a fourth sharing a paper with the third.
+SOURCES = {
+    "four-dimensional-framework": [],
+    "what-is-binding": ["https://example.org/a"],
+    "selectivity": ["https://example.org/b", "https://example.org/c"],
+    "molecular-integrity": ["https://example.org/b"],
+}
+
+
+class NumberedScrubberTests(unittest.TestCase):
+    def collect(self, chunks):
+        scrubber = StreamScrubber(lambda cid: SOURCES.get(cid, []))
+        parts = [scrubber.feed(chunk) for chunk in chunks]
+        parts.append(scrubber.flush())
+        return "".join(parts), scrubber
+
+    def scrub(self, text):
+        return self.collect([text])[0]
+
+    def test_marker_becomes_an_ordinal(self):
+        self.assertEqual(
+            self.scrub("Binding is measured directly [what-is-binding]."),
+            "Binding is measured directly [1].",
+        )
+
+    def test_second_concept_takes_the_next_number(self):
+        out = self.scrub("First [what-is-binding]. Then [molecular-integrity].")
+        self.assertEqual(out, "First [1]. Then [2].")
+
+    def test_repeat_citation_reuses_its_number(self):
+        out = self.scrub("One [what-is-binding]. Two [what-is-binding].")
+        self.assertEqual(out, "One [1]. Two [1].")
+
+    def test_concept_with_two_papers_renders_both(self):
+        out = self.scrub("Paralogs matter [selectivity].")
+        self.assertEqual(out, "Paralogs matter [1, 2].")
+
+    def test_shared_paper_shares_a_number(self):
+        # selectivity takes 1 and 2; molecular-integrity's only paper is
+        # selectivity's first, so it renumbers to nothing new.
+        out = self.scrub("Wide [selectivity]. Narrow [molecular-integrity].")
+        self.assertEqual(out, "Wide [1, 2]. Narrow [1].")
+
+    def test_concept_without_a_citable_source_drops_the_marker(self):
+        # The IPI-authored case, which is most of the corpus: grounded, cited
+        # internally, and numbered nowhere because it publishes no paper.
+        out = self.scrub("IPI reads it this way [four-dimensional-framework].")
+        self.assertEqual(out, "IPI reads it this way.")
+
+    def test_unknown_id_drops_the_marker(self):
+        self.assertEqual(self.scrub("A claim [not-a-concept]."), "A claim.")
+
+    def test_multi_id_group_collects_both_numbers(self):
+        out = self.scrub("Both [what-is-binding; molecular-integrity].")
+        self.assertEqual(out, "Both [1, 2].")
+
+    def test_number_survives_a_marker_split_across_chunks(self):
+        out, _ = self.collect(["binding matters ", "[what-is-", "binding]", " a lot"])
+        self.assertEqual(out, "binding matters [1] a lot")
+
+    def test_literal_bracket_in_prose_is_untouched(self):
+        text = "the buffer [pH 7.4!] stays"
+        self.assertEqual(self.scrub(text), text)
+
+    def test_keys_report_reading_order(self):
+        _, scrubber = self.collect(["Wide [selectivity]. One [what-is-binding]."])
+        self.assertEqual(
+            scrubber.keys,
+            ["https://example.org/b", "https://example.org/c", "https://example.org/a"],
+        )
+
+    def test_no_resolver_still_deletes(self):
+        # History scrubbing and the eval scorer pass no resolver and must keep
+        # the old behavior exactly, markers gone rather than numbered.
+        self.assertEqual(
+            scrub_text("Binding is measured directly [what-is-binding]."),
+            "Binding is measured directly.",
+        )
+
+
 class LeakScanTests(unittest.TestCase):
     def test_clean_text_passes(self):
         self.assertEqual(leak_scan("Selectivity is about binding partners.", SLUGS), [])
@@ -128,8 +210,40 @@ class LeakScanTests(unittest.TestCase):
     def test_surviving_marker_group_detected(self):
         self.assertTrue(leak_scan("as noted [what-is-binding]", SLUGS))
 
+    def test_ordinal_marker_is_not_a_leak(self):
+        # The published form of a citation. The backstop scans the text the
+        # visitor actually read, so it has to pass numbers through or every
+        # sourced answer would be blocked.
+        self.assertEqual(leak_scan("binding is direct [1].", SLUGS), [])
+
+    def test_ordinal_list_is_not_a_leak(self):
+        self.assertEqual(leak_scan("paralogs matter [1, 2].", SLUGS), [])
+
+    def test_near_ordinal_group_is_still_a_leak(self):
+        # Only a bare ordinal run is carved out; anything else in the brackets
+        # falls back to being a finding.
+        self.assertTrue(leak_scan("as noted [1a]", SLUGS))
+
     def test_internal_label_detected(self):
         self.assertTrue(leak_scan("per the chatbot kickoff notes", SLUGS))
+
+    def test_paraphrased_internal_label_detected(self):
+        # The exact frontmatter label is not what a leaked reply says. A model
+        # that has never seen the label still reaches for the surname and noun.
+        for text in ("per Moshinsky's notes", "IPI's internal draft says",
+                     "recorded in the kickoff notes", "released under IPI-CHR-002"):
+            self.assertTrue(leak_scan(text, SLUGS), text)
+
+    def test_ordinary_scientific_prose_is_not_a_leak(self):
+        # The bound on the list above. leak_scan is fail-closed and replaces the
+        # whole reply, so a marker that fires on validation prose destroys
+        # correct answers. This is the test that fails if someone adds bare
+        # "manuscript", "draft", "notes", or "unpublished" to the tuple.
+        for text in ("the 2016 manuscript proposing five pillars",
+                     "a draft guideline from the working group",
+                     "the authors' notes on antibody selection",
+                     "unpublished data was excluded from the review"):
+            self.assertEqual(leak_scan(text, SLUGS), [], text)
 
     def test_zero_width_obfuscation_detected(self):
         self.assertTrue(leak_scan("molecular-\u200bintegrity", SLUGS))

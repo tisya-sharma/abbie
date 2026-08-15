@@ -101,7 +101,7 @@ def main() -> None:
 
     if not os.environ.get("OPENAI_API_KEY"):
         raise SystemExit(
-            "OPENAI_API_KEY is not set. Paste IPI's key into .env at the repo root,"
+            "OPENAI_API_KEY is not set. Paste IPI's key into keys.env at the repo root,"
             " or export it in this shell."
         )
 

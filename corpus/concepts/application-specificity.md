@@ -47,10 +47,11 @@ leads_to:
 ---
 
 An **application** is a specific experimental use of an antibody — Western blot, immunofluorescence,
-immunohistochemistry, flow cytometry, ELISA, immunoprecipitation. Antibodies are fit-for-purpose
-reagents, and validation attaches to the application rather than to the antibody in general. "This
-antibody works" is an incomplete sentence; it only means something as "this antibody works for this
-application, in this kind of sample."
+immunohistochemistry, flow cytometry, enzyme-linked immunosorbent assay (ELISA),
+immunoprecipitation. Antibodies are fit-for-purpose reagents, and validation attaches to the
+application rather than to the antibody in general. "This antibody works" is an incomplete
+sentence; it only means something as "this antibody works for this application, in this kind of
+sample."
 
 The reason is that different methods leave the protein in different physical states before the
 antibody ever meets it. Proteins are typically in near-native form for flow cytometry and sandwich

@@ -21,10 +21,11 @@ leads_to:
   - application-specificity
 ---
 
-Experimental Readout is the dimension you meet first, because it is the moment you look at the
-result: the band on the film, the stain in the cell, the shifted population on the plot. It
-asks whether the antibody appears to work in a defined application, assay, and system context,
-judged on the experimental output with appropriate positive and negative controls.
+Experimental Readout is the last of IPI's four dimensions and the one you meet first, because it
+is the moment you look at the result: the band on the film, the stain in the cell, the shifted
+population on the plot. It asks whether the antibody appears to work in a defined application,
+assay, and system context, judged on the experimental output with appropriate positive and
+negative controls.
 
 Of the four dimensions this is the one most tied to circumstances. The same antibody can produce
 a clean, interpretable readout in one application and an uninterpretable one in another, so

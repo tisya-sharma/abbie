@@ -1,12 +1,15 @@
 """Corpus gate checks that need no API key, for CI and for local use.
 
-Four checks, each corresponding to a rule written down elsewhere:
+Six checks, each corresponding to a rule written down elsewhere:
 
 - graph invariants, via the loader's own validate()
 - clearance: no pre-publication concept reaches a public build
+- review status, and the sign-off an approved file has to carry
 - no antibody-specific identifier appears anywhere in the corpus
 - no source carrying an internal label also carries a url, which is what
   would make IPI's unpublished material publishable
+- every withheld source matches an internal marker, so the guardrail's list
+  cannot drift out of step with the corpus without CI noticing
 
 Deliberately not here: leak_scan. That checks text on its way to a reader,
 and a corpus file is not a reader surface — its frontmatter names concept ids
@@ -101,18 +104,53 @@ def check_internal_sources_stay_uncitable() -> list[str]:
     is_publishable withholds these on both conditions, so this is belt and
     braces — but the corpus is where the mistake would be made, and catching
     it here names the file rather than leaving a source silently withheld.
+
+    Every rendered field is searched, not just the label: the widget shows
+    short, journal and title too, so an internal reference parked in a title
+    beside a public url would publish. The runtime scan catches that and blocks
+    the whole turn, which is safe and destructive; build time is the cheaper
+    place to find it.
     """
     findings: list[str] = []
     for concept in load_corpus(include_pre_publication=True).values():
         for source in concept.sources:
-            label = str(source.get("label", "")).lower()
             if not source.get("url"):
                 continue
+            shown = " ".join(
+                str(value) for key, value in source.items() if key != "url"
+            ).lower()
             for marker in INTERNAL_LABEL_MARKERS:
-                if marker in label:
+                if marker in shown:
                     findings.append(
                         f"{concept.id}: internal source {marker!r} carries a url"
                     )
+    return findings
+
+
+def check_withheld_sources_are_marked() -> list[str]:
+    """A source with no url must match an internal marker.
+
+    This changes nothing at runtime, since is_publishable withholds a url-less
+    source whatever its label says. What it buys is visibility: a label the
+    markers do not recognize is invisible to leak_scan, so a reply that named
+    it would reach a reader with only the prompts in the way, and the drift
+    would be silent. Resolve a finding by giving the source a url, if it is
+    genuinely public, or by adding its label to INTERNAL_LABEL_MARKERS.
+
+    Paired with the check above, this is also what makes publication day
+    self-checking: forget the url and this fires, forget to drop the marker
+    and the other one does.
+    """
+    findings: list[str] = []
+    for concept in load_corpus(include_pre_publication=True).values():
+        for source in concept.sources:
+            if source.get("url"):
+                continue
+            label = str(source.get("label", ""))
+            if not any(m in label.lower() for m in INTERNAL_LABEL_MARKERS):
+                findings.append(
+                    f"{concept.id}: withheld source {label!r} matches no internal marker"
+                )
     return findings
 
 
@@ -149,6 +187,7 @@ CHECKS = (
     ("review status", check_review_status),
     ("antibody identifiers", check_identifiers),
     ("internal sources uncitable", check_internal_sources_stay_uncitable),
+    ("withheld sources marked", check_withheld_sources_are_marked),
 )
 
 

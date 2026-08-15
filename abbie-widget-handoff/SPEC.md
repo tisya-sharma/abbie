@@ -131,6 +131,12 @@ Behaviour:
 
 Collapsed to a count by default; expanded on click; **capped at three visible rows**. Two earlier designs (tile row, journal-name chips) were rejected — chips truncated journal names and repeated identically across papers from the same journal.
 
+**Amended 2026-08-15, both clauses.** Inline citation pills now sit in the reply itself, and two rules above had to give way.
+
+*Chips are back, on the condition that killed them.* The objection was never the shape, it was the label: a journal name is not unique. The pill carries `short` instead — "Uhlén 2016", which this section already argues for one paragraph down, "author + year is unique where a journal name is not". Two eLife papers render as "Edfors 2018" and "Laflamme 2019". A claim resting on several papers shows the first plus `+N`. The pill reuses this section's own collapsed-control tokens, so the two read as one system rather than two.
+
+*The three-row cap is gone.* Every pill indexes into the expanded list, so a row the layout hides is a citation the reader cannot follow. Expanding now shows every source and the block's height varies with the count. `MAX_SOURCES` is removed server-side for the same reason, which also settles the open call in section 14: with no cap, the "N more" state that section asked for never occurs and its control has been removed.
+
 **Collapsed (default).** One inline control, `margin-top:15px`, radius 999, no fill at rest, padding `5px 10px 5px 8px`, gap 8: a 13 px document glyph, `N sources` at 12 px/600, a 9 px chevron — all `#B3161C`. Hover fills `#F4F4F1`. This is what users see most of the time, and the count answers the real question: "is this grounded in anything?"
 
 **Expanded.** Hairline `#F2F2EF` top border; header row `N SOURCES` at 10 px/700, letterspacing .1em, `#6E737B`, up-chevron right. Then up to three rows, `display:flex; gap:9px; padding:7px 0`:
@@ -239,5 +245,5 @@ None of these block the build; pick a default and note it.
 
 - **Thumbs up/down storage** — no feedback endpoint exists. Keep it local per turn (visual only) or add one. Do not invent an endpoint silently.
 - **Retry** — replace the previous answer or append a second one. Appending is safer; replacing is tidier.
-- **`MAX_SOURCES`** — leaving it at 3 means the "N more" state never appears in practice. Build it anyway.
+- ~~**`MAX_SOURCES`** — leaving it at 3 means the "N more" state never appears in practice. Build it anyway.~~ Settled 2026-08-15: the cap is removed and the expanded list shows every source, so there is no "N more" state. See the amendment in section 7.
 - **Font delivery** — self-host or CDN.

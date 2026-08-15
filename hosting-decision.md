@@ -150,8 +150,9 @@ decision — both are additional Cloud Run services over the same database:
 Both are thin transport adapters over one shared, typed tool library, not reimplementations, so
 they add deployment surface rather than architecture. They also raise one question the public
 widget does not: if staff surfaces expose unpublished records, tool results flow into the hosted
-model as context. That is a data-residency decision, not a hosting one — see architecture.md, Decisions
-for the team #5.
+model as context. That is a data-residency decision, not a hosting one — see [roadmap.md](roadmap.md),
+open question 6, and note that the recommended answer is to scope the staff surface to the approved
+extract, which keeps both services on the same data as the widget.
 
 ## 6. The database: one Postgres is right, but "anywhere" isn't
 

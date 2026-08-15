@@ -116,14 +116,17 @@ reasoned position and the reasoning is what dates.
 - **`apps/mcp/`, the authoring server.** Written to make corpus authoring inspectable from an
   agent client. At seventeen files the corpus is edited directly and the server would be tooling
   for a problem that never appeared. MCP's real consumer is Stage 4's staff surface, serving the
-  antibody library through ChatGPT and Slack, and that is where it should be built.
+  antibody library to ChatGPT, and that is where it should be built. The Slack app calls the same
+  tool library directly, since Slack is not an MCP client.
 
 **The trigger for revisiting retrieval is a measurement, not a milestone.** The assembled corpus
-is currently 6,384 tokens across seventeen concepts, about 376 tokens each. Cost and attention
-dilution both start to bind somewhere around 100k tokens of prose, which is roughly 250 concepts
-at that size. So: build retrieval when assembly crosses ~50k tokens, around 130 concepts, which
-leaves room to measure before it is needed. Ingesting IPI publications or protocols wholesale,
-rather than hand-authoring concepts, crosses that line immediately and is the likelier trigger.
+is currently ~15,700 tokens across thirty concepts, about 523 tokens each. Cost and attention
+dilution both start to bind somewhere around 100k tokens of prose, which is roughly 190 concepts
+at that size. So: build retrieval when assembly crosses ~50k tokens, around 96 concepts, which
+leaves room to measure before it is needed. Concepts have grown denser than the first estimate of
+376 tokens each, so the trigger arrives sooner than the 130 concepts originally projected.
+Ingesting IPI publications, protocols, or the product datasheets wholesale, rather than
+hand-authoring concepts, crosses that line immediately and is the likelier trigger.
 The rule that retrieval must beat the full-context baseline on the golden set does not change.
 
 **Head start.** The kickoff notes already carry Deb's own answers for four questions — what
@@ -354,9 +357,15 @@ Needing someone else:
    manuscript says "Experimental Readout." Abbie will use one in every answer.
 5. **Whether capability 5 should produce a ranking at all**, given the framework declines to produce
    a single score (Stage 6). See Stages 5 to 7 above.
-6. **Whether staff surfaces may expose unpublished data to OpenAI** (Stage 4). IPI's own OpenAI
-   account is the one being used, so this concerns IPI's existing terms rather than a new vendor
-   decision.
+6. **Whether staff surfaces may expose unpublished data to OpenAI** (Stage 4). Not the account
+   question it first looks like. Abbie bills an OpenAI **API** organization, while a ChatGPT MCP
+   connector runs inside a **ChatGPT workspace**, a separate tenant with its own terms, retention,
+   admin controls, and training defaults. Asked as a question about IPI's existing terms it gets a
+   yes for the wrong reason, so it has to be asked about the workspace. The recommended answer makes
+   it moot for Stage 4: scope the staff tool surface to the approved extract, so it serves nothing
+   the public widget does not. See architecture.md, AI-engineering rationale. Revisit only when a
+   reviewed internal dataset exists to serve — there is none today, since only 4 entries in the
+   tenant have ever completed review.
 7. **Third-party licensing terms and budget** (Stage 5), including whether CiteAb's terms permit a
    ranking, which is a derived work.
 

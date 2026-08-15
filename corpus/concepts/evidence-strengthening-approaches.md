@@ -22,11 +22,11 @@ leads_to:
   - controls-in-validation
 ---
 
-Genetic perturbation, independent antibodies, and expression correlation are not dimensions of
-validation and not separate locations in the evidence space. They are approaches that strengthen
-confidence in how evidence generated somewhere else should be interpreted. This is where IPI's
-framework departs most visibly from schemes that count such methods as validation pillars in
-their own right.
+IPI treats genetic perturbation, independent antibodies, and expression correlation as neither
+dimensions of validation nor separate locations in the evidence space. They are approaches that
+strengthen confidence in how evidence generated somewhere else should be interpreted. This is
+where the framework departs most visibly from schemes that count such methods as validation
+pillars in their own right.
 
 The distinction is practical rather than semantic. A knockout control produces no new claim about
 the antibody by itself; what it does is make an existing result attributable. An

@@ -22,15 +22,15 @@ leads_to:
   - assay-cell-display
 ---
 
-Target engagement is the ability of an antibody to bind its intended target. It is measured in
-a model system where the target is known to be present and accessible, such as a HEK
-overexpression system, so that a binding signal can be interpreted without ambiguity about
-whether the target was there to be bound.
+Target Engagement, the second of IPI's four dimensions, is the ability of an antibody to bind its
+intended target. It is measured in a model system where the target is known to be present and
+accessible, such as a HEK overexpression system, so that a binding signal can be interpreted
+without ambiguity about whether the target was there to be bound.
 
-Typical assays include surface plasmon resonance, biolayer interferometry, and cell display.
-SPR and BLI measure the interaction directly and report kinetics and affinity against purified
-protein. Cell display measures binding to target presented on a cell surface, which is closer
-to the context most experiments care about. Each answers the same question at a different
+Typical assays include surface plasmon resonance (SPR), biolayer interferometry (BLI), and cell
+display. SPR and BLI measure the interaction directly and report kinetics and affinity against
+purified protein. Cell display measures binding to target presented on a cell surface, which is
+closer to the context most experiments care about. Each answers the same question at a different
 level of biological complexity.
 
 Engagement answers a deliberately narrow question: does the antibody bind its intended target

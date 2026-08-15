@@ -38,10 +38,10 @@ or a contaminating protein are all resolvable, and the comparison is against a t
 computed from the sequence rather than against another sample.
 
 This makes intact mass a Molecular Integrity measurement, and specifically the identity half of
-it, where SEC covers the purity half. At IPI it is performed after scale-up alongside sequence
-verification of the plasmid, and both are required before an antibody is distributed. The pairing
-matters: sequence verification establishes what was encoded, intact mass establishes what was
-actually produced, and the two can disagree.
+it, where size-exclusion chromatography covers the purity half. At IPI it is performed after
+scale-up alongside sequence verification of the plasmid, and both are required before an antibody
+is distributed. The pairing matters: sequence verification establishes what was encoded, intact
+mass establishes what was actually produced, and the two can disagree.
 
 Like all characterization, it says nothing about function. Confirming that the intended molecule
 was made is what allows a later binding result to be attributed to that molecule, and it is

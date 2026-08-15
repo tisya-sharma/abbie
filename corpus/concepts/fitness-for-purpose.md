@@ -22,10 +22,10 @@ leads_to:
   - controls-in-validation
 ---
 
-Fitness for Purpose is the conclusion that the assembled evidence supports using a particular
-antibody for a particular purpose. It is the integrated judgment the four dimensions exist to
-make possible, and it requires sufficient evidence across all four rather than strong evidence
-in one.
+Fitness for Purpose is where IPI's framework lands: the conclusion that the assembled evidence
+supports using a particular antibody for a particular purpose. It is the integrated judgment the
+four dimensions exist to make possible, and it requires sufficient evidence across all four rather
+than strong evidence in one.
 
 The phrase carries two words that do most of the work. Purpose means a named application in a
 named biological system, not general quality — an antibody is never fit or unfit in the

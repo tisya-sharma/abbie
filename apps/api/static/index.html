@@ -739,13 +739,28 @@ button { font-family: var(--abbie-sans); }
 }
 .abbie-src-text:hover .abbie-src-short,
 .abbie-src-text:hover .abbie-src-title { color: var(--abbie-red-deep); }
-.abbie-src-more {
-  font-size: 12px;
-  font-weight: 600;
+/* Inline citation pill. Deliberately the same visual language as the sources
+   toggle beneath it — same radius, same red, same rest-and-hover fill — so a
+   reply reads as one evidence system rather than two. Sits on the baseline of
+   the sentence it cites, which is why the font size drops a step. */
+.abbie-cite {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  vertical-align: baseline;
+  margin-left: 3px;
+  padding: 1px 7px 1px 5px;
+  border-radius: 999px;
+  background: #F4F4F1;
   color: var(--abbie-red-deep);
-  padding: 8px 0 0;
-  margin-left: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.5;
+  text-decoration: none;
+  white-space: nowrap;
 }
+.abbie-cite:hover { background: #EDEDE9; }
+.abbie-cite svg { width: 10px; height: 10px; flex: none; }
 .abbie-followups {
   display: flex;
   flex-wrap: wrap;
@@ -1090,8 +1105,6 @@ button { font-family: var(--abbie-sans); }
   // sources. matchMedia rather than innerWidth, which counts the scrollbar
   // and disagrees with the CSS by a dozen pixels at the boundary.
   var DIALOG_QUERY = window.matchMedia("(min-width: 780px)");
-  var SOURCES_CAP_PANEL = 3;
-  var SOURCES_CAP_DIALOG = 6;
 
   /* Build the Abbie mark at a given size. Pass "expressive" only at 48px and
      up, which in this widget means the greeting circle alone. The mark takes
@@ -1335,8 +1348,8 @@ button { font-family: var(--abbie-sans); }
       scrollBottom();
     }
 
-    // The dialog and the docked panel show a different number of source rows,
-    // so crossing the 780px floor has to recount them.
+    // Sources start expanded in the dialog and collapsed in the docked panel,
+    // so crossing the 780px floor has to reapply that.
     DIALOG_QUERY.addEventListener("change", refreshSources);
 
     refs.launcher.addEventListener("click", function () {
@@ -1462,7 +1475,7 @@ button { font-family: var(--abbie-sans); }
       var turn = { state: "routing", behavior: null, form: null, question: question,
                    raw: "", shown: 0, finalCount: 0, rafId: null, lastTick: 0,
                    caughtAt: 0, streamEnded: false, pendingDone: null,
-                   fixedRate: null,
+                   fixedRate: null, cites: {},
                    activityTimer: null, feedback: null, restore: null,
                    els: { turn: turnEl, assistant: assistant, thinking: thinking,
                           status: status, body: body, live: live } };
@@ -1517,12 +1530,41 @@ button { font-family: var(--abbie-sans); }
       }
     }
 
+    /* A citation pill. The server replaces each concept marker with the
+       ordinals of the papers behind it and sends those papers ahead of the
+       delta that cites them, so by the time this runs the numbers resolve.
+       The label is author and year rather than the journal, because two papers
+       from one journal would otherwise render identical pills, which is why
+       SPEC section 7 rejected chips the first time.
+
+       Only the first paper is linked; a claim resting on several shows +N and
+       the rest sit a click away in the sources block, which the same numbering
+       orders. A number with no paper behind it drops out silently, which is
+       also what happens to a marker for IPI's own framework: it grounds the
+       answer and publishes nothing to point at. */
+    function citePill(ordinals, turn) {
+      var found = ordinals.map(function (n) { return turn.cites[n]; })
+        .filter(Boolean);
+      if (!found.length) return "";
+      var extra = found.length - 1;
+      return '<a class="abbie-cite" href="' + escapeHtml(found[0].url) + '"' +
+        ' target="_blank" rel="noopener noreferrer">' + ICONS.doc + "<span>" +
+        escapeHtml(found[0].short || found[0].title || found[0].label) +
+        (extra ? " +" + extra : "") + "</span></a>";
+    }
+
     /* Markdown-lite rendering: escape first, finalize blocks exactly once.
-       Citation markers never reach the page — the server scrubs them from
-       the stream — so rendering has no marker handling here at all. */
+       Concept ids never reach the page — the server rewrites them upstream —
+       so the only marker shape handled here is the ordinal one it emits. */
     function inline(src, turn) {
       var stash = [];
       var s = escapeHtml(src);
+      s = s.replace(/[ \t]*\[(\d+(?:\s*,\s*\d+)*)\]/g, function (m, group) {
+        var html = citePill(group.split(",").map(Number), turn);
+        if (!html) return "";
+        stash.push(html);
+        return "\u0000" + (stash.length - 1) + "\u0000";
+      });
       s = s.replace(/`([^`]+)`/g, function (m, c) {
         stash.push('<code class="abbie-code">' + c + "</code>");
         return "\u0000" + (stash.length - 1) + "\u0000";
@@ -1827,32 +1869,20 @@ button { font-family: var(--abbie-sans); }
       applySourcesCap(block);
     }
 
-    /* Show only as many rows as the current layout has room for, and close
-       with an "N more" count. The cap is a layout question, so it is
-       recomputed whenever the panel changes shape rather than fixed at render
-       time — MAX_SOURCES is 3 today, but nothing here assumes that. */
+    /* Collapsed by default, and expanding shows every source rather than the
+       first few. SPEC section 7 caps the expanded list at three rows to hold
+       the block at a constant height, which this deliberately departs from:
+       once each pill in the prose indexes into this list, a row the layout
+       chose to hide is a citation the reader cannot follow. Height varies;
+       reachability does not.
+
+       Open/closed is still a layout question, so it is recomputed whenever the
+       panel changes shape rather than fixed at render time. */
     function applySourcesCap(block) {
-      var dialog = widgetState === "expanded" && DIALOG_QUERY.matches;
-      var cap = dialog ? SOURCES_CAP_DIALOG : SOURCES_CAP_PANEL;
       // The dialog has room to show the evidence without asking, so sources
       // start expanded there and collapse again back in the docked panel.
+      var dialog = widgetState === "expanded" && DIALOG_QUERY.matches;
       if (block.setOpen) block.setOpen(dialog, true);
-      var rows = block.querySelectorAll(".abbie-src-row");
-      var hidden = 0;
-      rows.forEach(function (row, i) {
-        row.hidden = i >= cap;
-        if (i >= cap) hidden++;
-      });
-      var more = block.querySelector(".abbie-src-more");
-      if (hidden) {
-        if (!more) {
-          more = make("div", "abbie-src-more");
-          block.querySelector(".abbie-src-rows").appendChild(more);
-        }
-        more.textContent = hidden + " more";
-      } else if (more) {
-        more.remove();
-      }
     }
 
     function refreshSources() {
@@ -2195,6 +2225,7 @@ button { font-family: var(--abbie-sans); }
     function dispatch(turn, frame) {
       if (!frame || turn.state === "settled" || turn.state === "error") return;
       if (frame.event === "route") onRoute(turn, frame.data);
+      else if (frame.event === "source") turn.cites[frame.data.n] = frame.data;
       else if (frame.event === "delta") onDelta(turn, frame.data);
       else if (frame.event === "done") onDone(turn, frame.data);
       else if (frame.event === "error") {

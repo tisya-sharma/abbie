@@ -11,7 +11,7 @@ from __future__ import annotations
 import re
 
 from packages.corpus_loader import Concept, extract_citations
-from packages.guardrail import leak_scan, scrub_text
+from packages.guardrail import is_publishable, leak_scan, scrub_and_number
 
 ABSTAIN_PHRASE = "I do not have approved validation data"
 
@@ -45,9 +45,30 @@ EM_DASH = "—"
 BOLD_SPAN = re.compile(r"\*\*[^*\n]+\*\*")
 
 
+ORDINAL_MARKER = re.compile(r"\[(\d+(?:\s*,\s*\d+)*)\]")
+
+
 def _word_count(text: str) -> int:
     """Count words with citation markers stripped, so citing is never penalized."""
     return len(CITATION_MARKER.sub("", text).split())
+
+
+def visible_form(text: str, concepts: dict[str, Concept]) -> tuple[str, list[str]]:
+    """The reply as a reader sees it, plus the sources its numbers point at.
+
+    The production scrub, not an approximation of it: markers resolve to source
+    ordinals through the same code path the API streams through. Scoring the
+    marker-deleted form instead would assert on text no visitor ever receives,
+    which is the drift this module exists to avoid.
+    """
+
+    def resolve(cid: str) -> list[str]:
+        concept = concepts.get(cid)
+        if not concept:
+            return []
+        return [s["url"] for s in concept.sources if is_publishable(s)]
+
+    return scrub_and_number(text, resolve)
 
 
 def _last_line(text: str) -> str:
@@ -135,9 +156,10 @@ def run_property_checks(
             results[name] = not extract_citations(text, concepts)
         elif name == "no_slug_leak":
             # Scrub first: internal [concept-id] markers are expected in raw
-            # replies and are removed before text ever reaches a user. What
-            # this asserts is that the scrubbed, user-visible form is clean.
-            results[name] = not leak_scan(scrub_text(text), set(concepts))
+            # replies and become source numbers before text reaches a user.
+            # What this asserts is that the numbered, user-visible form is
+            # clean, which is the form the API's own backstop scans.
+            results[name] = not leak_scan(visible_form(text, concepts)[0], set(concepts))
         elif name == "no_section_labels":
             # arg is the list of labels already caught in the wild, kept as
             # documentation. The structural match is what catches the ones
@@ -149,7 +171,7 @@ def run_property_checks(
             # Abbie can teach a topic; she cannot hand over a file. Offering
             # one is a promise with no fulfillment path, so the terms are
             # barred outright rather than only in the closing sentence.
-            visible = scrub_text(text).lower()
+            visible = visible_form(text, concepts)[0].lower()
             results[name] = not any(
                 re.search(rf"\b{re.escape(str(term).lower())}\b", visible)
                 for term in arg
@@ -167,8 +189,22 @@ def run_property_checks(
             if any(term.lower() in question.lower() for term in arg):
                 results[name] = True
             else:
-                visible = scrub_text(text).lower()
+                visible = visible_form(text, concepts)[0].lower()
                 results[name] = not any(term.lower() in visible for term in arg)
+        elif name == "citations_resolve":
+            # Every inline number must name a row the sources block renders. A
+            # dangling [4] is worse than carrying no number at all, because it
+            # tells a reader the evidence exists and then fails to produce it.
+            visible, keys = visible_form(text, concepts)
+            highest = max(
+                (
+                    int(n)
+                    for group in ORDINAL_MARKER.findall(visible)
+                    for n in group.split(",")
+                ),
+                default=0,
+            )
+            results[name] = highest <= len(keys)
         elif name == "word_budget":
             limit = int(arg.get(form) or arg.get("default", 220))
             results[name] = _word_count(text) <= limit

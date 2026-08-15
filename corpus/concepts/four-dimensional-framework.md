@@ -36,19 +36,19 @@ target. Selectivity establishes that the binding is attributable to that target 
 relative. Readout establishes that it produces an interpretable result in a specific
 application, with appropriate controls.
 
-None of the four is settled by any one experiment, and no experiment covers all of them. An
-SPR measurement speaks to Engagement and says nothing about Readout. A clean Western blot
-speaks to Readout and only weakly to Selectivity. Evidence therefore has to be assembled
-across dimensions and interpreted together, in light of the application the antibody is
+None of the four is settled by any one experiment, and no experiment covers all of them. A surface
+plasmon resonance (SPR) measurement speaks to Engagement and says nothing about Readout. A clean
+Western blot speaks to Readout and only weakly to Selectivity. Evidence therefore has to be
+assembled across dimensions and interpreted together, in light of the application the antibody is
 actually intended for.
 
 The dimensions organize evidence by the property it supports, not by the experimental approach
 used to generate it. The question is never which methods were run, but which foundational
 properties those methods establish — and consequently, which remain open.
 
-The practical consequence is that some widely used approaches — genetic perturbation,
-independent antibodies, expression correlation — are treated here as **evidence-strengthening
-approaches** rather than dimensions of their own. They raise confidence in the interpretation of
-evidence generated in a given assay and system context; they are not separate dimensions. A
+The practical consequence is that IPI treats some widely used approaches, including genetic
+perturbation, independent antibodies, and expression correlation, as **evidence-strengthening
+approaches** rather than as dimensions of their own. They raise confidence in the interpretation
+of evidence generated in a given assay and system context; they are not separate dimensions. A
 knockout control is not a separate kind of validation, it is what makes an immunofluorescence
 result attributable.

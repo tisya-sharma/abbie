@@ -42,7 +42,7 @@ expected composition. Concentration and yield describe what is actually in the v
 these involve the biological system the antibody is eventually pointed at, which is precisely
 what makes them reusable: a characterization result holds for that lot regardless of application.
 
-Characterization is the evidence base for Molecular Integrity, the first of the four dimensions,
+Characterization is the evidence base for Molecular Integrity, the first of IPI's four dimensions,
 and it is foundational in a specific sense. Every later claim rests on knowing which reagent
 produced the data. When identity or purity is unestablished, a downstream result cannot be
 attributed with confidence to any particular molecule, and a failure has no unambiguous cause —

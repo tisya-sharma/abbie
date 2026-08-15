@@ -24,11 +24,11 @@ leads_to:
   - selectivity
 ---
 
-Surface plasmon resonance and biolayer interferometry both measure binding as it happens, without
-labeling either partner. One binding partner is immobilized on a sensor surface, the other flows
-past in solution, and the instrument reports the accumulating mass at the surface in real time.
-The resulting curve has a rising association phase while the analyte binds and a falling
-dissociation phase after it is washed away.
+Surface plasmon resonance (SPR) and biolayer interferometry (BLI) both measure binding as it
+happens, without labeling either partner. One binding partner is immobilized on a sensor surface,
+the other flows past in solution, and the instrument reports the accumulating mass at the surface
+in real time. The resulting curve has a rising association phase while the analyte binds and a
+falling dissociation phase after it is washed away.
 
 Because the measurement is kinetic rather than an endpoint, it separates two things a single
 binding number conflates. The association rate describes how quickly the complex forms; the
@@ -43,7 +43,7 @@ small-scale material as one of the two activity screens that decide which antibo
 scaling up.
 
 Its limitation is the same one that makes it clean. The measurement is usually performed against
-purified antigen on an artificial surface, which is the simplest region of the Validation Map:
+purified antigen on an artificial surface, which is the simplest region of IPI's Validation Map:
 no competing proteins, no membrane, no cellular context. Strong binding there establishes
 Engagement and says nothing about Selectivity, since nothing else was present to bind, and
 nothing about Readout in any real application.

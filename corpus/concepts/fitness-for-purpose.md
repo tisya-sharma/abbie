@@ -33,8 +33,8 @@ abstract. Sufficient means enough for the claim being made, which depends on wha
 result. An antibody used to confirm a band on a blot alongside other evidence is asked to
 support less than one used to establish where a protein localizes in tissue.
 
-No single method establishes fitness. Reagent characterization speaks to Integrity. Assays in
-defined systems generate evidence for Engagement, Selectivity, or Readout depending on the
+No single method establishes fitness. Reagent characterization speaks to **integrity**. Assays in
+defined systems generate evidence for **engagement**, **selectivity**, or **readout** depending on the
 question asked and the controls run. Evidence-strengthening approaches raise confidence in how
 those results should be interpreted. Fitness for Purpose is what emerges when all of it is read
 together against the intended use.

@@ -44,7 +44,7 @@ transcript-level expression data used with appropriate caution — fails differe
 between the two is genuinely informative rather than a repeated measurement of the same
 potential error.
 
-Its natural use is Selectivity. Establishing that an antibody binds its target is comparatively
+Its natural use is **selectivity**. Establishing that an antibody binds its target is comparatively
 easy; establishing that observed signal comes from that target rather than a relative is the
 harder problem, and correlating signal against an antibody-independent measurement across a panel
 of samples is one of the few ways to attack it without genetic perturbation.

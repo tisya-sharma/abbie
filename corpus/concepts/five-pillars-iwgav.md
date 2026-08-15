@@ -38,11 +38,10 @@ reasonably ask how IPI's four dimensions relate to it. They are not the same thi
 difference is deliberate rather than cosmetic.
 
 In 2016 an ad hoc committee, the International Working Group for Antibody Validation, proposed
-five categories of evidence: **genetic strategies**, removing or reducing the target gene and
-checking the signal disappears; **orthogonal strategies**, checking the signal tracks an
-independent measurement such as RNA sequencing; **independent antibody strategies**, using a second
-antibody against a different epitope; **expression of tagged proteins**; and **immunocapture
-followed by mass spectrometry**. The stated minimum is that at least one should be used before
+five categories of evidence: genetic strategies, removing or reducing the target gene and
+checking the signal disappears; orthogonal strategies, checking the signal tracks an
+independent measurement such as RNA sequencing; independent antibody strategies, using a second
+antibody against a different epitope; expression of tagged proteins; and immunocapture followed by mass spectrometry. The stated minimum is that at least one should be used before
 claiming an antibody is validated for a specific application — a floor rather than a ceiling, since
 the proposal adds that multiple strategies strengthen the conclusion.
 
@@ -53,8 +52,7 @@ the target, is the binding attributable, does it produce an interpretable result
 application.
 
 The practical consequence is that several pillars are not dimensions at IPI. Genetic perturbation,
-independent antibodies, and expression correlation are treated as **evidence-strengthening
-approaches**: they raise confidence in the interpretation of a result generated in a particular
+independent antibodies, and expression correlation are treated as evidence-strengthening approaches: they raise confidence in the interpretation of a result generated in a particular
 assay and system, rather than constituting separate axes of validation. A knockout control is not a
 fifth kind of validation; it is what makes an immunofluorescence result attributable to the
 intended target.

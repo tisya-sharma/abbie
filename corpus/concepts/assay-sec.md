@@ -39,11 +39,11 @@ distorts affinity measurements and can produce binding signal that the monomeric
 not reproduce. It also tends to raise background and to vary between preparations, which makes it
 a direct contributor to lot-to-lot inconsistency.
 
-SEC is therefore a Molecular Integrity measurement, and at IPI it runs on every batch of every
+SEC is therefore a **molecular integrity** measurement, and at IPI it runs on every batch of every
 antibody, at small scale and again after scale-up. It is a property of the preparation rather
 than of the antibody design, which is why it has to be repeated per batch rather than inherited
 from an earlier one.
 
 What SEC does not do is say anything about binding. A perfectly monomeric preparation may bind
-nothing at all, or bind the wrong thing. Integrity is the foundation the other dimensions rest
+nothing at all, or bind the wrong thing. **Integrity** is the foundation the other dimensions rest
 on, not a substitute for them.

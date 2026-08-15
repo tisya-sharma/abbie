@@ -31,7 +31,7 @@ questions, they are constantly confused, and keeping them apart is the single mo
 distinction a newcomer to antibodies can learn. Both are questions about binding — the contact
 between an antibody's paratope and an epitope on its target.
 
-**Affinity** is how tightly a single antibody-epitope interaction holds. **Specificity** is
+Affinity is how tightly a single antibody-epitope interaction holds. Specificity is
 whether the antibody binds the intended target and little else. The field's working definition
 is that a highly specific antibody recognizes its target with minimal cross-reactivity, meaning
 off-target binding, within a given application and experimental context.

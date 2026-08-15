@@ -36,7 +36,7 @@ Calling an antibody a reagent places it on a particular side of that line, and t
 carries real consequences. In therapeutic development an antibody is the object of study: the
 question is what the antibody does. In a research laboratory the same molecule is a tool: the
 question is about the protein it detects, and the antibody is only the means of asking. The field
-describes antibodies as **fit-for-purpose reagents**, meaning a reagent's job is to be adequate
+describes antibodies as fit-for-purpose reagents, meaning a reagent's job is to be adequate
 for a defined use rather than good in the abstract.
 
 The consequence is that an antibody's reliability becomes an experimental variable in every study

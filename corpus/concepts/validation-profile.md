@@ -27,18 +27,18 @@ the four dimensions, for one named application. It is a reading of the evidence 
 Validation Map, not a new measurement.
 
 It is deliberately not a score. The profile shows the relative strength of support for
-Integrity, Engagement, Selectivity, and Readout side by side, and dimensions with little or no
+**integrity**, **engagement**, **selectivity**, and **readout** side by side, and dimensions with little or no
 supporting evidence stay visibly empty rather than being averaged away. Partial, ambiguous, and
 conflicting findings remain visible for the same reason: an aggregate number would conceal
 exactly the information a reader needs.
 
 Because a profile is written for a defined application, the same antibody has different profiles
-for different uses. Consider one with established Integrity that produces a single band at the
-expected molecular weight in Western blot. That supports Readout in Western blot and is
-consistent with Engagement — though a single band at the expected weight does not by itself
+for different uses. Consider one with established **integrity** that produces a single band at the
+expected molecular weight in Western blot. That supports **readout** in Western blot and is
+consistent with **engagement** — though a single band at the expected weight does not by itself
 establish what the detected protein is, since off-target proteins can migrate similarly. Asked
-about immunofluorescence instead, the Integrity evidence carries over unchanged, the blot result
-offers moderate support for Engagement, and Selectivity and Readout in imaging have no direct
+about immunofluorescence instead, the **integrity** evidence carries over unchanged, the blot result
+offers moderate support for **engagement**, and **selectivity** and **readout** in imaging have no direct
 support at all. Same antibody, same underlying data, two substantially different profiles.
 
 The most useful thing a profile does is expose gaps. A dimension with weak support is not a

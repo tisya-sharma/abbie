@@ -50,7 +50,7 @@ result is real but not reliably repeatable, because nobody can say whether the n
 same molecule.
 
 In IPI's framework the relationship is explicit. Characterization supplies the evidence for
-Molecular Integrity, one of the four dimensions. Validation is the integration of evidence across
+**molecular integrity**, one of the four dimensions. Validation is the integration of evidence across
 all four, read against a named application, and it terminates in a judgment of Fitness for
 Purpose. Characterization is therefore necessary for validation and nowhere near sufficient for
 it.

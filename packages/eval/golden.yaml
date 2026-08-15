@@ -43,7 +43,18 @@ property_checks:
     - single_question: [procedural]   # closing line asks exactly one question; at most one rhetorical elsewhere
     - max_bullets: 5
     - max_em_dashes: 1            # production ran 1 per 77 words against the corpus's 1 per 128; the prompt was the source
-    - max_bold_spans: 0           # no emphasis today. Raising this number is how the emphasis A/B gets measured
+    # Bold marks IPI's four dimensions and nothing else. The A/B on free
+    # emphasis stays deferred and this does not reopen it: the evidence against
+    # bold measures a model choosing what to stress, and a closed set of four
+    # terms makes no choice.
+    #
+    # There is deliberately no count cap here. Every mention is meant to be
+    # bolded, so a ceiling would fight the rule rather than support it: the
+    # q-four-dimensions ideal legitimately carries 13 spans while 14 of 18
+    # answer ideals carry none. Density is a repetition question, and the
+    # run-level repetition report in run.py is what measures that.
+    - bold_terms_allowed: ["molecular integrity", "target engagement", "selectivity",
+                           "experimental readout", "integrity", "engagement", "readout"]
     - no_banned_openers: ["Great question", "That's a great", "Certainly", "Absolutely",
                           "Nice question", "Good question", "Thanks for asking"]
     - max_exclamation_marks: 1    # warmth lives in the contractions; one is the ceiling in a technical explanation
@@ -148,8 +159,8 @@ cases:
       meaning the same reagent behaves the same way across lots and across days. Positive and
       negative controls are what make each of those answerable rather than assumed.
 
-      IPI organizes that evidence along four dimensions: Molecular Integrity, Target
-      Engagement, Selectivity, and Experimental Readout.
+      IPI organizes that evidence along four dimensions: **molecular integrity**,
+      **target engagement**, **selectivity**, and **experimental readout**.
 
       Want to walk through the four dimensions, or start with why evidence from one
       application does not transfer to another?
@@ -173,7 +184,7 @@ cases:
       which is what lets validation carry over instead of each new lot being effectively a new
       reagent.
 
-      Worth knowing what it does not tell you. Integrity says nothing about whether the
+      Worth knowing what it does not tell you. **Integrity** says nothing about whether the
       antibody binds your target.
 
       Want to see how integrity fits into the four-dimensional framework, or move on to
@@ -209,7 +220,7 @@ cases:
       That is exactly the selectivity question, and it is a different one from whether the
       antibody binds your target at all.
 
-      Selectivity is whether the signal you see can be attributed to your target rather than to
+      **Selectivity** is whether the signal you see can be attributed to your target rather than to
       something related — paralogs, isoforms, splice variants. Those are the off-targets most
       likely to be mistaken for the real thing, so establishing selectivity means measuring
       cross-reactivity against them directly.
@@ -217,7 +228,7 @@ cases:
       Here is why it matters practically. A single band at the expected molecular weight feels
       like proof, but it is not: an off-target protein can run at a similar weight, and staining
       in the expected compartment can come from a relative that localizes there too. The result
-      is consistent with your target without establishing it. Selectivity evidence is what turns
+      is consistent with your target without establishing it. **Selectivity** evidence is what turns
       a plausible result into an attributable one.
 
       Want to look at how genetic perturbation controls strengthen this?
@@ -318,22 +329,23 @@ cases:
     behavior: answer
     must_cite: [four-dimensional-framework]
     ideal: |
-      IPI organizes validation evidence along four foundational dimensions: Molecular Integrity,
-      Target Engagement, Selectivity, and Experimental Readout. They are ordered by dependency
-      rather than importance. Integrity establishes that the reagent is defined and
-      reproducible. Engagement establishes that it binds the intended target. Selectivity
+      IPI organizes validation evidence along four foundational dimensions:
+      **molecular integrity**, **target engagement**, **selectivity**, and
+      **experimental readout**. They are ordered by dependency rather than importance.
+      **Integrity** establishes that the reagent is defined and reproducible.
+      **Engagement** establishes that it binds the intended target. **Selectivity**
       establishes that the binding is attributable to that target rather than a relative.
-      Readout establishes that it produces an interpretable result in a specific application,
-      with appropriate controls.
+      **Readout** establishes that it produces an interpretable result in a specific
+      application, with appropriate controls.
 
       The reason to separate them is that no single experiment settles more than a piece. An
-      SPR measurement speaks to Engagement and says nothing about Readout; a clean Western blot
-      speaks to Readout and only weakly to Selectivity. Sorting evidence by the property it
-      supports, rather than by the method that produced it, lets you say precisely what has
-      been established for your antibody and what has not.
+      SPR measurement speaks to **engagement** and says nothing about **readout**; a clean
+      Western blot speaks to **readout** and only weakly to **selectivity**. Sorting evidence
+      by the property it supports, rather than by the method that produced it, lets you say
+      precisely what has been established for your antibody and what has not.
 
-      Want to start at the foundation with Molecular Integrity, or see why validation attaches
-      to an application rather than to the antibody itself?
+      Want to start at the foundation with **molecular integrity**, or see why validation
+      attaches to an application rather than to the antibody itself?
     notes: |
       The one case that must use the word dimensions. Levels and pillars are both wrong here -
       the kickoff notes say levels, but the manuscript and the system prompt settled on

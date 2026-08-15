@@ -28,7 +28,7 @@ leads_to:
 A band on a blot or a glow in a cell is a signal. It does not arrive labeled with which protein
 produced it, and that is the whole difficulty.
 
-Proteins come in families. **Paralogs** are related proteins encoded by different genes in the
+Proteins come in families. Paralogs are related proteins encoded by different genes in the
 same family, often sharing substantial stretches of sequence. An antibody raised against one
 family member can bind its relatives, because the patch it recognizes may be present on several
 of them. Deciding that an observed signal came from the intended protein rather than a relative

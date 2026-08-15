@@ -46,7 +46,7 @@ leads_to:
   - genetic-perturbation-controls
 ---
 
-An **application** is a specific experimental use of an antibody — Western blot, immunofluorescence,
+An application is a specific experimental use of an antibody — Western blot, immunofluorescence,
 immunohistochemistry, flow cytometry, enzyme-linked immunosorbent assay (ELISA),
 immunoprecipitation. Antibodies are fit-for-purpose reagents, and validation attaches to the
 application rather than to the antibody in general. "This antibody works" is an incomplete

@@ -37,7 +37,7 @@ differences arising from a wrong construct, an incomplete sequence, an unexpecte
 or a contaminating protein are all resolvable, and the comparison is against a theoretical value
 computed from the sequence rather than against another sample.
 
-This makes intact mass a Molecular Integrity measurement, and specifically the identity half of
+This makes intact mass a **molecular integrity** measurement, and specifically the identity half of
 it, where size-exclusion chromatography covers the purity half. At IPI it is performed after
 scale-up alongside sequence verification of the plasmid, and both are required before an antibody
 is distributed. The pairing matters: sequence verification establishes what was encoded, intact

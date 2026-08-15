@@ -104,6 +104,45 @@ class BannedOpenerTests(unittest.TestCase):
         self.assertTrue(check("Honestly, I like both.", self.SPEC)["no_banned_openers"])
 
 
+class BoldTermTests(unittest.TestCase):
+    """Bold marks IPI's four dimensions and nothing else.
+
+    The research against emphasis measures a model choosing what to stress,
+    where misplaced highlighting hurts comprehension. A closed set makes no
+    choice, and this check is what keeps the set closed.
+    """
+
+    SPEC = [{"bold_terms_allowed": ["molecular integrity", "target engagement",
+                                    "selectivity", "experimental readout",
+                                    "integrity", "engagement", "readout"]}]
+
+    def test_dimension_in_full_passes(self):
+        text = "IPI organizes evidence along **molecular integrity** and **selectivity**."
+        self.assertTrue(check(text, self.SPEC)["bold_terms_allowed"])
+
+    def test_short_form_passes(self):
+        text = "**Integrity** says nothing about whether the antibody binds."
+        self.assertTrue(check(text, self.SPEC)["bold_terms_allowed"])
+
+    def test_sentence_initial_capital_passes(self):
+        # Capitalized only because it opens a sentence, which is ordinary
+        # English rather than the proper-noun casing being retired.
+        text = "**Selectivity** is a separate question from engagement."
+        self.assertTrue(check(text, self.SPEC)["bold_terms_allowed"])
+
+    def test_emphasis_on_anything_else_is_flagged(self):
+        text = "This is **really important** for your experiment."
+        self.assertFalse(check(text, self.SPEC)["bold_terms_allowed"])
+
+    def test_one_stray_span_among_valid_ones_is_flagged(self):
+        text = "**selectivity** matters, and so does **sample preparation**."
+        self.assertFalse(check(text, self.SPEC)["bold_terms_allowed"])
+
+    def test_unbolded_prose_passes(self):
+        self.assertTrue(check("No emphasis anywhere here.", self.SPEC)
+                        ["bold_terms_allowed"])
+
+
 class WarmthBoundTests(unittest.TestCase):
     def test_exclamation_marks_within_the_bound(self):
         spec = [{"max_exclamation_marks": 2}]

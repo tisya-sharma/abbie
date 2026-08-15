@@ -28,10 +28,10 @@ most often.
 
 A working readout does not establish that the signal came from the intended target. A clean band
 or a convincing stain shows the assay produced an interpretable result; attributing that result
-to the target requires evidence for Engagement and Selectivity, which the readout alone does not
+to the target requires evidence for **engagement** and **selectivity**, which the readout alone does not
 supply.
 
-Evidence of Engagement does not establish Selectivity. Demonstrating that an antibody binds its
+Evidence of **engagement** does not establish **selectivity**. Demonstrating that an antibody binds its
 target says nothing about whether it also binds something else. Binding and exclusive binding are
 different claims requiring different experiments.
 

@@ -202,6 +202,15 @@ def run_property_checks(
             results[name] = text.count(EM_DASH) <= int(arg)
         elif name == "max_bold_spans":
             results[name] = len(BOLD_SPAN.findall(text)) <= int(arg)
+        elif name == "bold_terms_allowed":
+            # Bold marks IPI's four dimensions and nothing else. The research
+            # against emphasis is about a model choosing what to stress, where
+            # misplaced highlighting measurably hurts comprehension; a closed
+            # set of four terms cannot be misplaced. This check is what keeps
+            # it closed, so the concession does not become general emphasis.
+            allowed = {str(term).lower() for term in arg}
+            spans = [s.strip("*").strip().lower() for s in BOLD_SPAN.findall(text)]
+            results[name] = all(span in allowed for span in spans)
         elif name == "word_floor":
             # Guards the direction word_budget cannot: a procedural reply that
             # collapses back to an orientation stub withholding the process.

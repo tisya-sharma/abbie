@@ -34,8 +34,8 @@ immunofluorescence signal that disappears in a knockout line is the same signal 
 the perturbation is what licenses reading it as the target.
 
 Matched comparisons of target-positive and perturbed samples are the most information-rich of
-these approaches, because run within one assay and system context they can strengthen Engagement
-and Selectivity at once while clarifying what the readout itself means. They are still not
+these approaches, because run within one assay and system context they can strengthen **engagement**
+and **selectivity** at once while clarifying what the readout itself means. They are still not
 decisive on their own. An antibody may cross-react with a relative that is not expressed in the
 system examined, so the comparison looks clean while the cross-reactivity remains. Perturbing a
 target can also change the surrounding biology, which complicates interpretation in its own way.

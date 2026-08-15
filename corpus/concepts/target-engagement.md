@@ -5,7 +5,7 @@ aliases:
   - engagement
   - does the antibody bind its target
   - binding
-ask: What is Target Engagement?
+ask: What is target engagement?
 provenance: ipi-authored
 sources:
   - label: D. Moshinsky, chatbot kickoff notes, 14 July 2026
@@ -22,7 +22,7 @@ leads_to:
   - assay-cell-display
 ---
 
-Target Engagement, the second of IPI's four dimensions, is the ability of an antibody to bind its
+**Target Engagement**, the second of IPI's four dimensions, is the ability of an antibody to bind its
 intended target. It is measured in a model system where the target is known to be present and
 accessible, such as a HEK overexpression system, so that a binding signal can be interpreted
 without ambiguity about whether the target was there to be bound.
@@ -33,7 +33,7 @@ purified protein. Cell display measures binding to target presented on a cell su
 closer to the context most experiments care about. Each answers the same question at a different
 level of biological complexity.
 
-Engagement answers a deliberately narrow question: does the antibody bind its intended target
+**Engagement** answers a deliberately narrow question: does the antibody bind its intended target
 at all. Whether that binding is selective is a separate matter. An antibody can bind its
 target well and also bind several related proteins, and an engagement measurement alone cannot
 distinguish those cases. That is what selectivity addresses.

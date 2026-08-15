@@ -42,9 +42,9 @@ leads_to:
 Buying the same catalog antibody twice does not guarantee receiving the same molecule twice, and
 the reason depends on how the antibody was made.
 
-A **polyclonal** antibody is a mixture harvested from an immunized animal. It is a finite
+A polyclonal antibody is a mixture harvested from an immunized animal. It is a finite
 resource: when that supply is exhausted, the replacement comes from a different animal and is a
-different mixture. A **monoclonal** antibody from a **hybridoma** is intended to be a single
+different mixture. A monoclonal antibody from a hybridoma is intended to be a single
 uniform molecule, but hybridoma cell lines can undergo genetic drift over time in culture. Lot
 numbers matter for both reasons.
 
@@ -56,7 +56,7 @@ productive heavy or light chain V genes. Note this was measured principally at t
 level, and the separate question of whether those extra chains degrade performance is not
 established.
 
-A **recombinant** antibody is produced from a known DNA sequence, so the same sequence yields the
+A recombinant antibody is produced from a known DNA sequence, so the same sequence yields the
 same protein indefinitely. In a head-to-head comparison across a large antibody set, recombinants
 outperformed both other formats in Western blot: 67% of recombinants immunodetected their target,
 against 41% of monoclonals and 27% of polyclonals. The authors note this advantage is

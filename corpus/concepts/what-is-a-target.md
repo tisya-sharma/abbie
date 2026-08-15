@@ -38,9 +38,9 @@ An antibody does not attach to a whole protein the way a hand grips a ball. It c
 small patch on the protein's surface. Three terms describe the parts of that arrangement, and
 they are not interchangeable.
 
-The **antigen** is the whole molecule the antibody is raised against. The **epitope**, also
+The antigen is the whole molecule the antibody is raised against. The epitope, also
 called the antigenic determinant, is the specific region of that molecule the antibody actually
-touches. The **paratope** is the part of the antibody doing the touching. Antibodies recognize
+touches. The paratope is the part of the antibody doing the touching. Antibodies recognize
 antigens through interactions between paratope and epitope, and an antibody generally recognizes
 only a small region on the surface of a large molecule.
 

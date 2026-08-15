@@ -25,20 +25,20 @@ leads_to:
   - fitness-for-purpose
 ---
 
-IPI organizes validation evidence along four foundational dimensions: Molecular Integrity,
-Target Engagement, Selectivity, and Experimental Readout. Together they describe the distinct
+IPI organizes validation evidence along four foundational dimensions: **molecular integrity**,
+**target engagement**, **selectivity**, and **experimental readout**. Together they describe the distinct
 properties that determine whether an antibody can be relied on, and separating them makes it
 possible to say precisely what has been established and what has not.
 
-The dimensions are ordered by dependency rather than importance. Integrity establishes that
-the reagent is defined and reproducible. Engagement establishes that it binds the intended
-target. Selectivity establishes that the binding is attributable to that target rather than a
-relative. Readout establishes that it produces an interpretable result in a specific
+The dimensions are ordered by dependency rather than importance. **Integrity** establishes that
+the reagent is defined and reproducible. **Engagement** establishes that it binds the intended
+target. **Selectivity** establishes that the binding is attributable to that target rather than a
+relative. **Readout** establishes that it produces an interpretable result in a specific
 application, with appropriate controls.
 
 None of the four is settled by any one experiment, and no experiment covers all of them. A surface
-plasmon resonance (SPR) measurement speaks to Engagement and says nothing about Readout. A clean
-Western blot speaks to Readout and only weakly to Selectivity. Evidence therefore has to be
+plasmon resonance (SPR) measurement speaks to **engagement** and says nothing about **readout**. A clean
+Western blot speaks to **readout** and only weakly to **selectivity**. Evidence therefore has to be
 assembled across dimensions and interpreted together, in light of the application the antibody is
 actually intended for.
 
@@ -47,8 +47,7 @@ used to generate it. The question is never which methods were run, but which fou
 properties those methods establish — and consequently, which remain open.
 
 The practical consequence is that IPI treats some widely used approaches, including genetic
-perturbation, independent antibodies, and expression correlation, as **evidence-strengthening
-approaches** rather than as dimensions of their own. They raise confidence in the interpretation
+perturbation, independent antibodies, and expression correlation, as evidence-strengthening approaches rather than as dimensions of their own. They raise confidence in the interpretation
 of evidence generated in a given assay and system context; they are not separate dimensions. A
 knockout control is not a separate kind of validation, it is what makes an immunofluorescence
 result attributable.

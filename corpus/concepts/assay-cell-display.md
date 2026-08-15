@@ -35,11 +35,11 @@ Cell display therefore sits further along the biological-relevance axis of IPI's
 than a biochemical binding measurement does, while remaining an engineered expression system
 rather than a native one.
 
-The format supports two distinct questions. Run against the intended target, it is Target
-Engagement evidence in a more physiological setting. Run against related family members
-expressed separately in the same system, it becomes a cross-reactivity experiment and therefore
-Selectivity evidence — which is the more valuable use, because binding a paralog is a failure
-mode that purified-antigen measurements are structurally unable to reveal.
+The format supports two distinct questions. Run against the intended target, it is
+**target engagement** evidence in a more physiological setting. Run against related family
+members expressed separately in the same system, it becomes a cross-reactivity experiment and
+therefore **selectivity** evidence, which is the more valuable use, because binding a paralog
+is a failure mode that purified-antigen measurements are structurally unable to reveal.
 
 The assay also surfaces polyreactivity, the tendency of some antibodies to stick broadly and
 non-specifically. Signal appearing against the controls rather than only against the antigen

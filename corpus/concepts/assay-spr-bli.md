@@ -37,7 +37,7 @@ dissociation constant, the affinity. Two antibodies can share an affinity while 
 differently, and for most applications the dissociation rate is the more practically important of
 the two, because it determines whether the complex survives the washes an assay puts it through.
 
-This is Target Engagement evidence, and among the most direct kinds available: it establishes
+This is **target engagement** evidence, and among the most direct kinds available: it establishes
 that the antibody binds the intended antigen, and quantifies how well. At IPI, SPR runs on
 small-scale material as one of the two activity screens that decide which antibodies are worth
 scaling up.
@@ -45,5 +45,5 @@ scaling up.
 Its limitation is the same one that makes it clean. The measurement is usually performed against
 purified antigen on an artificial surface, which is the simplest region of IPI's Validation Map:
 no competing proteins, no membrane, no cellular context. Strong binding there establishes
-Engagement and says nothing about Selectivity, since nothing else was present to bind, and
-nothing about Readout in any real application.
+**engagement** and says nothing about **selectivity**, since nothing else was present to bind, and
+nothing about **readout** in any real application.

@@ -10,6 +10,11 @@ ask: What does experimental readout establish?
 provenance: ipi-authored
 sources:
   - label: D. Moshinsky, chatbot kickoff notes, 14 July 2026
+  - label: IPI 4D framework, internal draft — defines the framework these concepts state. No manuscript text is reproduced.
+  - label: "Institute for Protein Innovation. Quality. proteininnovation.org/quality/. IPI's own public statement of its antibody quality and validation standards, which describes these tiers and assays directly."
+    url: https://proteininnovation.org/quality/
+    short: "IPI Quality"
+    title: "Quality"
 status: draft
 reviewed_by:
 clearance: public

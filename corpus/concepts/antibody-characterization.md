@@ -19,6 +19,11 @@ sources:
     short: "Uhlén 2016"
     journal: "Nat Methods"
     title: "A proposal for validation of antibodies"
+  - label: "Kahn RA, Ahmed SM, Ampah SB, et al. Antibody characterization is critical to enhance reproducibility in biomedical research. eLife. 2024;13:e100211. Source for characterization being where reproducibility problems are most tractable."
+    url: https://doi.org/10.7554/eLife.100211
+    short: "Kahn 2024"
+    journal: "eLife"
+    title: "Antibody characterization is critical to enhance reproducibility in biomedical research"
   - label: IPI 4D framework, internal draft — grounds the statements of IPI's own position. No manuscript text is reproduced.
 status: draft
 reviewed_by:

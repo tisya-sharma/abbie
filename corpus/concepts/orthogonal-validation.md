@@ -19,6 +19,11 @@ sources:
     short: "Ayoubi 2025"
     journal: "Nat Protoc"
     title: "A consensus platform for antibody characterization"
+  - label: "Edfors F, Hober A, Linderbäck K, et al. Enhanced validation of antibodies for research applications. Nat Commun. 2018;9:4130. Source for orthogonal validation run at scale against independent measurement."
+    url: https://doi.org/10.1038/s41467-018-06642-y
+    short: "Edfors 2018"
+    journal: "Nat Commun"
+    title: "Enhanced validation of antibodies for research applications"
   - label: IPI 4D framework, internal draft — grounds the statements of IPI's own position. No manuscript text is reproduced.
 status: draft
 reviewed_by:

@@ -57,13 +57,21 @@ conditions, and `leak_scan` blocks any reply whose sources mention them. The ide
 to IPI in the prose instead, which is what `provenance: ipi-authored` means in practice: the
 concept says "IPI views validation as…" and cites nothing.
 
-**When the 4D paper publishes**, replace the `IPI 4D framework, internal draft` label in the nine
-concepts carrying it with the real Vancouver reference plus `url`, `short`, `journal` and `title`,
-then drop `internal draft` from `INTERNAL_LABEL_MARKERS` in `packages/guardrail`. Nothing else
-changes: the source becomes publishable, the sources block renders it, and the reply cites it like
-any other paper. `scripts/check_corpus.py` gates both halves, so a flip done in one direction only
-fails the build rather than shipping. Deb's notes and `IPI-CHR-001` stay internal regardless, which
-is why no prompt names the manuscript specifically.
+**When the 4D paper publishes**, replace the `IPI 4D framework, internal draft` label wherever it
+appears with the real Vancouver reference plus `url`, `short`, `journal` and `title`, then drop
+`internal draft` from `INTERNAL_LABEL_MARKERS` in `packages/guardrail`. Nothing else changes: the
+source becomes publishable, the sources block renders it, and the reply cites it like any other
+paper. Deb's notes and `IPI-CHR-001` stay internal regardless, which is why no prompt names the
+manuscript specifically.
+
+Do not trust a count here. That label sat on nine concepts while the six that *are* the framework,
+`four-dimensional-framework`, `antibody-validation` and the four dimensions, carried only Deb's
+kickoff notes, so a find-and-replace would have published the paper and never cited it on the
+concepts defining it. Silently, and years after anyone remembered. `check_framework_concepts_cite_the_draft`
+in `scripts/check_corpus.py` now asserts the property directly, keyed off the prose rather than off
+provenance so a new concept explaining the dimensions cannot slip through either. Together with
+`internal sources uncitable` and `withheld sources marked`, publication day fails the build in
+whichever direction it is done wrong rather than shipping.
 
 **`status`** has three values, and the middle one exists because scientist time is the scarcest
 input to this project.

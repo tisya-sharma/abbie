@@ -24,6 +24,22 @@ sources:
     short: "Biddle 2024"
     journal: "mAbs"
     title: "Improving the integrity and reproducibility of research that uses antibodies: a technical, data sharing, behavioral and policy challenge"
+  - label: "Baker M. 1,500 scientists lift the lid on reproducibility. Nature. 2016;533(7604):452-454. Source for the wider reproducibility problem this concept places reagents inside. A news feature reporting a survey, not primary research."
+    url: https://doi.org/10.1038/533452a
+    short: "Baker 2016"
+    journal: "Nature"
+    title: "1,500 scientists lift the lid on reproducibility"
+  - label: "Bordeaux J, Welsh AW, Agarwal S, et al. Antibody validation. BioTechniques. 2010;48(3):197-209. Source for what validation evidence conventionally consists of, and for specificity, sensitivity and reproducibility as the field's framing."
+    url: https://doi.org/10.2144/000113382
+    short: "Bordeaux 2010"
+    journal: "BioTechniques"
+    title: "Antibody validation"
+  - label: "Polakiewicz RD. Antibodies: the solution is validation. Nature. 2015;518(7540):483. Source for reliability resting on evidence rather than on reputation."
+    url: https://doi.org/10.1038/518483b
+    short: "Polakiewicz 2015"
+    journal: "Nature"
+    title: "Antibodies: The solution is validation"
+  - label: IPI 4D framework, internal draft — defines the dimensions this concept names. No manuscript text is reproduced.
 status: draft
 reviewed_by:
 clearance: public
@@ -46,6 +62,13 @@ problem in biomedical research, and it has been treated as such by the field for
 response has been a series of proposals for what validation should require, community initiatives
 generating and publishing validation data at scale, and growing attention to how antibodies are
 described in the literature so that a reader can tell which reagent was used at all.
+
+The field's own long-standing framing asks for three things. Specificity is whether the signal
+comes from the intended target rather than from something else. Sensitivity is whether the
+antibody detects the target at the abundance the experiment will actually encounter.
+Reproducibility is whether the same reagent gives the same result across lots and across days.
+That framing is the field's rather than IPI's, and it is worth knowing because most published
+guidance is written in it. IPI organizes the same evidence differently, into four dimensions.
 
 The cost of skipping validation is asymmetric. Running the necessary controls is a bounded amount
 of work, done once per application. Discovering afterward that a reagent was not selective can

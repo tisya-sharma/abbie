@@ -9,6 +9,11 @@ ask: What does it mean to validate an antibody?
 provenance: ipi-authored
 sources:
   - label: D. Moshinsky, chatbot kickoff notes, 14 July 2026
+  - label: IPI 4D framework, internal draft — defines the framework these concepts state. No manuscript text is reproduced.
+  - label: "Institute for Protein Innovation. Quality. proteininnovation.org/quality/. IPI's own public statement of its antibody quality and validation standards, which describes these tiers and assays directly."
+    url: https://proteininnovation.org/quality/
+    short: "IPI Quality"
+    title: "Quality"
 status: draft
 reviewed_by:
 clearance: public
@@ -34,12 +39,11 @@ lacks in the abstract. An antibody is validated *for something* — for Western 
 mouse tissue, for flow cytometry on human cells — and evidence gathered in one context does
 not automatically carry to another.
 
-Validation typically requires evidence of specificity, sensitivity, and reproducibility,
-supported by appropriate positive and negative controls. Specificity asks whether the signal
-comes from the intended target rather than something else. Sensitivity asks whether the
-antibody detects the target at the abundance the experiment will encounter. Reproducibility
-asks whether the same reagent gives the same result across lots and across days. Controls are
-what make each of those answerable rather than assumed.
+IPI organizes the evidence that demonstrates it into four foundational dimensions:
+**molecular integrity**, **target engagement**, **selectivity**, and **experimental readout**.
+Each names a distinct property an antibody has to be shown to have, and separating them is what
+makes it possible to say precisely what has been established and what is still open. Controls
+are what make each of them answerable rather than assumed.
 
 Because confidence in a biological result depends on confidence in the reagent that produced
 it, validation is not paperwork attached to an antibody after the fact. It determines whether

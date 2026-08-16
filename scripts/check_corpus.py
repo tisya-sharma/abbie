@@ -154,6 +154,40 @@ def check_withheld_sources_are_marked() -> list[str]:
     return findings
 
 
+FRAMEWORK_TERMS = ("four dimensions", "four foundational dimensions", "molecular integrity",
+                   "target engagement", "experimental readout")
+FRAMEWORK_DRAFT = "ipi 4d framework, internal draft"
+
+
+def check_framework_concepts_cite_the_draft() -> list[str]:
+    """A concept stating IPI's four dimensions carries the draft label.
+
+    This one guards a failure that would arrive silently, years from now.
+    corpus/README.md tells whoever handles publication day to replace the
+    internal-draft label wherever it appears, which only works if every concept
+    that states the framework carries it. Six did not: the framework itself and
+    its four dimensions were sourced to Deb's kickoff notes alone, so the paper
+    defining them would have published and never been cited on them.
+
+    Keyed off the prose rather than off provenance, because the risk is a new
+    concept that explains the dimensions and is filed as summarized. The terms
+    are deliberately specific: "selectivity" alone is an ordinary word, while
+    "molecular integrity" and "target engagement" are IPI's names for things.
+    """
+    findings: list[str] = []
+    for concept in load_corpus(include_pre_publication=True).values():
+        body = concept.body.lower()
+        if not any(term in body for term in FRAMEWORK_TERMS):
+            continue
+        labels = " ".join(str(s.get("label", "")) for s in concept.sources).lower()
+        if FRAMEWORK_DRAFT not in labels:
+            findings.append(
+                f"{concept.id}: states IPI's dimensions but carries no draft label, "
+                "so publication day would leave it behind"
+            )
+    return findings
+
+
 def check_review_status() -> list[str]:
     """Status vocabulary, and the sign-off that approved has to carry.
 
@@ -188,6 +222,7 @@ CHECKS = (
     ("antibody identifiers", check_identifiers),
     ("internal sources uncitable", check_internal_sources_stay_uncitable),
     ("withheld sources marked", check_withheld_sources_are_marked),
+    ("framework concepts cite the draft", check_framework_concepts_cite_the_draft),
 )
 
 

@@ -29,6 +29,16 @@ sources:
     short: "Uhlén 2016"
     journal: "Nat Methods"
     title: "A proposal for validation of antibodies"
+  - label: "Bradbury A, Plückthun A. Reproducibility: standardize antibodies used in research. Nature. 2015;518(7537):27-29. Source for the case that sequence-defined recombinant reagents are what make an antibody reproducible. A different paper from Bradbury 2018 above."
+    url: https://doi.org/10.1038/518027a
+    short: "Bradbury 2015"
+    journal: "Nature"
+    title: "Reproducibility: Standardize antibodies used in research"
+  - label: "Freedman LP. Antibodies: validate recombinants too. Nature. 2015;518(7540):483. Source for sequence definition fixing identity but not performance, which is this concept's closing claim."
+    url: https://doi.org/10.1038/518483c
+    short: "Freedman 2015"
+    journal: "Nature"
+    title: "Antibodies: Validate recombinants too"
 status: draft
 reviewed_by:
 clearance: public

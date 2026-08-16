@@ -127,9 +127,17 @@ class CitationNumberingTests(TurnHarness, unittest.TestCase):
 
     Run against the real corpus rather than a fixture, because the property at
     risk is agreement with actual frontmatter: what-is-an-antibody carries one
-    paper, antibody-characterization carries two, and the second of those is
-    the same Uhlén 2016 that what-is-binding cites. A reply touching all three
-    therefore has to number three rows, reuse one, and leave nothing dangling.
+    paper, antibody-characterization carries three, and one of those is the
+    same Uhlén 2016 that what-is-binding cites. A reply touching all three has
+    to reuse the shared paper rather than number it twice, and leave nothing
+    dangling.
+
+    The coupling is deliberate and these assertions are expected to move when
+    the corpus does. They last moved when IPI-authored concepts began citing
+    IPI's own public quality page, which is why the last test below asserts
+    exclusivity rather than silence: the framework sentence used to render
+    nothing because IPI published nothing to point at, and now renders one
+    source, still never a neighbour's.
     """
 
     REPLY = (
@@ -155,20 +163,29 @@ class CitationNumberingTests(TurnHarness, unittest.TestCase):
         self.assertEqual(
             self.visible,
             "An antibody is a protein [1]."
-            " Characterization describes the reagent [2, 3]."
+            " Characterization describes the reagent [2, 3, 4]."
             " Binding is the interaction itself [3]."
-            " IPI reads all of it one way.",
+            " IPI reads all of it one way [5].",
         )
 
     def test_rows_resolve_to_the_papers_the_numbers_name(self):
         shorts = [s.get("short") for s in self.done["sources"]]
-        self.assertEqual(shorts, ["Janeway 2001", "Ayoubi 2025", "Uhlén 2016"])
+        self.assertEqual(
+            shorts,
+            ["Janeway 2001", "Ayoubi 2025", "Uhlén 2016", "Kahn 2024", "IPI Quality"],
+        )
 
-    def test_ipi_authored_citation_numbers_nothing(self):
-        # The framework grounds the last sentence and publishes no paper, so it
-        # takes no number and leaves no gap in the prose.
-        self.assertNotIn("four-dimensional", self.visible)
-        self.assertTrue(self.visible.endswith("one way."))
+    def test_an_ipi_claim_cites_only_ipi(self):
+        # The framework sentence carries IPI's own page and nothing else. The
+        # concepts cited beside it in this reply hold four external papers
+        # between them, and not one of them attaches to IPI's claim.
+        last = self.visible.rsplit(".", 2)[-2]
+        ordinals = [int(n) for group in re.findall(r"\[([\d, ]+)\]", last)
+                    for n in group.split(",")]
+        self.assertEqual(len(ordinals), 1)
+        cited = self.done["sources"][ordinals[0] - 1]
+        self.assertEqual(cited["short"], "IPI Quality")
+        self.assertIn("proteininnovation.org", cited["url"])
 
 
 class SourceFrameTests(TurnHarness, unittest.TestCase):

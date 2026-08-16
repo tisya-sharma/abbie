@@ -35,7 +35,7 @@ mistaken for the intended one.
 **Selectivity** is a separate question from engagement, and evidence of one is not evidence of the
 other. An antibody may bind its target with high affinity and bind three close paralogs just
 as well. Only a comparison across those related proteins distinguishes a selective reagent
-from a merely avid one.
+from one that merely binds tightly.
 
 The reason this matters practically is that a positive result in an application is rarely
 self-interpreting. A single band at the expected molecular weight, or staining in the expected

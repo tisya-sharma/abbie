@@ -1,9 +1,11 @@
 ---
 id: what-is-binding
-title: Binding, affinity, and specificity
+title: Binding, affinity, avidity, and specificity
 aliases:
   - what does binding mean
   - what is affinity
+  - what is avidity
+  - affinity versus avidity
   - is a strong binder a specific binder
   - how tightly does it bind
 ask: What does it mean for an antibody to bind?
@@ -14,6 +16,10 @@ sources:
     short: "Uhlén 2016"
     journal: "Nat Methods"
     title: "A proposal for validation of antibodies"
+  - label: "Janeway CA Jr, Travers P, Walport M, Shlomchik MJ. Immunobiology. 5th ed. New York: Garland Science; 2001. Glossary. NCBI Bookshelf NBK10759. Source for the affinity and avidity definitions."
+    url: https://www.ncbi.nlm.nih.gov/books/NBK10759/
+    short: "Janeway 2001"
+    title: "Immunobiology, 5th edition: Glossary"
 status: draft
 reviewed_by:
 clearance: public
@@ -41,6 +47,14 @@ very tightly and still bind several other proteins in the same sample. This happ
 amount of target protein relative to everything else in a sample affects how much off-target
 binding shows up — and that remains true even when the antibody's affinity for those other
 proteins is much lower than its affinity for the target.
+
+Affinity also has a companion term that is easily conflated with it. Where affinity describes
+binding at a single site, such as one Fab fragment holding one monovalent antigen, avidity is the
+sum total of the strength when two molecules are held together at multiple sites at once. An
+antibody carries more than one identical binding tip, so a target presenting repeated copies of an
+epitope can be held far more tightly than the affinity of any single site would suggest. The
+distinction matters because a measurement made under multivalent conditions reports avidity while
+appearing to report affinity.
 
 The same reasoning applies to other measurements that describe the antibody itself. Measuring
 affinity, mapping where the antibody binds, determining its isotype, or reading its gene sequence

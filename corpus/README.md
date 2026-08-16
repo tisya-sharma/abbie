@@ -35,6 +35,7 @@ sources:                         # required when provenance is summarized
     short: "Uhlén 2016"          # first author and year, how a paper is named out loud
     journal: "Nat Methods"       # standard abbreviation, omit for books
     title: "A proposal for validation of antibodies"
+    depth: full-text             # full-text | abstract; absent means unrecorded, see below
 status: draft                    # draft | sourced | approved
 reviewed_by:                     # the scientist who approved it, set only at approved
 clearance: public                # public | pre-publication
@@ -47,8 +48,14 @@ checklist:                       # optional, drives the downloadable checklist e
 ```
 
 **`checklist`** is optional and only bench-procedure concepts carry it — today
-`controls-in-validation` and `application-western-blot`. Each entry is an `item` / `proves`
+`controls-in-validation` and every per-application concept. Each entry is an `item` / `proves`
 pair, both required, and the loader rejects an entry missing either.
+
+Write these from the full text, not from what the technique is generally believed to require. Two
+of the per-application checklists were drafted with an item that the sources turned out to
+contradict: that omitting the primary antibody controls for specificity, which it does not, and
+that Fc receptors should always be blocked, which breaks staining of immunoglobulin on B cells.
+Both would have reached a reader as bench instructions in a downloadable document.
 
 It is not read by the model. The export at `/export/checklist` composes a fixed template from
 these pairs, so the model chooses which concepts apply and never writes the artifact itself,
@@ -344,7 +351,7 @@ is and shape it accordingly.
 
 ## The concept map
 
-Thirty-three concepts written, and no `leads_to` edge points at an unwritten file, so every
+Thirty-four concepts written, and no `leads_to` edge points at an unwritten file, so every
 follow-up the widget can offer resolves. That is a property of the corpus as it stands rather
 than one CI enforces: the loader fails a concept only when *none* of its follow-ups resolve, so
 a typo in one id on a concept with several is filtered out silently at render time. This map
@@ -353,8 +360,8 @@ concepts added on August 12 to close the bench-controls gap described below, thi
 August 13 covering the framework and the assays, `species-cross-reactivity` added on
 August 15, and the per-application concepts written from August 16.
 
-Two files are at `status: sourced`, both written from the full text of every source they cite and
-both carrying `depth: full-text` on each source row. The rest of the corpus is still at
+Three files are at `status: sourced`, all written from the full text of every source they cite and
+all carrying `depth: full-text` on each source row. The rest of the corpus is still at
 `status: draft` and carries no depth marker, which means unrecorded rather than shallow. No file
 names a reviewer, so the grounding column below records what a concept was written from rather
 than a claim that a scientist has checked it.
@@ -396,6 +403,7 @@ than a claim that a scientist has checked it.
 | `assay-cell-display` | advanced | public | IPI QC standard, internal |
 | `application-immunofluorescence` | core | public | Stadler 2010, Schnell 2012, Stadler 2013 |
 | `application-immunohistochemistry` | core | public | Shi 2011, Buchwalow 2011, Howat 2014, Hewitt 2014 |
+| `application-flow-cytometry` | core | public | Cossarizza 2021, Andersen 2016 |
 
 The four assay concepts carry no numeric criteria. The bands live in IPI's internal release-gate
 standard, and what "good" means per application is recorded below as deferred pending a
@@ -407,15 +415,15 @@ describing its own process rather than a performance grade, which is the line th
 
 ### Still to write
 
-The three remaining per-application concepts: flow cytometry, ELISA, and immunoprecipitation.
-These are the open half of the sourcing gap below — `application-western-blot` closed the Western
-blot entry on August 12, and immunofluorescence and immunohistochemistry closed on August 16.
-None is a dangling `leads_to` target, so the graph is complete without them; they are coverage
+Two remaining per-application concepts: ELISA and immunoprecipitation. These are the open half of
+the sourcing gap below. `application-western-blot` closed the Western blot entry on August 12, and
+immunofluorescence, immunohistochemistry and flow cytometry closed on August 16. Neither remaining
+concept is a dangling `leads_to` target, so the graph is complete without them; they are coverage
 rather than repair.
 
-Of the three, only flow cytometry can be written from open sources today. ELISA and
-immunoprecipitation each rest on a closed paper that carries the claim the concept exists to
-make, and neither should be written until that full text is in hand.
+Flow cytometry rests on two sources rather than the usual three, which is a deliberate exception:
+one of them is a consensus guideline running to several hundred pages with nearly two hundred
+authors, and no open-access equivalent exists for the second axis the concept needs.
 
 Each remaining one gets its golden-set question written before its prose. The corpus and the
 golden set are otherwise authored together, a concept earning its file by being `must_cite` for
@@ -446,7 +454,7 @@ was leaning on a word it never defined.
 | Gap | Effect | What would close it |
 |---|---|---|
 | **Isoform and splice-variant attribution** — only paralogs are sourced | Stated as an explicit limit inside `paralogs-and-isoforms` | Unknown whether published guidance exists |
-| **What each application measures** — beyond the conformation and sample-preparation axis | Closed for Western blot on August 12, immunofluorescence and immunohistochemistry on August 16; still open for flow cytometry, ELISA and immunoprecipitation | Per-application methods literature. Pillai-Kastoori 2020, Ghosh 2014 and Tsuji 2020 closed blotting; Stadler 2010, Schnell 2012 and Stadler 2013 closed immunofluorescence; Shi 2011, Buchwalow 2011, Howat 2014 and Hewitt 2014 closed immunohistochemistry. Equivalents are what the remaining three need, and two of them are behind a paywall |
+| **What each application measures** — beyond the conformation and sample-preparation axis | Closed for four of six applications; still open for ELISA and immunoprecipitation | Per-application methods literature, read as full text. Pillai-Kastoori 2020, Ghosh 2014 and Tsuji 2020 closed blotting; Stadler 2010, Schnell 2012 and Stadler 2013 closed immunofluorescence; Shi 2011, Buchwalow 2011, Howat 2014 and Hewitt 2014 closed immunohistochemistry; Cossarizza 2021 and Andersen 2016 closed flow cytometry |
 | **Mechanism of lot-to-lot variation** — beyond "finite resource" and "genetic drift" | `reagent-reproducibility` stops at those two mechanisms | Not yet identified |
 | **Communicating validation to non-experts** | No published guidance found; Abbie's approach is adapted from scientist-to-scientist reporting principles by analogy, which should be stated rather than implied | Science communication literature, or portal documentation |
 

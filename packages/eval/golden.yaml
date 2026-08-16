@@ -1207,6 +1207,42 @@ cases:
       is not a specificity control, only a check on the detection system, which is why the ideal
       offers controls as a topic rather than naming that one.
 
+  - id: q-what-is-flow-cytometry
+    added: 2026-08-16
+    form: definitional
+    question: what is flow cytometry?
+    behavior: answer
+    must_cite: [application-flow-cytometry]
+    ideal: |
+      Flow cytometry does not take the cell apart. A suspension of intact cells is pushed single
+      file past a laser, and the instrument records one measurement for each cell that goes by,
+      across tens of thousands of them.
+
+      Because the cell is whole, only the part of your target facing outward is available to the
+      antibody. Reaching something inside means fixing and permeabilizing first, which gives up
+      the intact state that made the method distinctive in the first place.
+
+      That intact cell is also what makes the result easy to misread. A whole cell can hold an
+      antibody by its tail rather than its binding site, cells that died before reaching the
+      instrument take up antibody with no specificity at all, and the line between negative and
+      positive is a decision you make from a control rather than something the data hands you.
+
+      Want to look at which controls make that line defensible?
+    notes: |
+      Question written before application-flow-cytometry existed, same inversion as the other
+      application cases.
+
+      The axis is that the cell is whole, which is what separates this from the blot's denatured
+      chain and the section's fixed tissue. What the reply must not do is treat whole as
+      untouched: getting cells into suspension can cleave the very markers being measured, and
+      antibody binding can drive the target off the surface within minutes.
+
+      Three overreaches the sources contradict. Fc-tail binding is not general, since T cells
+      carry no Fc receptors and it varies by isotype and even by lot. Blocking is not blanket
+      advice, because it interferes with staining immunoglobulin on B cells. And a
+      fluorescence-minus-one control handles spillover only, so it cannot be described as the
+      thing that establishes where positive begins.
+
   - id: q-redteam-injection-in-history
     added: 2026-08-12
     holdout: true

@@ -1929,6 +1929,82 @@ cases:
       interests. The figures should not be quoted as though they generalize beyond the single
       application they were measured in.
 
+  # The prerequisite-expansion pair, added 2026-08-16. Same subject concept, so
+  # form is the only variable between them: the definitional one should gloss the
+  # prerequisite inline, the procedural one should not.
+
+  - id: q-what-is-a-knockout-control
+    added: 2026-08-16
+    form: definitional
+    question: what's a knockout control?
+    behavior: answer
+    must_cite: [genetic-perturbation-controls, paralogs-and-isoforms]
+    ideal: |
+      A knockout control is the same experiment run on a sample where the target gene has been
+      deleted, so the protein you are looking for is not there to be found.
+
+      That is the whole force of it. If the signal goes when the protein goes, the signal was
+      your protein. If it stays, something else produced it, often a paralog, one of the related
+      proteins encoded by other genes in the same family, which an antibody can grip just as
+      readily.
+
+      The strongest form is an isogenic pair, two cell lines identical except that one has the
+      gene deleted, so the only difference between the experiments is the protein itself.
+
+      One caution before you lean on it. A knockout is not always as complete as its paperwork
+      suggests, so the deletion has to be confirmed in the protein rather than only in the DNA.
+
+      Would you like to see what to do when your sample cannot be edited at all?
+    notes: |
+      The case prerequisite expansion exists for. genetic-perturbation-controls declares
+      requires: paralogs-and-isoforms, and its body contains neither the word paralog nor the
+      word isoform, so the reason a residual signal is worrying lives only in the prerequisite.
+      Zero of the fifteen definitional trials in eval-20260816-013647 mentioned either.
+
+      must_cite carries the prerequisite because a glossed claim still cites what it rests on.
+      What no deterministic check can see is whether the term arrived with a definition attached
+      rather than bare, so that half stays a human read of the report. Building a proximity
+      regex for it would invite exactly the ritual phrasing corpus/README.md refuses to
+      mechanize in the teaching shape.
+
+      Expect this to fail against a pre-change baseline. That failure is the measurement.
+
+  - id: q-knockout-or-knockdown
+    added: 2026-08-16
+    form: procedural
+    question: help me pick between a knockout and a knockdown control for my blot
+    behavior: answer
+    must_cite: [genetic-perturbation-controls]
+    ideal: |
+      Reach for the knockout where you can make one. Removing the gene outright is the cleaner
+      test, because a knockdown only reduces the protein, and a faint remaining band is then
+      ambiguous between residual target and something else the antibody is binding.
+
+      Knockdown earns its place where deletion is out of reach, and so does neither. Genetic
+      strategies cannot be used at all for some sample types, human tissue and body fluids among
+      them, and there the fallback is an independent measurement or a second antibody raised
+      against a different epitope.
+
+      Whichever you choose, confirm the perturbation in the protein rather than only in the DNA.
+      An edited gene can be read around, leaving a shortened product that still carries the
+      epitope, and across one set of verified deletions roughly a third of targets still
+      expressed protein at some level.
+
+      I am reading this as a blot rather than an imaging experiment. Can you edit the cells your
+      samples come from?
+    notes: |
+      The scoping half of the pair, on the same concept, so form is the only variable. "Help me
+      pick" is the phrasing router.md names for procedural, and q-control-imaging routes
+      procedural on it.
+
+      This one should not gloss. A scientist choosing between two controls is not asking to have
+      paralog defined at them, and if the gloss shows up here the form gate is not holding.
+
+      Read as a measurement rather than a clean gate: one of three q-control-imaging trials
+      raised paralogs unprompted before any of this existed, so the term appearing here is
+      weak evidence on its own. If it appears at the same rate before and after, the change is
+      not what moved it.
+
   - id: q-redteam-injection-in-history
     added: 2026-08-12
     holdout: true

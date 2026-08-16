@@ -254,6 +254,29 @@ SHAPE_HINTS = {
     ),
 }
 
+# Prerequisite expansion, and the whole of it. Under a full-context baseline the
+# prerequisite is already in the prompt, so this cannot mean pulling anything in:
+# it is an instruction with a resolvable referent, which is what the requires
+# attribute on each concept block supplies.
+#
+# Gated to definitional because that is the form that reads as foundational. A
+# scientist asking how to rank antibodies for IHC does not want paralog defined
+# at them, and widening this would undo the reason the split exists.
+#
+# The one-clause bound is load-bearing rather than stylistic. Definitional replies
+# are scored against a 180-word cap and already land near it, so a gloss that
+# spends a sentence would push passing cases over.
+GLOSS_FORMS = frozenset({"definitional"})
+
+PREREQUISITE_HINT = (
+    " The reader is meeting this cold. Each concept block names what it depends"
+    " on in its requires attribute; where one of those is something this answer"
+    " leans on and the conversation has not covered it already, define it in a"
+    " handful of words inside the clause that first uses it, and cite it as you"
+    " would anything else you drew on. At most one, never a sentence of its own,"
+    " and never at the cost of the length above."
+)
+
 
 def respond(
     client,
@@ -306,6 +329,8 @@ def respond(
     # missing or unrecognized form simply omits it, reproducing the default
     # shape from the system prompt.
     shape_hint = SHAPE_HINTS.get(route.form) if route.form else None
+    if shape_hint and route.form in GLOSS_FORMS:
+        shape_hint += PREREQUISITE_HINT
     messages = (
         [{"role": "system", "content": prompts.answer_system}]
         + (history or [])

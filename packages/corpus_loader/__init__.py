@@ -145,17 +145,27 @@ def reading_order(concepts: dict[str, Concept]) -> list[str]:
 def assemble_context(concepts: dict[str, Concept]) -> str:
     """Render the visible corpus as one delimited block, in reading order.
 
-    Follow-up edges are filtered to targets that resolve in this build, so the
-    model can never offer a concept the reader cannot reach.
+    Both edge kinds are filtered to targets that resolve in this build, so the
+    model can never offer a concept the reader cannot reach, nor be pointed at a
+    prerequisite that is not here to read. Rendering rather than raising on a
+    dangling edge is deliberate: rejecting the build belongs to validate, and
+    keeping the split means a clearance-filtered build still renders.
+
+    Prerequisites are rendered so a definitional turn can gloss the simpler term
+    inline instead of offering it as a follow-up. Until this attribute existed
+    the graph was invisible to the model, which is why requires had no effect on
+    any answer despite being enforced in CI.
     """
     ids = set(concepts)
     blocks: list[str] = []
     for cid in reading_order(concepts):
         concept = concepts[cid]
+        requires = ", ".join(r for r in concept.requires if r in ids) or "none"
         follow_ups = ", ".join(t for t in concept.leads_to if t in ids) or "none"
         blocks.append(
             f'<concept id="{concept.id}" title="{concept.title}" '
-            f'level="{concept.level}" follow_ups="{follow_ups}">'
+            f'level="{concept.level}" requires="{requires}" '
+            f'follow_ups="{follow_ups}">'
             f"\n{concept.body}\n</concept>"
         )
     return "<corpus>\n" + "\n\n".join(blocks) + "\n</corpus>"

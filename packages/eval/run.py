@@ -35,7 +35,13 @@ sys.path.insert(0, str(REPO_ROOT))
 
 import yaml
 
-from packages.composer import ComposerPrompts, read_prompt_file, respond
+from packages.composer import (
+    PREREQUISITE_HINT,
+    SHAPE_HINTS,
+    ComposerPrompts,
+    read_prompt_file,
+    respond,
+)
 from packages.corpus_loader import build_system_message, estimate_tokens
 from packages.envfile import load_env_file
 from packages.eval.checks import score_case
@@ -144,9 +150,14 @@ class RoutedStrategy:
     def __init__(self, name: str, prompts: ComposerPrompts, router_prompt: str, router_model: str):
         self.name = name
         self.system_tokens_estimate = estimate_tokens(prompts.answer_system)
+        # The per-turn hints belong in the fingerprint even though they are code
+        # rather than prompt files. Without them, tuning a shape hint changes the
+        # request and not the cache key, so the next run replays pre-change
+        # replies and reads as "no effect" when nothing was actually measured.
         self.fingerprint = _text_hash(
             prompts.answer_system + prompts.redirect_system + prompts.refuse_text
             + prompts.abstain_template + router_prompt + router_model
+            + json.dumps(SHAPE_HINTS, sort_keys=True) + PREREQUISITE_HINT
         )
         self._prompts = prompts
         self._router_prompt = router_prompt

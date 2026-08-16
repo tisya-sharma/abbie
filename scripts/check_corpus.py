@@ -1,8 +1,9 @@
 """Corpus gate checks that need no API key, for CI and for local use.
 
-Six checks, each corresponding to a rule written down elsewhere:
+Eight checks, each corresponding to a rule written down elsewhere:
 
 - graph invariants, via the loader's own validate()
+- every concept is reachable, so none is written and then stranded
 - clearance: no pre-publication concept reaches a public build
 - review status, and the sign-off an approved file has to carry
 - no antibody-specific identifier appears anywhere in the corpus
@@ -55,6 +56,30 @@ IDENTIFIER_PATTERNS = (
 def check_graph() -> list[str]:
     """Graph invariants for the public build."""
     return validate(load_corpus())
+
+
+# five-pillars-iwgav is unreachable on purpose: it exists so Abbie can answer a
+# visitor who asks how IPI's framework relates to IWGAV's, and for no other
+# reason, so no concept may point a follow-up at it.
+UNREACHABLE_BY_DESIGN = {"five-pillars-iwgav"}
+
+
+def check_reachable() -> list[str]:
+    """Every concept is offerable as a follow-up from somewhere.
+
+    The loader's fourth invariant checks that a concept still has somewhere to
+    send a reader. This is the other direction, and nothing checked it: five
+    per-application concepts were written, passed every gate, and could not be
+    reached from anywhere in the graph. The widget builds its chips from
+    leads_to edges, so a concept with no inbound edge is one a reader can only
+    arrive at by asking for it in exactly the right words.
+    """
+    concepts = load_corpus()
+    targeted = {t for c in concepts.values() for t in c.leads_to if t != c.id}
+    return [
+        f"{cid}: no concept leads to it, so it can never be offered"
+        for cid in sorted(set(concepts) - targeted - UNREACHABLE_BY_DESIGN)
+    ]
 
 
 def check_clearance() -> list[str]:
@@ -217,6 +242,7 @@ def check_review_status() -> list[str]:
 
 CHECKS = (
     ("graph invariants", check_graph),
+    ("every concept reachable", check_reachable),
     ("clearance", check_clearance),
     ("review status", check_review_status),
     ("antibody identifiers", check_identifiers),

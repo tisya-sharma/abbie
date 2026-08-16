@@ -81,9 +81,10 @@ cleanliness.
 
 What a pull-down asks of an antibody is also its own question. Antibodies raised to bind a
 well-folded domain can serve here and still fail to detect the same protein once it is
-denatured, so success in this application does not imply the reagent reads a blot. The
-implication has been observed to run the other way in at least one large panel, where reagents
-that performed well in a pull-down were also frequently useful for imaging.
+denatured, so success in this application does not imply the reagent reads a blot. It does not
+follow that pull-down evidence is useful nowhere else: in at least one large panel, reagents
+that performed well here were frequently useful for imaging too, which is a different
+application rather than a general licence.
 
 What an immunoprecipitation establishes is that some material was retained by an antibody from
 one lysate under one set of wash conditions. Whether the intended protein is in it, and whether

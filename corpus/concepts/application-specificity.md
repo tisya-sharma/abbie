@@ -45,6 +45,12 @@ leads_to:
   - experimental-readout
   - genetic-perturbation-controls
   - species-cross-reactivity
+  - application-western-blot
+  - application-immunofluorescence
+  - application-immunohistochemistry
+  - application-flow-cytometry
+  - application-elisa
+  - application-immunoprecipitation
 ---
 
 An application is a specific experimental use of an antibody — Western blot, immunofluorescence,

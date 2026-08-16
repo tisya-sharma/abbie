@@ -73,12 +73,17 @@ common error. Somewhere between half and four fifths of most protein antigens ad
 conditions are optimized, which sounds reassuring until you notice it describes how much
 material stays on the plate rather than how much of it still works.
 
-Capturing the target with an antibody instead of adsorbing it directly moves the problem rather
-than removing it, because the capture antibody is now the thing stuck to the plastic. Only a
-small minority of it may survive the surface in working order, and the antigen a plate can hold
-that way falls below what direct adsorption achieves. Polyclonal capture reagents tend to
-outlast monoclonal ones here, because a single clone that does not survive adsorption fails
-uniformly while a mixed population is unlikely to fail all at once.
+This is why the sandwich format exists, and it is worth being precise about what it does. Using
+a capture antibody rather than coating the target directly keeps the target off the plastic
+entirely, so the thing you are measuring stays close to its native form. That is the version of
+the assay used for complex samples, and it is why a plate can be a near-native context for an
+antigen even though the surface is not.
+
+The cost moves rather than disappearing. The capture antibody is now what is stuck to the
+plastic, only a small minority of it may survive there in working order, and the amount of
+antigen a plate holds that way falls below what direct adsorption achieves. Polyclonal capture
+reagents tend to outlast monoclonal ones, because a single clone that does not survive
+adsorption fails uniformly while a mixed population is unlikely to fail all at once.
 
 Because the readout carries no structure, nothing in a result announces that it has gone wrong.
 Antibodies already present in a sample can bridge the capture and detection reagents and drive

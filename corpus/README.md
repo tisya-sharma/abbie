@@ -175,6 +175,15 @@ Four invariants govern the graph, all enforced in CI:
    plus one pre-publication one, leaving the most-asked question in the product with nowhere to
    go.
 
+A fifth invariant lives in `scripts/check_corpus.py` rather than the loader, and it is the mirror
+of the fourth: **every concept must be the target of at least one `leads_to` edge.** The fourth
+asks whether a reader can leave a concept; this one asks whether they can arrive. It exists
+because the five per-application concepts were written, passed every other gate, and were
+reachable from nowhere. The widget builds its chips from `leads_to`, so a concept with no inbound
+edge can only be found by a visitor who guesses its subject in the right words.
+`five-pillars-iwgav` is the one exception and is unreachable deliberately, since no concept may
+point a follow-up at it.
+
 Edges may point at concepts that do not exist yet — that is how the corpus records its own to-do
 list — but rendering resolves against the active index, so an unwritten or filtered target is
 simply not offered.

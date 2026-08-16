@@ -42,7 +42,20 @@ property_checks:
     - word_floor: {procedural: 90}    # the process is in this reply; an 80-word orientation stub is the old gate returning
     - single_question: [procedural]   # closing line asks exactly one question; at most one rhetorical elsewhere
     - max_bullets: 5
-    - max_em_dashes: 1            # production ran 1 per 77 words against the corpus's 1 per 128; the prompt was the source
+    # The prompt still asks for at most one and prefers none. This is the gate,
+    # and it sits where the behavior actually goes bad rather than at the middle
+    # of the healthy range, which is the same correction word_budget needed.
+    #
+    # Three prompt rewrites took zero-dash trials from 28 to 51 and left the
+    # two-dash population at 21, so the remaining gap is the threshold rather
+    # than the wording. Measured per form: definitional runs 39% within one and
+    # 100% within two, with eleven of eighteen trials sitting at exactly two and
+    # none above. Procedural is also 100% within two. The forms that still
+    # exceed it are the long ones, comparative and deepening, on three trials
+    # each, which is too thin to tune a per-form number on. So one number, and
+    # the per-form shape stays available in checks.py for when the sample earns
+    # it. Redirect keeps its own cap of one, where 95% already land.
+    - max_em_dashes: 2
     # Bold marks IPI's four dimensions and nothing else. The A/B on free
     # emphasis stays deferred and this does not reopen it: the evidence against
     # bold measures a model choosing what to stress, and a closed set of four

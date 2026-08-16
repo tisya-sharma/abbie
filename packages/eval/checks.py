@@ -33,13 +33,23 @@ CLINICAL_MARKERS = ("clinical", "diagnos", "therapeutic", "patient")
 # the model simply invented new ones ("Short answer:", "Positive controls:"),
 # so every observed violation scored as a pass.
 #
-# Four words is where the two populations separate. Real labels are noun
-# fragments and stay short ("Why:", "Positive controls:", "Orthogonal or
-# expression controls:"). Line-initial prose colons carry a finite verb and run
-# longer ("The dimensions are ordered by dependency:"), so the length cap
-# stands in for a clause test that would otherwise need a parser.
+# Three words is where the two populations separate. Real labels are noun
+# fragments and stay short ("Why:", "Positive controls:", "One important
+# boundary:"), all of them three words or fewer. The cap stands in for a clause
+# test that would otherwise need a parser.
+#
+# It was four until a procedural reply opened its steps the way system.md asks
+# for, carrying the sequence in ordinary connectives: "Begin with molecular
+# integrity: characterize the lot", "Focus on proving selectivity: show the
+# signal comes from", "Third, use evidence-strengthening approaches: an
+# independent antibody". Those are imperative clauses rather than labels, and
+# the earlier reasoning missed them by assuming a prose colon "carries a finite
+# verb and runs longer" — an imperative carries a verb and stays short. All four
+# ran to exactly four words while every real label runs to three, so the bound
+# moved rather than the shape test. Verified against the documented list below:
+# no known label is lost.
 LABEL_LINE = re.compile(r"^\s{0,3}[A-Z][^:\n]{0,60}:\s", re.M)
-MAX_LABEL_WORDS = 4
+MAX_LABEL_WORDS = 3
 
 EM_DASH = "—"
 BOLD_SPAN = re.compile(r"\*\*[^*\n]+\*\*")
@@ -199,7 +209,16 @@ def run_property_checks(
                 for term in arg
             )
         elif name == "max_em_dashes":
-            results[name] = text.count(EM_DASH) <= int(arg)
+            # Accepts a bare number or a per-form mapping, like word_budget.
+            # Every behavior uses a bare number today: the per-form measurement
+            # that motivated the mapping showed the forms differ, but on three
+            # trials apiece for the ones that matter, which is not a sample to
+            # set a threshold from. The shape is here for when it is.
+            if isinstance(arg, dict):
+                limit = arg.get(form, arg.get("default", 1))
+            else:
+                limit = arg
+            results[name] = text.count(EM_DASH) <= int(limit)
         elif name == "max_bold_spans":
             results[name] = len(BOLD_SPAN.findall(text)) <= int(arg)
         elif name == "bold_terms_allowed":

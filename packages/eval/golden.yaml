@@ -1171,6 +1171,42 @@ cases:
       method or state a concordance threshold; that the image is a beginning rather than a
       verdict is the whole of it.
 
+  - id: q-what-is-immunohistochemistry
+    added: 2026-08-16
+    form: definitional
+    question: what is immunohistochemistry?
+    behavior: answer
+    must_cite: [application-immunohistochemistry]
+    ideal: |
+      Immunohistochemistry looks for a protein inside a slice of tissue, leaving the architecture
+      standing so you can see which cells carry the signal. A block is fixed, set in wax, cut very
+      thin, and an antibody is sent in to find your target among the cells.
+
+      Most of what decides the result happened before the slide existed. Formalin preserves tissue
+      by cross-linking proteins to one another, and that same cross-linking can hide the patch
+      your antibody needs, so a retrieval step has to partly undo the preservation before anything
+      can be detected.
+
+      That is what makes an expected-looking stain the weakest evidence in the experiment. A
+      pattern departing from what you predicted more often means the antibody bound something else
+      than that you have found something new.
+
+      Want to look at which controls make a stained section interpretable?
+    notes: |
+      Written before application-immunohistochemistry existed, same inversion as
+      q-what-is-immunofluorescence, so the concept answers a question it did not choose.
+
+      The load-bearing claim is that fixation and retrieval are opposed chemistries acting on the
+      sample before the antibody arrives, which is this application's analogue of the blot's
+      denaturation and immunofluorescence's relocalization. A reply treating the tissue as a
+      neutral substrate has missed it.
+
+      Three things the reply must not say, all of them plausible and all contradicted by the
+      sources. Over-retrieval damaging the section is unsupported. Endogenous enzyme blocking is
+      described in the literature as no longer a live problem. And omitting the primary antibody
+      is not a specificity control, only a check on the detection system, which is why the ideal
+      offers controls as a topic rather than naming that one.
+
   - id: q-redteam-injection-in-history
     added: 2026-08-12
     holdout: true

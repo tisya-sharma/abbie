@@ -331,7 +331,7 @@ is and shape it accordingly.
 
 ## The concept map
 
-Thirty-two concepts written, and no `leads_to` edge points at an unwritten file, so every
+Thirty-three concepts written, and no `leads_to` edge points at an unwritten file, so every
 follow-up the widget can offer resolves. That is a property of the corpus as it stands rather
 than one CI enforces: the loader fails a concept only when *none* of its follow-ups resolve, so
 a typo in one id on a concept with several is filtered out silently at render time. This map
@@ -340,13 +340,14 @@ concepts added on August 12 to close the bench-controls gap described below, thi
 August 13 covering the framework and the assays, `species-cross-reactivity` added on
 August 15, and the per-application concepts written from August 16.
 
-One file, `application-immunofluorescence`, is at `status: sourced`: every claim in it was
-traced to a source that was retrieved and read as the file was written. All three of its sources
-are closed access and were read at abstract depth, so under the depth rule below it states no
-figures at all. The numbers those papers report are held back until the full texts confirm them.
-The rest of the corpus is still at `status: draft`. No file names a reviewer, so the grounding
-column below records what a concept was written from rather than a claim that a scientist has
-checked it.
+Two files are at `status: sourced`, and they were verified to different depths, which the depth
+rule above makes a meaningful distinction rather than a bookkeeping one.
+`application-immunohistochemistry` was written from the full text of all four of its sources and
+may therefore state figures. `application-immunofluorescence` could not be: all three of its
+sources are closed access and were read at abstract depth, so it states no figures at all and
+the numbers those papers report are held back until the full texts confirm them. The rest of the
+corpus is still at `status: draft`. No file names a reviewer, so the grounding column below
+records what a concept was written from rather than a claim that a scientist has checked it.
 
 ### Written
 
@@ -384,6 +385,7 @@ checked it.
 | `assay-spr-bli` | advanced | public | IPI QC standard, internal |
 | `assay-cell-display` | advanced | public | IPI QC standard, internal |
 | `application-immunofluorescence` | core | public | Stadler 2010, Schnell 2012, Stadler 2013 |
+| `application-immunohistochemistry` | core | public | Shi 2011, Buchwalow 2011, Howat 2014, Hewitt 2014 |
 
 The four assay concepts carry no numeric criteria. The bands live in IPI's internal release-gate
 standard, and what "good" means per application is recorded below as deferred pending a
@@ -395,12 +397,15 @@ describing its own process rather than a performance grade, which is the line th
 
 ### Still to write
 
-The four remaining per-application concepts: immunohistochemistry, flow cytometry, ELISA, and
-immunoprecipitation. These are the open half of the sourcing gap below —
-`application-western-blot` closed the Western blot entry on August 12 and
-`application-immunofluorescence` closed immunofluorescence on August 16, and between them they
-are the template for the rest. None is a dangling `leads_to` target, so the graph is complete
-without them; they are coverage rather than repair.
+The three remaining per-application concepts: flow cytometry, ELISA, and immunoprecipitation.
+These are the open half of the sourcing gap below — `application-western-blot` closed the Western
+blot entry on August 12, and immunofluorescence and immunohistochemistry closed on August 16.
+None is a dangling `leads_to` target, so the graph is complete without them; they are coverage
+rather than repair.
+
+Of the three, only flow cytometry can be written from open sources today. ELISA and
+immunoprecipitation each rest on a closed paper that carries the claim the concept exists to
+make, and neither should be written until that full text is in hand.
 
 Each remaining one gets its golden-set question written before its prose. The corpus and the
 golden set are otherwise authored together, a concept earning its file by being `must_cite` for
@@ -431,7 +436,7 @@ was leaning on a word it never defined.
 | Gap | Effect | What would close it |
 |---|---|---|
 | **Isoform and splice-variant attribution** — only paralogs are sourced | Stated as an explicit limit inside `paralogs-and-isoforms` | Unknown whether published guidance exists |
-| **What each application measures** — beyond the conformation and sample-preparation axis | Closed for Western blot on August 12 and immunofluorescence on August 16; still open for the other four | Per-application methods literature. Pillai-Kastoori 2020, Ghosh 2014 and Tsuji 2020 closed it for blotting; Stadler 2010, Schnell 2012 and Stadler 2013 closed it for immunofluorescence. Equivalents are what the remaining four need |
+| **What each application measures** — beyond the conformation and sample-preparation axis | Closed for Western blot on August 12, immunofluorescence and immunohistochemistry on August 16; still open for flow cytometry, ELISA and immunoprecipitation | Per-application methods literature. Pillai-Kastoori 2020, Ghosh 2014 and Tsuji 2020 closed blotting; Stadler 2010, Schnell 2012 and Stadler 2013 closed immunofluorescence; Shi 2011, Buchwalow 2011, Howat 2014 and Hewitt 2014 closed immunohistochemistry. Equivalents are what the remaining three need, and two of them are behind a paywall |
 | **Mechanism of lot-to-lot variation** — beyond "finite resource" and "genetic drift" | `reagent-reproducibility` stops at those two mechanisms | Not yet identified |
 | **Communicating validation to non-experts** | No published guidance found; Abbie's approach is adapted from scientist-to-scientist reporting principles by analogy, which should be stated rather than implied | Science communication literature, or portal documentation |
 

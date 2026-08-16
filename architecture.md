@@ -682,6 +682,24 @@ held-out and excluded while tuning, and abstain cases are re-audited whenever th
 what is answerable, since Stage 2 catalog data will turn some correct abstentions into answerable
 questions.
 
+**Sampling parameters are deliberately not pinned, and pinning them would not do what it sounds
+like.** The obvious hygiene move is to set temperature and a seed so runs become comparable. Two
+things argue against it here. The generation path uses `reasoning_effort` rather than the sampling
+controls, so temperature is not a parameter this model family reliably accepts, and adding it
+untested risks failing every call in a run that costs real money to repeat. More importantly it
+would not buy determinism even where accepted: non-determinism at temperature zero comes mostly
+from batch composition and the non-associativity of floating-point reduction inside the kernels,
+which no request parameter reaches, and published measurements put the residual variation at
+several percentage points. The mechanism that actually makes runs comparable is replaying stored
+replies, which `run.py --rescore` already does at zero cost, and that is where determinism should
+be claimed from. Revisit only with evidence that the model family accepts the parameters and that
+accepting them measurably narrows the spread.
+
+**Read per-check trends, not just the headline.** Every results file already records each check's
+outcome per case, and `scripts/eval_trends.py` reads the series across recorded runs. A pass rate
+moving is not a finding on its own at this sample size; a single check degrading across several
+runs is. This is what distinguishes a real regression from resampling.
+
 **Citation correctness must be checked at the claim level, not the concept level, or the eval misses
 the failure it exists to catch.** `must_cite` records which concepts an answer should draw on, but
 an answer that cites `molecular-integrity` while asserting something absent from that file passes a

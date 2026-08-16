@@ -14,7 +14,7 @@ sources:
     short: "Uhlén 2016"
     journal: "Nat Methods"
     title: "A proposal for validation of antibodies"
-  - label: "Ayoubi R, et al. Scaling of an antibody validation procedure enables quantification of antibody performance in major research applications. eLife. 2023;12:RP91645."
+  - label: "Ayoubi R, et al. Scaling of an antibody validation procedure enables quantification of antibody performance in major research applications. eLife. 2023;12:RP91645. Source for the split of manufacturer-recommended validation strategies by application, and for the knockout-control retest rates in both Western blot and immunofluorescence."
     url: https://doi.org/10.7554/eLife.91645
     short: "Ayoubi 2023"
     journal: "eLife"
@@ -24,8 +24,8 @@ sources:
     short: "Ayoubi 2025"
     journal: "Nat Protoc"
     title: "A consensus platform for antibody characterization"
-  - label: "Smits AH, et al. Biological plasticity rescues target activity in CRISPR knock outs. PMID 31659326."
-    url: https://pubmed.ncbi.nlm.nih.gov/31659326/
+  - label: "Smits AH, Ziebell F, Joberty G, et al. Biological plasticity rescues target activity in CRISPR knock outs. Nat Methods. 2019;16(11):1087-1093. Source for residual protein expression across verified CRISPR deletions, and for the two mechanisms that produce it."
+    url: https://doi.org/10.1038/s41592-019-0614-5
     short: "Smits 2019"
     journal: "Nat Methods"
     title: "Biological plasticity rescues target activity in CRISPR knock outs"
@@ -35,7 +35,6 @@ clearance: public
 level: advanced
 requires:
   - paralogs-and-isoforms
-  - five-pillars-iwgav
 leads_to:
   - selectivity
   - application-specificity

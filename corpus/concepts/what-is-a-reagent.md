@@ -6,7 +6,7 @@ aliases:
   - why is an antibody called a reagent
   - fit for purpose reagent
 ask: What makes an antibody a reagent?
-provenance: established
+provenance: summarized
 sources:
   - label: "Ayoubi R, Ryan J, Gonzalez Bolivar S, et al. A consensus platform for antibody characterization. Nat Protoc. 2025;20(6):1509-1545. Source of the field's fit-for-purpose reagent framing."
     url: https://doi.org/10.1038/s41596-024-01095-8

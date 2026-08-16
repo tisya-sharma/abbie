@@ -14,7 +14,7 @@ sources:
     short: "Kumar 2023"
     journal: "Protein Sci"
     title: "Multi-perspectives and challenges in identifying B-cell epitopes"
-  - label: "Janeway CA Jr, Travers P, Walport M, Shlomchik MJ. Immunobiology, 5th ed., section 3-8. NCBI Bookshelf NBK27160."
+  - label: "Janeway CA Jr, Travers P, Walport M, Shlomchik MJ. Immunobiology. 5th ed. New York: Garland Science; 2001. Section 3-8. NCBI Bookshelf NBK27160."
     url: https://www.ncbi.nlm.nih.gov/books/NBK27160/
     short: "Janeway 2001"
     title: "Immunobiology: The Immune System in Health and Disease, 5th edition"

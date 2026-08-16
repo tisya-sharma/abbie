@@ -9,7 +9,7 @@ aliases:
 ask: What is an antibody?
 provenance: established
 sources:
-  - label: "Janeway CA Jr, Travers P, Walport M, Shlomchik MJ. Immunobiology. NCBI Bookshelf NBK27160. Reference work, further reading rather than a claim-level citation."
+  - label: "Janeway CA Jr, Travers P, Walport M, Shlomchik MJ. Immunobiology. 5th ed. New York: Garland Science; 2001. NCBI Bookshelf NBK27160. Reference work, further reading rather than a claim-level citation."
     url: https://www.ncbi.nlm.nih.gov/books/NBK27160/
     short: "Janeway 2001"
     title: "Immunobiology: The Immune System in Health and Disease, 5th edition"
@@ -22,6 +22,7 @@ leads_to:
   - what-is-a-target
   - antibody-validation
   - reagent-reproducibility
+  - what-is-a-reagent
 ---
 
 Picture a protein shaped like the letter Y, with two identical tips at the ends of its arms.

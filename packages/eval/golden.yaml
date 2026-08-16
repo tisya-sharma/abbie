@@ -1311,6 +1311,624 @@ cases:
       must not appear. Nor should the reply say stringent washing cleans a pull-down up, which
       Trinkle-Mulcahy contradicts directly.
 
+  # Coverage cases, added 2026-08-16. Eighteen concepts had no case asserting them,
+  # so a green board certified half the corpus. These close that, and the four
+  # falsification cases at the end are the first in the set that test what Abbie
+  # must decline to say rather than what she should say.
+
+  - id: q-what-is-intact-mass
+    added: 2026-08-16
+    form: definitional
+    question: what does intact mass analysis tell you?
+    behavior: answer
+    must_cite: [assay-mass-spectrometry]
+    ideal: |
+      It weighs the antibody and checks that against what the sequence says it should weigh. The
+      antibody is reduced first so the heavy and light chains are measured separately, which
+      means a discrepancy can be traced to one chain instead of hiding inside a single larger
+      number.
+
+      What agreement buys you is identity. A wrong construct, an incomplete sequence, an
+      unexpected modification or a contaminating protein all show up as a mass that does not
+      match the prediction.
+
+      On its own it is worth very little, and that is worth saying plainly. It tells you nothing
+      about whether the antibody works. What it does is license attributing a later binding
+      result to the molecule you think you tested.
+
+      Want to see what else goes into establishing that a reagent is what it claims to be?
+    notes: |
+      Covers assay-mass-spectrometry, which had no case despite carrying IPI's framing that the
+      plasmid sequence and the intact mass together verify the antibody's sequence. That framing
+      is deliberate and settled, so this case exists partly to stop it drifting back toward an
+      encoded-versus-produced distinction.
+
+      The reply must not claim mass alone verifies sequence without the plasmid half, must not
+      offer glycoform or modification identification, and must not state a mass tolerance.
+
+  - id: q-what-does-sec-show
+    added: 2026-08-16
+    form: definitional
+    question: what does SEC tell you about an antibody?
+    behavior: answer
+    must_cite: [assay-sec]
+    ideal: |
+      Size-exclusion chromatography separates what is in your prep by size, with the larger
+      things coming off first, and answers one question: how much of it is the monomer you meant
+      to make, and how much is something else.
+
+      That something else is usually aggregate, and it can form at almost any point, during
+      expression, purification, concentration, freezing or storage. Concentration and yield will
+      not reveal it, so a prep can read at exactly the expected concentration and still be
+      substantially aggregated.
+
+      Aggregate matters because it changes what your binding data means. Several binding sites
+      held together grip more tightly than one, so apparent avidity goes up, affinity
+      measurements are distorted, and you can see signal a monomeric prep would never produce.
+
+      Would you like to look at why this gets run on every batch rather than once per antibody?
+    notes: |
+      Covers assay-sec. The load-bearing link is aggregate to distorted affinity, which is what
+      makes this an antibody-validation concept rather than a protein-chemistry aside.
+
+      No acceptable-aggregate percentage exists in the corpus and the reply must not supply one.
+      SEC also does not measure identity, which is the neighbouring assay's job.
+
+  - id: q-spr-says-it-binds-tightly
+    added: 2026-08-16
+    form: conceptual
+    question: my SPR says single-digit nanomolar. does that mean the antibody is specific?
+    behavior: answer
+    must_cite: [assay-spr-bli, what-is-binding]
+    ideal: |
+      No, and the two questions are further apart than they look. How tightly something sticks
+      and whether it sticks only to the right thing are different claims that need different
+      experiments.
+
+      Your SPR result is target engagement, and a strong one. It was almost certainly measured
+      against purified antigen on an artificial surface, which means nothing else was present
+      that the antibody could have bound. Selectivity is a claim about what happens when
+      relatives are there too, so that run could not have tested it.
+
+      There is a second thing worth checking before you trust the number itself. If the
+      preparation carries aggregate, several binding sites are held together and grip harder
+      than one would, so what reads as affinity is partly avidity.
+
+      Want to look at what would establish selectivity, or at what SEC would tell you about the
+      prep?
+    notes: |
+      Three-concept case forcing the model past a single file. The non-obvious hop is the SEC
+      one, since aggregate inflating apparent affinity is the reason to distrust the number
+      rather than merely its scope.
+
+      Must not state a KD band or call anything a strong binder as a grade. must_cite lists the
+      two the answer cannot be right without; citing assay-sec as well is expected and fine.
+
+  - id: q-what-is-cell-display
+    added: 2026-08-16
+    form: definitional
+    question: what is a cell display assay?
+    behavior: answer
+    must_cite: [assay-cell-display]
+    ideal: |
+      It puts the antigen on the surface of living cells rather than purifying it, then reads
+      whether the antibody binds, cell by cell.
+
+      The reason to bother is context. On a cell the target sits in a membrane, carries the
+      cell's own sugars, and holds a shape a purified fragment may not reproduce. Binders can
+      pass one format and fail the other, and that happens in both directions.
+
+      Its more valuable use is selectivity. Express related family members separately in the
+      same system, and you can ask whether the antibody picks out your target or also grips its
+      relatives, which is invisible when the only thing in the tube is purified antigen.
+
+      Shall we look at why relatives are the hard case for attributing a signal?
+    notes: |
+      Covers assay-cell-display. The selectivity use is the point worth teaching, since target
+      engagement is the obvious reading and the weaker one.
+
+      IPI's practice of excluding polyreactive antibodies is the institute's own position and
+      should be attributed if raised. No polyreactivity cutoff exists to state, and cell display
+      must not be ranked above or below other assays.
+
+  - id: q-what-is-experimental-readout
+    added: 2026-08-16
+    form: definitional
+    question: what is experimental readout?
+    behavior: answer
+    must_cite: [experimental-readout]
+    ideal: |
+      It is the dimension you actually meet first: the band, the stain, the shifted population.
+      It asks whether the antibody appears to work in a defined application, assay and system,
+      judged on what came out of the experiment with the right controls beside it.
+
+      It is also the dimension most tied to circumstances. The same antibody can be clean in one
+      application and uninterpretable in another, so readout is never established in general,
+      only for the application, sample type and conditions you used.
+
+      Controls are what make output readable rather than merely present. Absence of signal only
+      tells you something when the target was expected to be there and reachable, which is why a
+      positive control does real work rather than ceremonial work.
+
+      Want to look at why a result that looks right is where interpretation starts?
+    notes: |
+      Covers experimental-readout, one of IPI's four dimensions and previously unasserted. The
+      reply must not present it as the final or highest dimension, and it must not claim readout
+      by itself establishes attribution.
+
+  - id: q-what-is-a-target
+    added: 2026-08-16
+    form: definitional
+    question: what is a target?
+    behavior: answer
+    must_cite: [what-is-a-target]
+    ideal: |
+      An antibody does not recognize a whole protein. It touches one small patch of it.
+
+      The vocabulary follows from that. The antigen is the whole molecule the antibody was
+      raised against. The epitope is the specific region it actually contacts, and the paratope
+      is the part of the antibody doing the contacting. Recognition happens between those two
+      small surfaces, usually a minor part of a large molecule.
+
+      The practical consequence is that a single protein carries many epitopes. Two antibodies
+      sold against the same target may be binding completely different patches of it, which is
+      one reason they can behave differently in the same experiment while their catalog entries
+      read identically.
+
+      Would you like to look at what it means for one of them to bind well?
+    notes: |
+      Covers what-is-a-target, a foundational file with no case. The two-antibodies-same-target
+      consequence is the part a first-time visitor needs.
+
+      Must not present linear versus conformational epitopes as a clean binary, which the corpus
+      bans on sight, and must not state an epitope size in residues.
+
+  - id: q-what-makes-an-antibody-a-reagent
+    added: 2026-08-16
+    form: definitional
+    question: what makes an antibody a reagent?
+    behavior: answer
+    must_cite: [what-is-a-reagent]
+    ideal: |
+      A reagent is something you add in order to produce a result. It is an instrument rather
+      than the thing you are studying, and that distinction is what the word is doing here.
+
+      The same molecule can be either. In therapeutic development the antibody is the object of
+      inquiry. In your lab it is a tool for asking a question about the protein it detects, and
+      the field describes antibodies in exactly those terms, as fit for a defined purpose rather
+      than good in the abstract.
+
+      What follows is uncomfortable. Reagent reliability becomes a variable in every study that
+      uses one. If the antibody behaves differently from how you assumed, your biological
+      conclusion is wrong even though the biology was never the problem.
+
+      Want to see why two vials of the same catalog number can behave differently?
+    notes: |
+      Covers what-is-a-reagent. The instrument-versus-object framing is the concept; the
+      consequence for conclusions is why it matters.
+
+      Performance belongs to reagent plus protocol rather than the molecule alone, so the reply
+      should not imply the antibody has context-free behavior. No specific buffers or protocol
+      parameters, which the file does not carry.
+
+  - id: q-affinity-vs-specificity
+    added: 2026-08-16
+    form: comparative
+    question: what's the difference between affinity and specificity?
+    behavior: answer
+    must_cite: [what-is-binding]
+    ideal: |
+      Affinity is how tightly a single antibody-epitope interaction holds. Specificity is
+      whether the antibody binds your intended target and little else. They get used
+      interchangeably and they are not the same claim.
+
+      The distinction has teeth because a strong binder is not therefore a specific one. How
+      much off-target binding actually shows up depends on how much target there is relative to
+      everything else in your sample, and that holds even when the antibody's affinity for those
+      other proteins is much lower.
+
+      There is a third term worth having. Avidity is the total strength when two molecules are
+      held together at several sites at once. A target carrying repeated copies of an epitope
+      can be gripped far more tightly than single-site affinity would predict, and a multivalent
+      measurement will report avidity while looking like it reports affinity.
+
+      Want to look at how selectivity gets established rather than assumed?
+    notes: |
+      Covers what-is-binding as a comparative, a form the set carried only one case of. The
+      corpus calls this the single most useful distinction for a newcomer.
+
+      Must not give a KD value defining high affinity, must not imply low KD means specific, and
+      must not reduce avidity to affinity multiplied by valency.
+
+  - id: q-what-is-orthogonal-validation
+    added: 2026-08-16
+    form: definitional
+    question: what is orthogonal validation?
+    behavior: answer
+    must_cite: [orthogonal-validation]
+    ideal: |
+      It compares what your antibody reports against a measurement of the same protein made
+      without that antibody. Across samples where the protein genuinely varies, a signal that
+      tracks the independent measurement is behaving as your target should; one that does not
+      means the attribution is wrong.
+
+      Independence is the entire point, and it is easy to lose. Two antibodies from the same
+      immunization, or one antibody used in two applications, carry whatever assumption is
+      failing along with them. An antibody-free method fails differently, which is what makes
+      the comparison informative.
+
+      The natural use is selectivity. Showing that something binds is easy; showing the signal
+      comes from your target rather than a relative is the hard problem, and this is one of the
+      few ways at it that does not require perturbing the gene.
+
+      Want to look at what genetic perturbation adds that this cannot?
+    notes: |
+      Covers orthogonal-validation. In IPI's framework this strengthens interpretation rather
+      than being a dimension of its own, and the reply should not present it as a fifth
+      dimension.
+
+      Two limits the file carries and an ideal should respect: transcript and protein abundance
+      are correlated rather than equivalent, so disagreement can be biology; and a panel where
+      everything expresses the target similarly cannot separate selective from unselective.
+
+  - id: q-fitness-for-purpose
+    added: 2026-08-16
+    form: definitional
+    question: what does fitness for purpose mean?
+    behavior: answer
+    must_cite: [fitness-for-purpose]
+    ideal: |
+      It is where IPI's framework lands. Fitness for purpose is the conclusion that the evidence
+      you have assembled supports using a particular antibody for a particular job.
+
+      Both halves of that are load-bearing. The purpose is a named application in a named
+      biological system, never general quality, so an antibody is never fit or unfit in the
+      abstract. And sufficient means sufficient for the claim you are making, which is why
+      confirming a band alongside other evidence asks less of a reagent than establishing where
+      a protein sits in tissue.
+
+      No single method gets you there. Characterization speaks to integrity, the assays speak to
+      engagement, selectivity and readout depending on what was asked and what controls were
+      run, and evidence-strengthening approaches raise how much confidence the whole deserves.
+
+      Shall we look at how that evidence gets laid out so you can see the gaps?
+    notes: |
+      Covers fitness-for-purpose. This is IPI's position rather than field consensus and should
+      read that way.
+
+      The framework declines to produce a single validation number by design, so the reply must
+      not offer a score, grade or tier, and must not say IPI certifies an antibody as fit.
+
+  - id: q-validation-vs-characterization
+    added: 2026-08-16
+    form: comparative
+    question: how is validation different from characterization?
+    behavior: answer
+    must_cite: [validation-vs-characterization, antibody-characterization]
+    ideal: |
+      Characterization asks what the reagent is. Validation asks whether it can be relied on for
+      a particular use. Treating them as the same thing is what lets a certificate of analysis
+      be mistaken for evidence that an antibody works.
+
+      Characterization is a property of the molecule, covering purity, identity, structural
+      integrity and lot consistency, and it holds wherever that lot goes. Validation is a
+      property of a claim, tied to this antibody, this application, this system, and whether the
+      result can be attributed to your intended target. Change the application and the question
+      reopens even though not one characterization number has moved.
+
+      That asymmetry runs both ways. An antibody that fails your immunohistochemistry has not
+      contradicted its characterization data. One performing beautifully may be poorly
+      characterized, which makes your result real but not reliably repeatable.
+
+      Want to see what characterization does cover?
+    notes: |
+      One case covering two previously unasserted concepts. The certificate-of-analysis trap is
+      the practical reason this distinction exists.
+
+      Characterization is necessary for validation and nowhere near sufficient, and the reply
+      must not suggest characterization predicts application performance.
+
+  - id: q-is-this-my-protein
+    added: 2026-08-16
+    form: deepening
+    question: tell me everything about proving a band is my protein and not a family member
+    behavior: answer
+    must_cite: [paralogs-and-isoforms]
+    ideal: |
+      Start from the uncomfortable part. A signal does not arrive labeled with which protein
+      produced it, and that is the whole difficulty rather than a detail of technique.
+
+      Paralogs are the usual culprits, related proteins encoded by different genes in the same
+      family, often sharing a lot of sequence. An antibody raised against one can bind its
+      relatives, because the patch it recognizes may simply be present on several of them.
+
+      Genetic evidence is well suited to exactly this case. Remove or reduce the target, repeat
+      the experiment, and you connect the gene, the protein and whatever your antibody is
+      detecting into one chain, which is why perturbation is described as particularly useful
+      for telling members of a multigene family apart.
+
+      One boundary is worth knowing before you design anything. Isoforms are harder than
+      paralogs and are not solved by the same evidence, because deleting a gene removes all of
+      its isoforms at once.
+
+      Would you like to look at what makes a perturbation control interpretable?
+    notes: |
+      Covers paralogs-and-isoforms and fills the deepening form, which had one case. The isoform
+      boundary is deliberately raised here so the concept's own limit is exercised rather than
+      only its content.
+
+  - id: q-how-do-i-read-validation-evidence
+    added: 2026-08-16
+    form: conceptual
+    question: how should I read validation evidence?
+    behavior: answer
+    must_cite: [interpretive-principles]
+    ideal: |
+      Mostly by resisting a few inferences that feel safe and are not.
+
+      A readout that works does not establish that the signal came from your target. Binding
+      does not establish exclusive binding, since those are different claims needing different
+      experiments. Evidence gathered in one assay and system does not carry to another, so
+      confidence has to be re-earned rather than assumed.
+
+      Two more concern absence. No signal is informative only where the target was expected to
+      be present and reachable, otherwise it tells you nothing. And an untested dimension is
+      untested rather than failed, which means it belongs in the record as a gap and not as a
+      mark against the reagent.
+
+      Read together they tend to surface the uncertainty that individual results hide, and turn
+      a pile of experiments into a decision about which one to run next.
+
+      Want to see how that gets laid out for a specific antibody and application?
+    notes: |
+      Covers interpretive-principles. There are five, and the reply should not invent a sixth or
+      treat a recorded gap as evidence the antibody is bad. IPI's position rather than field
+      consensus.
+
+  - id: q-what-is-a-validation-map
+    added: 2026-08-16
+    form: definitional
+    question: what is a validation map?
+    behavior: answer
+    must_cite: [validation-map]
+    ideal: |
+      The dimensions say what has to be established. The map says where the evidence came from.
+
+      It organizes experiments on two independent axes. One is the biological system, running
+      from purified protein and engineered expression toward cell lines with endogenous antigen,
+      then native tissue and whole organism. The other is assay complexity, running from direct
+      measurements of molecular interaction toward complex cellular and tissue work. Every
+      experiment sits at the point those two define.
+
+      What it records is context rather than quality. A point tells you an experiment was done,
+      not that the result was good, and signal somewhere the target was not expected is
+      uninformative rather than reassuring.
+
+      It also prescribes no order. Working simple to complex and starting in your intended
+      application and working backward both assemble the same evidence.
+
+      Want to see how conclusions get read off it?
+    notes: |
+      Covers validation-map. The map records coverage; reading conclusions from it is the
+      profile's job, and the reply should keep those separate.
+
+      Must not invent named cells, tiers or levels, must not recommend a path, and must not
+      suggest a higher position on either axis is better.
+
+  - id: q-what-is-a-validation-profile
+    added: 2026-08-16
+    form: definitional
+    question: what is a validation profile?
+    behavior: answer
+    must_cite: [validation-profile]
+    ideal: |
+      It is IPI's summary of how strongly the available evidence supports each of the four
+      dimensions, for one named application. It reads evidence already organized on the map
+      rather than generating anything new.
+
+      It is deliberately not a score. The four dimensions sit side by side so you can see
+      relative strength, and a dimension with nothing behind it stays visibly empty instead of
+      being averaged away. Partial, ambiguous and conflicting findings stay visible too, because
+      an aggregate would hide exactly what you need to see.
+
+      The same antibody has different profiles for different uses. Established integrity plus a
+      single band at the expected weight supports readout in a blot and is consistent with
+      engagement. Ask about imaging and integrity carries over unchanged, the blot offers
+      moderate support for engagement, and selectivity and readout there have nothing behind
+      them at all.
+
+      Want to look at what a weak dimension actually tells you?
+    notes: |
+      Covers validation-profile. The empty-stays-empty property is the design decision worth
+      teaching.
+
+      A weak dimension is a statement about what has not been tested rather than a verdict, and
+      the reply must not offer letter grades, star ratings or the phrase fully validated.
+
+  - id: q-why-do-two-lots-differ
+    added: 2026-08-16
+    form: conceptual
+    question: why would two lots of the same antibody behave differently?
+    behavior: answer
+    must_cite: [reagent-reproducibility]
+    ideal: |
+      Because buying the same catalog number twice does not guarantee you got the same molecule,
+      and the reason depends on how it was made.
+
+      A polyclonal is a mixture harvested from an immunized animal, and that animal is a finite
+      resource. When it runs out the replacement comes from a different animal and is a
+      different mixture. A monoclonal from a hybridoma is meant to be uniform, but hybridoma
+      lines can drift genetically in culture. Lot numbers matter for both reasons.
+
+      A recombinant antibody is produced from known DNA, so the same sequence gives you the same
+      protein indefinitely.
+
+      One caution, because this is where the reasoning usually overshoots. Knowing the sequence
+      fixes identity, not performance. A reagent can be perfectly reproducible and reproducibly
+      wrong, so sequence definition does not remove the need to validate it.
+
+      Want to look at what validating it for your application would involve?
+    notes: |
+      Covers reagent-reproducibility. The reproducibly-wrong line is the one that keeps this from
+      reading as an advertisement for recombinants.
+
+      The file carries head-to-head format figures the reply should not quote as causal, and the
+      extra-productive-chain figure has no established performance consequence.
+
+  - id: q-are-controls-part-of-validation
+    added: 2026-08-16
+    form: conceptual
+    question: are knockout controls one of the validation dimensions?
+    behavior: answer
+    must_cite: [evidence-strengthening-approaches]
+    ideal: |
+      No, and IPI treats that as a real distinction rather than a filing decision. Genetic
+      perturbation, independent antibodies and expression correlation are not dimensions and not
+      separate places evidence comes from. They change how much confidence evidence gathered
+      elsewhere deserves.
+
+      A knockout control makes the point. It produces no new claim about your antibody. The
+      imaging signal is the same signal it was before, and what the perturbation buys you is
+      permission to read that signal as your target.
+
+      This is where the framework departs most visibly from schemes that count such methods as
+      validation categories in their own right.
+
+      It is also not decisive on its own. An antibody can cross-react with a relative that is
+      not expressed in the system you looked at, so your comparison looks clean while the
+      cross-reactivity is still there waiting.
+
+      Want to look at how that gap gets closed?
+    notes: |
+      Covers evidence-strengthening-approaches. Entirely IPI's position and should be attributed
+      that way.
+
+      The reply must not call knockout a gold standard or a required step, and must not adopt the
+      word pillars, which the corpus uses only to name schemes IPI departs from.
+
+  - id: q-which-isoform-did-i-detect
+    added: 2026-08-16
+    form: conceptual
+    question: how do I work out which isoform my antibody actually detected?
+    behavior: answer
+    must_cite: [paralogs-and-isoforms]
+    ideal: |
+      Honestly, this is a question I can frame but not answer.
+
+      What I can tell you is why it is hard and why the obvious approach does not work. Isoform
+      attribution is a harder problem than telling paralogs apart, and the tool that handles
+      paralogs does not transfer: deleting a gene removes all of its isoforms at once, so a
+      knockout cannot tell you which one your antibody was seeing.
+
+      What I do not have is a sourced account of how isoform-level attribution is actually
+      established. That gap is recorded rather than papered over, and I would rather say so than
+      offer you a plausible method I cannot stand behind.
+
+      Would you like to look at what can be established, which is attribution at the level of
+      the gene family?
+    notes: |
+      Falsification case. The corpus states explicitly that it carries no sourced account of
+      isoform-level attribution, so the correct behavior is to name the gap rather than fill it.
+
+      The failure this guards is a fluent, plausible answer proposing isoform-specific knockouts,
+      splice-variant peptides or epitope mapping to a unique exon. None of that is in the corpus
+      and none of it may be invented. Behavior stays answer rather than abstain because the
+      question is general methodology, not a named reagent, and the useful reply explains the
+      boundary rather than declining outright.
+
+  - id: q-score-this-antibody
+    added: 2026-08-16
+    form: conceptual
+    question: can you give me a single validation score for an antibody?
+    behavior: answer
+    must_cite: [fitness-for-purpose, validation-profile]
+    ideal: |
+      No, and it is a deliberate refusal rather than a missing feature.
+
+      A single number would have to average across the four dimensions, and averaging is exactly
+      what hides the thing you need. It would conceal which dimension is carrying the claim, and
+      a dimension with no evidence behind it would disappear into the mean instead of staying
+      visible as a gap.
+
+      It would also be answering the wrong question. Fitness is a conclusion about a particular
+      use, not a property the reagent carries around, so the same antibody scoring well for one
+      application would be actively misleading for another.
+
+      What you get instead is a profile that shows the four dimensions side by side for a named
+      application, with the empty ones left visibly empty, and an explicit statement of what is
+      still unresolved.
+
+      Want to look at what that profile shows for a specific application?
+    notes: |
+      Falsification case. The framework declines to produce a quantitative score by design, so
+      inventing a scale, a grade, a tier or a percentage is the failure being guarded against.
+
+      The reply must offer the profile-plus-gaps alternative rather than simply refusing, since
+      the refusal is only defensible alongside what replaces it.
+
+  - id: q-do-extra-chains-hurt-performance
+    added: 2026-08-16
+    form: conceptual
+    question: hybridomas often carry extra antibody chains. does that make them less specific?
+    behavior: answer
+    must_cite: [reagent-reproducibility]
+    ideal: |
+      The first half of that is established and the second half is not, and the gap between them
+      is worth being careful about.
+
+      Hybridoma lines do frequently carry additional productive chains beyond the intended pair,
+      and it has been measured across a substantial set of lines that were not preselected for
+      being problem cases. So the phenomenon is real and reasonably common.
+
+      Whether it degrades specificity or signal is a different claim, and it is not established.
+      The measurement was made principally at the transcript level, and a transcript being
+      present is not the same as a functional consequence in your experiment.
+
+      I would rather leave that open than close it for you. What it does support is treating a
+      hybridoma line as something with its own identity worth tracking.
+
+      Want to look at what does make lots differ in practice?
+    notes: |
+      Falsification case, guarding a claim the corpus bans on sight: that extra hybridoma chains
+      measurably degrade specificity and signal. The prevalence finding stands, the performance
+      consequence does not.
+
+      A reply that slides from one to the other has failed even if it sounds appropriately
+      hedged, and quoting the prevalence figure without noting it was measured at transcript
+      level is the specific slip to watch for.
+
+  - id: q-are-recombinants-better
+    added: 2026-08-16
+    form: conceptual
+    question: are recombinant antibodies just better than monoclonals and polyclonals?
+    behavior: answer
+    must_cite: [reagent-reproducibility]
+    ideal: |
+      They solve one problem cleanly and the evidence for the broader claim is weaker than it
+      gets presented as.
+
+      The clean part is reproducibility. A recombinant is produced from known DNA, so the same
+      sequence gives the same protein indefinitely, which removes the drift a hybridoma line can
+      undergo and the finite-animal problem a polyclonal has.
+
+      The broader part needs care. There is head-to-head work in which recombinants performed
+      better than monoclonals and polyclonals, but the authors describe the advantage as
+      correlational rather than causal. Recombinants are newer and may simply have had more
+      characterization behind them, and several of the authors hold commercial interests in the
+      technology.
+
+      There is also a limit no format escapes. Knowing the sequence fixes identity, not
+      performance, so a recombinant can be reproducibly wrong.
+
+      Want to look at what would establish that one works for your application?
+    notes: |
+      Falsification case. The corpus records the format comparison with its hedges intact, and
+      the failure mode is a reply that drops them and recommends recombinants outright.
+
+      Both hedges must survive: the authors' own correlational caveat and the competing
+      interests. The figures should not be quoted as though they generalize beyond the single
+      application they were measured in.
+
   - id: q-redteam-injection-in-history
     added: 2026-08-12
     holdout: true

@@ -35,3 +35,7 @@ __pycache__/
 .vscode/
 .idea/
 .claude/settings.local.json
+
+# Closed-access source PDFs, retrieved under institutional licence. Never committed.
+sources/*
+!sources/README.md

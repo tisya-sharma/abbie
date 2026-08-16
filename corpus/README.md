@@ -63,6 +63,29 @@ Take those three from the resolved record — Crossref for a DOI, PubMed for a P
 entry for a book — rather than by splitting the label string, and leave a field out entirely when
 the work genuinely has none. A book has no journal, and inventing one is worse than omitting it.
 
+**How deeply a source must be read depends on what is being claimed of it.** Retrieving the record
+is not reading the paper, and reading the abstract is not reading the paper either. Abstracts
+disagree with their own full texts often enough to matter: across seventeen studies the median
+inconsistency was around a third, and one survey of structured abstracts found numbers in the
+abstract that appear nowhere in the article. The risk sits almost entirely in figures rather than
+in direction, so the rule splits on that:
+
+- **Full text is required** for any number, denominator, sample size, threshold, stated condition,
+  negative result, or limitation. No full text, no number. A figure whose conditions live in the
+  methods section cannot be lifted from an abstract, because the abstract is where the conditions
+  were dropped.
+- **An abstract is enough** for directional and definitional claims, which are then written as what
+  the authors report rather than as bare fact.
+
+This is the distinction the evidence ontologies already draw between an experimental finding and an
+author statement, and it is worth keeping because it fails safe: the claims an abstract cannot
+support are exactly the ones a reader would most want to check.
+
+Closed-access papers are retrieved under institutional licence into `sources/`, which is
+gitignored. Europe PMC answers availability, licence and full text in one call and should be tried
+first. Do not trust Unpaywall's `is_oa` without dereferencing the URL it gives you: two of this
+corpus's own sources report as green open access and resolve to records withdrawn in 2019.
+
 **Unpublished IPI material is never cited.** Deb's notes and the 4D framework draft ground answers,
 and their ideas may be used freely, but they carry no `url` and must never appear as a source, on
 request or otherwise. `is_publishable()` in `packages/guardrail` enforces this on two independent
@@ -318,9 +341,12 @@ August 13 covering the framework and the assays, `species-cross-reactivity` adde
 August 15, and the per-application concepts written from August 16.
 
 One file, `application-immunofluorescence`, is at `status: sourced`: every claim in it was
-traced to a source that was retrieved and read as the file was written. The rest are still at
-`status: draft`. No file names a reviewer, so the grounding column below records what a concept
-was written from rather than a claim that a scientist has checked it.
+traced to a source that was retrieved and read as the file was written. All three of its sources
+are closed access and were read at abstract depth, so under the depth rule below it states no
+figures at all. The numbers those papers report are held back until the full texts confirm them.
+The rest of the corpus is still at `status: draft`. No file names a reviewer, so the grounding
+column below records what a concept was written from rather than a claim that a scientist has
+checked it.
 
 ### Written
 

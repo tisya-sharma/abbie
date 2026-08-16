@@ -60,10 +60,10 @@ is an image of a cell with some part of it lit up.
 
 Fixation is a choice between two chemistries and it is not a neutral one. A sample can be
 dehydrated with an alcohol such as methanol or ethanol, or it can be cross-linked with
-paraformaldehyde and then permeabilized with a detergent. A systematic comparison across
-eighteen human proteins, spanning eleven organelles and subcellular structures in three human
-cell lines, found cross-linking essential for work covering many proteins at once, so the two
-routes are not interchangeable. What that comparison asks anyone to account for is how
+paraformaldehyde and then permeabilized with a detergent. A systematic comparison across a panel
+of human proteins, spanning a range of organelles and subcellular structures in more than one
+cell line, reported cross-linking as essential for work covering many proteins at once, so the
+two routes are not interchangeable. What that comparison asks anyone to account for is how
 accessible a protein is in the compartment it occupies, and the chemistry of the protein itself.
 
 The preparation can also move the protein or take it away. Getting an antibody inside a cell
@@ -73,12 +73,12 @@ cell. Nothing in the resulting image records that this has happened, which is wh
 localization seen only in fixed cells is worth complementing with a method that watches living
 ones.
 
-A pattern in the expected place is the claim most exposed to the reader's own expectation. When
-more than five hundred human proteins were localized both by immunofluorescence and by tagging
-the protein genetically with a fluorescent partner, the two methods agreed for about eighty
-percent of them, and the discrepancies that remained were systematic rather than random. The
-same work found roughly sixty percent of proteins present in more than one compartment by both
-methods, so a single expected location is a weaker prior than it feels.
+A pattern in the expected place is the claim most exposed to the reader's own expectation. When a
+large set of human proteins was localized both by immunofluorescence and by tagging the protein
+genetically with a fluorescent partner, the two methods agreed for most of them, and the
+discrepancies that remained were reported as systematic rather than random. The same work found
+many proteins present in more than one compartment by both methods, so a single expected
+location is a weaker prior than it feels.
 
 What immunofluorescence establishes is where signal appeared in one fixed cell prepared one
 way. Because nothing was separated by size before the antibody arrived, the image does not say

@@ -45,8 +45,9 @@ computed from the sequence rather than against another sample.
 This makes intact mass a **molecular integrity** measurement, and specifically the identity half of
 it, where size-exclusion chromatography covers the purity half. At IPI it is performed after
 scale-up alongside sequence verification of the plasmid, and both are required before an antibody
-is distributed. The pairing matters: sequence verification establishes what was encoded, intact
-mass establishes what was actually produced, and the two can disagree.
+is distributed. IPI treats the pair as the antibody's sequence verification: the plasmid
+establishes what was encoded, and matching each measured chain against its predicted mass
+confirms that the antibody produced is that molecule.
 
 Like all characterization, it says nothing about function. Confirming that the intended molecule
 was made is what allows a later binding result to be attributed to that molecule, and it is

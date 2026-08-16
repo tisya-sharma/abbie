@@ -6,8 +6,8 @@ Abbie answers what antibody validation and characterization mean, how an antibod
 validated, and — as approved data becomes available — how well characterized a given antibody
 is. Every factual claim carries a citation, and the assistant abstains rather than guesses.
 
-Status: Stage 0 near its gate — 30 concepts with every follow-up edge resolving, behavior
-routing, per-behavior composition, the output guardrail, the streamed web demo, and a 41-case
+Status: Stage 0 near its gate — 31 concepts with every follow-up edge resolving, behavior
+routing, per-behavior composition, the output guardrail, the streamed web demo, and a 47-case
 golden set are all working, and the corpus and unit checks run in CI. What remains for the gate
 is an eval run against the current golden set. The five per-application concepts beyond Western
 blot are the open coverage gap, and the corpus is at `status: draft` pending a sourcing pass.

@@ -120,13 +120,17 @@ reasoned position and the reasoning is what dates.
   tool library directly, since Slack is not an MCP client.
 
 **The trigger for revisiting retrieval is a measurement, not a milestone.** The assembled corpus
-is currently ~15,700 tokens across thirty concepts, about 523 tokens each. Cost and attention
-dilution both start to bind somewhere around 100k tokens of prose, which is roughly 190 concepts
-at that size. So: build retrieval when assembly crosses ~50k tokens, around 96 concepts, which
-leaves room to measure before it is needed. Concepts have grown denser than the first estimate of
-376 tokens each, so the trigger arrives sooner than the 130 concepts originally projected.
-Ingesting IPI publications, protocols, or the product datasheets wholesale, rather than
-hand-authoring concepts, crosses that line immediately and is the likelier trigger.
+is currently ~11,900 tokens across thirty-one concepts, about 383 tokens each. Measure it the way
+the application does — `assemble_context()` through `estimate_tokens()` in
+`packages/corpus_loader` — because counting whole files instead sweeps in frontmatter and the
+Vancouver source labels and comes out roughly half again too high. Cost and attention dilution
+both start to bind somewhere around 100k tokens of prose, which is roughly 260 concepts at that
+size. So: build retrieval when assembly crosses ~50k tokens, around 130 concepts, which leaves
+room to measure before it is needed. An earlier revision of this paragraph put the trigger at 96
+concepts on the grounds that concepts had grown denser than the first estimate of 376 tokens each.
+They had not: 383 is essentially that estimate, and the density claim was an artifact of measuring
+whole files. Ingesting IPI publications, protocols, or the product datasheets wholesale, rather
+than hand-authoring concepts, crosses that line immediately and is the likelier trigger.
 The rule that retrieval must beat the full-context baseline on the golden set does not change.
 
 **Head start.** The kickoff notes already carry Deb's own answers for four questions — what

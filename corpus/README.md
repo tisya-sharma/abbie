@@ -28,8 +28,8 @@ id: molecular-integrity          # kebab-case, matches the filename
 title: Molecular Integrity
 aliases: [integrity, reagent integrity]   # phrasings a user might use
 ask: What is Molecular Integrity?   # the follow-up chip label, phrased as a question a first-time visitor would type
-provenance: ipi-authored         # quoted | summarized | ipi-authored
-sources:                         # required unless provenance is ipi-authored
+provenance: ipi-authored         # quoted | summarized | ipi-authored | established
+sources:                         # required when provenance is summarized
   - label: "Uhlén M, Bandrowski A, Carr S, et al. A proposal for validation of antibodies. Nat Methods. 2016;13(10):823-827."
     url: https://doi.org/10.1038/nmeth.3995
     short: "Uhlén 2016"          # first author and year, how a paper is named out loud
@@ -40,8 +40,21 @@ reviewed_by:                     # the scientist who approved it, set only at ap
 clearance: public                # public | pre-publication
 level: core                      # foundational | core | advanced
 requires: [what-is-a-reagent]    # prerequisites, always simpler than this concept
-leads_to: [assay-sec, assay-mass-spectrometry]   # elaborations, always harder
+leads_to: [assay-sec, assay-mass-spectrometry]   # where to go next, usually deeper
+checklist:                       # optional, drives the downloadable checklist export
+  - item: Positive control expressing the target at endogenous level
+    proves: The assay could have detected the target at all
 ```
+
+**`checklist`** is optional and only bench-procedure concepts carry it — today
+`controls-in-validation` and `application-western-blot`. Each entry is an `item` / `proves`
+pair, both required, and the loader rejects an entry missing either.
+
+It is not read by the model. The export at `/export/checklist` composes a fixed template from
+these pairs, so the model chooses which concepts apply and never writes the artifact itself,
+which is what keeps a downloadable document from becoming something Abbie can improvise. Add
+one when a concept describes steps a reader would work through at the bench; leave it off
+otherwise.
 
 **`sources`** carries both the full citation and the pieces the widget displays. `label` is the
 complete Vancouver-style reference and `url` is what makes a source citable at all; `short`,
@@ -97,6 +110,12 @@ trail. A demo may ship on `sourced` as long as it is described as such.
 first" and "you can go deeper here" are different relationships and behave differently.
 `requires` lets Abbie notice a reader needs the simpler concept first. `leads_to` generates the
 "want to know more about X or Y?" offers.
+
+`leads_to` usually points deeper, but it is not required to. Fifteen of the current edges point
+at an easier concept, and they are right to: after reading what SEC measures, the useful next
+step is often back to why reproducibility matters. What `leads_to` means is "a sensible next
+question," not "a harder one." `requires` is the edge with a strict direction, because a
+prerequisite that is harder than the thing it unlocks explains nothing.
 
 Four invariants govern the graph, all enforced in CI:
 
@@ -203,6 +222,22 @@ content is `summarized` and needs a real source. `established` concepts may list
 under `sources` as further reading, but those are pointers rather than claim-level citations, and
 the scientist reviewer is the actual check.
 
+`what-is-a-reagent` was moved out of `established` for exactly that reason: the fit-for-purpose
+framing is the field's, traceable to Ayoubi 2025, and both its source labels already described
+themselves as claim-level. It is `summarized`.
+
+**A `summarized` concept may still state IPI's position in one place**, and several do —
+`antibody-characterization`, `five-pillars-iwgav`, `orthogonal-validation` and
+`validation-vs-characterization` each end by locating their subject inside IPI's framework. Give
+that sentence an IPI subject ("In IPI's framework…", "at IPI…") and expect no source behind it.
+The provenance field records what the file is mostly doing, not a promise that every sentence
+traces outward.
+
+Do not promote such a file to `ipi-authored` to resolve the mismatch. That value carries a second
+meaning: `cite_resolver` marks IPI-authored concepts *exclusive*, so their citations never merge
+with a neighbor's. That is right for a file whose whole content is IPI's position, and wrong for
+one whose externally sourced majority should combine normally.
+
 **`clearance`** controls what may reach a public build.
 
 - `public` — may ship
@@ -218,9 +253,6 @@ framework's structure, which is the distinction that matters.
 nothing and gives IPI an option if any future content needs holding back — and because the
 separate-index machinery behind it is the same mechanism that will scope internal-only antibody
 data later.
-
-**`related`** is the concept graph. These links generate the "want to know more about X or
-Y?" follow-ups in the UI. Suggestions are not written per answer — they fall out of the graph.
 
 ## How a concept teaches
 
@@ -276,19 +308,28 @@ is and shape it accordingly.
 
 ## The concept map
 
-Thirty concepts written, and no `leads_to` edge points at an unwritten file — every follow-up
-the widget can offer resolves. Status reflects the August 7 sourcing pass, three concepts added
-on August 12 to close the bench-controls gap described below, and thirteen added on August 13
-covering the framework and the assays.
+Thirty-one concepts written, and no `leads_to` edge points at an unwritten file, so every
+follow-up the widget can offer resolves. That is a property of the corpus as it stands rather
+than one CI enforces: the loader fails a concept only when *none* of its follow-ups resolve, so
+a typo in one id on a concept with several is filtered out silently at render time. This map
+reflects the August 7 sourcing pass, three
+concepts added on August 12 to close the bench-controls gap described below, thirteen added on
+August 13 covering the framework and the assays, and `species-cross-reactivity` added on
+August 15.
+
+Every file is still at `status: draft`. Nothing here has reached `sourced`, and no file names a
+reviewer, so the grounding column below records what a concept was written from rather than a
+claim that anyone has checked it.
 
 ### Written
 
 | id | level | clearance | grounding |
 |---|---|---|---|
 | `what-is-a-target` | foundational | public | Kumar 2023, Janeway, Van Regenmortel |
-| `reagent-reproducibility` | foundational | public | Bradbury 2018, Ayoubi 2023/2025, Uhlen 2016 |
+| `reagent-reproducibility` | foundational | public | Bradbury 2018/2015, Ayoubi 2023/2025, Uhlen 2016, Freedman 2015 |
 | `antibody-validation` | core | public | Deb, kickoff notes |
-| `what-is-binding` | core | public | Uhlen 2016 |
+| `what-is-binding` | core | public | Uhlen 2016, Janeway glossary |
+| `species-cross-reactivity` | core | public | Pruvost 2023, Hu 2025 |
 | `paralogs-and-isoforms` | core | public | Uhlen 2016 |
 | `five-pillars-iwgav` | core | public | Uhlen 2016, Ayoubi 2025 |
 | `application-specificity` | core | public | Uhlen 2016, Taussig 2018, Biddle 2024, Ayoubi 2025 |
@@ -297,28 +338,32 @@ covering the framework and the assays.
 | `target-engagement` | core | public | Deb, kickoff notes |
 | `selectivity` | core | public | Deb, kickoff notes |
 | `what-is-an-antibody` | foundational | public | established, reference works |
-| `what-is-a-reagent` | foundational | public | established, plus Ayoubi 2025 framing |
+| `what-is-a-reagent` | foundational | public | Ayoubi 2025, Uhlen 2016 |
 | `genetic-perturbation-controls` | advanced | public | Uhlen 2016, Ayoubi 2023/2025, Smits |
 | `experimental-readout` | core | public | 4D draft, kickoff notes |
 | `controls-in-validation` | core | public | Pillai-Kastoori 2020, Ayoubi 2023/2025 |
 | `application-western-blot` | core | public | Pillai-Kastoori 2020, Ghosh 2014, Tsuji 2020 |
-| `why-validation-matters` | foundational | public | Uhlen 2016, Taussig 2018, Biddle 2024 |
-| `antibody-characterization` | core | public | Ayoubi 2025, Uhlen 2016, 4D draft |
+| `why-validation-matters` | foundational | public | Uhlen 2016, Taussig 2018, Biddle 2024, Baker 2016, Bordeaux 2010, Polakiewicz 2015 |
+| `antibody-characterization` | core | public | Ayoubi 2025, Uhlen 2016, Kahn 2024, 4D draft |
 | `validation-vs-characterization` | core | public | Ayoubi 2025, Taussig 2018, 4D draft |
 | `validation-map` | core | public | 4D draft |
 | `validation-profile` | core | public | 4D draft |
 | `fitness-for-purpose` | core | public | 4D draft |
 | `interpretive-principles` | core | public | 4D draft |
 | `evidence-strengthening-approaches` | core | public | 4D draft |
-| `orthogonal-validation` | advanced | public | Uhlen 2016, Ayoubi 2025, 4D draft |
+| `orthogonal-validation` | advanced | public | Uhlen 2016, Ayoubi 2025, Edfors 2018, 4D draft |
 | `assay-sec` | advanced | public | IPI QC standard, internal |
 | `assay-mass-spectrometry` | advanced | public | IPI QC standard, internal |
 | `assay-spr-bli` | advanced | public | IPI QC standard, internal |
 | `assay-cell-display` | advanced | public | IPI QC standard, internal |
 
-The four assay concepts carry no pass/fail criteria. The numeric bands live in IPI's internal
-release-gate standard, and what "good" means per application is recorded below as deferred
-pending a scientist. Describing what an assay establishes needs no threshold.
+The four assay concepts carry no numeric criteria. The bands live in IPI's internal release-gate
+standard, and what "good" means per application is recorded below as deferred pending a
+scientist. Describing what an assay establishes needs no threshold.
+
+What they do carry, in one case, is a qualitative disposition: `assay-cell-display` states that
+polyreactive signal against the controls takes an antibody out of consideration. That is IPI
+describing its own process rather than a performance grade, which is the line that matters here.
 
 ### Still to write
 
@@ -343,9 +388,14 @@ under the `established` provenance, which exists for settled knowledge no single
 They carry reference-work pointers rather than claim-level citations, and their check is
 scientist sign-off — flag them for particular attention in review.
 
+**Avidity closed on August 15.** The definition was retrieved from the Immunobiology glossary,
+which distinguishes affinity as binding at a single site from avidity as the sum of binding at
+multiple sites, and `what-is-binding` now carries it. This was worth closing rather than
+deferring because `assay-sec` already used "apparent avidity" as a term of art, so the corpus
+was leaning on a word it never defined.
+
 | Gap | Effect | What would close it |
 |---|---|---|
-| **Avidity** — entirely unsourced | `what-is-binding` covers affinity and specificity only | Janeway's Immunobiology treats affinity and avidity separately, but the section was not retrieved |
 | **Isoform and splice-variant attribution** — only paralogs are sourced | Stated as an explicit limit inside `paralogs-and-isoforms` | Unknown whether published guidance exists |
 | **What each application measures** — beyond the conformation and sample-preparation axis | Closed for Western blot on August 12; still open for the other five | Per-application methods literature. Pillai-Kastoori 2020, Ghosh 2014 and Tsuji 2020 closed it for blotting, and equivalents are what the remaining five need |
 | **Mechanism of lot-to-lot variation** — beyond "finite resource" and "genetic drift" | `reagent-reproducibility` stops at those two mechanisms | Not yet identified |
@@ -368,19 +418,25 @@ resurface — this list exists so they can be rejected on sight rather than re-l
 
 ## Two questions left blank in the kickoff notes
 
-Both block a concept, but they are not the same kind of question, and treating them the same
-is what kept both stuck.
+They are not the same kind of question, and treating them the same is what kept both stuck.
+One is now answered; the other is still deferred.
 
 1. **What "functional" means for SPR, and what good versus acceptable versus poor looks like
    per application.** Deferred, not researchable. The literature has no consensus banding to
    look up, and the 4D framework declines to produce a quantitative score by design, so any
    thresholds Abbie states would be IPI's position rather than the field's. This waits for a
-   scientist. Until then no concept states a band, and questions that ask for one are answered
-   qualitatively or abstained on.
-2. **Monoclonal versus polyclonal, and why recombinant antibodies are preferable.** Resolvable
-   from published sources — reproducibility, defined sequence, and lot-to-lot consistency are
-   all argued in the literature already cited elsewhere in this corpus. This is a writing task,
-   not a blocked one, and belongs in `recombinant-vs-conventional`.
+   scientist. Until then no concept grades antibody performance, and questions that ask for a
+   band are answered qualitatively or abstained on. This is narrower than "no concept states a
+   number": `controls-in-validation` says a knockdown is generally expected to remove at least
+   half the target protein, and reports the expression range one program screened its cell lines
+   for. Those describe whether a control is fit to interpret, which is a methodological
+   requirement rather than a verdict on a reagent.
+2. **Monoclonal versus polyclonal, and why recombinant antibodies are preferable.** Answered,
+   and not in a file of its own. It was resolvable from published sources, and
+   `reagent-reproducibility` now carries it: all three formats, the head-to-head Western blot
+   figures, and the authors' own caveat that the advantage is correlational. It also holds the
+   alias a visitor would ask under. This is why `recombinant-vs-conventional` was dropped rather
+   than written, as recorded under Still to write above.
 
 The distinction generalizes: a question with a published answer gets researched and written at
 `sourced`. A question that asks IPI to take a position gets deferred and stays visibly absent

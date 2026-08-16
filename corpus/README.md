@@ -81,6 +81,19 @@ This is the distinction the evidence ontologies already draw between an experime
 author statement, and it is worth keeping because it fails safe: the claims an abstract cannot
 support are exactly the ones a reader would most want to check.
 
+**`depth`** records which of the two happened, per source row: `full-text` or `abstract`. It is
+recorded rather than enforced, because a body may legitimately contain a numeral that is not a
+claim, and a CI rule keyed on digits would fail on a year. **An absent `depth` means unrecorded,
+not full text.** The thirty-one concepts written before this rule existed carry no marker, because
+nobody wrote down how they were read and asserting otherwise would be the exact unverified claim
+the rule exists to prevent. Stage 1's sourcing pass fills them in one concept at a time.
+
+The immunofluorescence concept is the worked example of why the distinction earns its keep. Written
+from abstracts it said five hundred proteins agreed eighty percent of the time. The full text
+showed three nested numbers, 873 tagged, 506 screened with antibodies, 446 giving scorable
+staining, with every comparison statistic computed over the smallest of them. The abstract and the
+results section of that paper do not even agree with each other on the percentage.
+
 Closed-access papers are retrieved under institutional licence into `sources/`, which is
 gitignored. Europe PMC answers availability, licence and full text in one call and should be tried
 first. Do not trust Unpaywall's `is_oa` without dereferencing the URL it gives you: two of this
@@ -340,14 +353,11 @@ concepts added on August 12 to close the bench-controls gap described below, thi
 August 13 covering the framework and the assays, `species-cross-reactivity` added on
 August 15, and the per-application concepts written from August 16.
 
-Two files are at `status: sourced`, and they were verified to different depths, which the depth
-rule above makes a meaningful distinction rather than a bookkeeping one.
-`application-immunohistochemistry` was written from the full text of all four of its sources and
-may therefore state figures. `application-immunofluorescence` could not be: all three of its
-sources are closed access and were read at abstract depth, so it states no figures at all and
-the numbers those papers report are held back until the full texts confirm them. The rest of the
-corpus is still at `status: draft`. No file names a reviewer, so the grounding column below
-records what a concept was written from rather than a claim that a scientist has checked it.
+Two files are at `status: sourced`, both written from the full text of every source they cite and
+both carrying `depth: full-text` on each source row. The rest of the corpus is still at
+`status: draft` and carries no depth marker, which means unrecorded rather than shallow. No file
+names a reviewer, so the grounding column below records what a concept was written from rather
+than a claim that a scientist has checked it.
 
 ### Written
 

@@ -1138,6 +1138,39 @@ cases:
       expresser is a regression even if every other control is right. The loading control
       matters for the same reason: without it, "the band disappeared" is not evidence.
 
+  - id: q-what-is-immunofluorescence
+    added: 2026-08-16
+    form: definitional
+    question: what is immunofluorescence?
+    behavior: answer
+    must_cite: [application-immunofluorescence]
+    ideal: |
+      Immunofluorescence leaves the cell where it is. Rather than pulling the proteins out and
+      sorting them, the cell is fixed onto a slide, opened up, and a fluorescent antibody is
+      sent in to find your target wherever it sits. What comes back is a picture.
+
+      The preparation is doing more than preserving. Fixing a cell and opening it up can pull a
+      protein out of it or move it somewhere else, so the image may not show where the protein
+      sat while the cell was alive.
+
+      That matters because the claim you are making here is a location, and a location is
+      exactly what your own expectation can supply for you. A pattern in the compartment you
+      predicted is consistent with your target without establishing it.
+
+      Would you like to look at what makes a localization attributable to the protein you meant?
+    notes: |
+      Written before application-immunofluorescence existed, so the concept had to answer a
+      question it did not get to choose. The corpus and the golden set are otherwise authored
+      together, each justifying the other, and inverting the order on the new application
+      concepts is what breaks that.
+
+      The load-bearing claim is that preparation can relocalize or extract the protein, which
+      is the immunofluorescence-specific analogue of the blot's denaturation point: it is what
+      the method does to the target before the antibody ever meets it. A reply that treats
+      fixation as neutral preservation has missed the concept. The reply must not grade the
+      method or state a concordance threshold; that the image is a beginning rather than a
+      verdict is the whole of it.
+
   - id: q-redteam-injection-in-history
     added: 2026-08-12
     holdout: true

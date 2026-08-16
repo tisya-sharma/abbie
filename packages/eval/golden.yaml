@@ -168,24 +168,64 @@ cases:
     must_cite: [antibody-validation, four-dimensional-framework]
     ideal: |
       Antibody validation is how you show that an antibody actually recognizes what you think
-      it does, and that it works reliably for the specific thing you are asking it to do.
+      it does, and that it performs reliably for the specific thing you are asking it to do.
 
       The part people most often skip: an antibody is never validated in general. It is
       validated for an application, a species, and a set of conditions. An antibody that
       performs beautifully in Western blot may do nothing useful in immunofluorescence, and
       evidence from one context does not carry over to the other on its own.
 
-      What you typically need is evidence of three things: specificity, meaning the signal
-      comes from your target and not something else; sensitivity, meaning it detects the
-      target at the abundance your experiment will actually encounter; and reproducibility,
-      meaning the same reagent behaves the same way across lots and across days. Positive and
-      negative controls are what make each of those answerable rather than assumed.
-
-      IPI organizes that evidence along four dimensions: **molecular integrity**,
-      **target engagement**, **selectivity**, and **experimental readout**.
+      IPI organizes the evidence along four foundational dimensions: **molecular integrity**,
+      whether the reagent is the molecule it claims to be; **target engagement**, whether it
+      binds the intended target; **selectivity**, whether the signal is attributable to that
+      target rather than to a relative; and **experimental readout**, whether it produces an
+      interpretable result in your application. Controls are what make each of those
+      answerable rather than assumed.
 
       Want to walk through the four dimensions, or start with why evidence from one
       application does not transfer to another?
+    notes: |
+      Rewritten on 2026-08-15 to track the concept it asserts against. The previous ideal
+      organized validation around specificity, sensitivity and reproducibility, which d78a6a9
+      deliberately moved out of antibody-validation.md into why-validation-matters, where it
+      is cited to Bordeaux 2010 and labeled the field's framing rather than IPI's. Teaching
+      the triad here read as IPI's definition and contradicted the corpus. The triad is now
+      covered by q-why-validation-matters.
+
+  - id: q-why-validation-matters
+    added: 2026-08-15
+    form: conceptual
+    question: Why does antibody validation matter?
+    behavior: answer
+    must_cite: [why-validation-matters]
+    ideal: |
+      Because a bad antibody does not look like a bad antibody. If the reagent binds something
+      other than your target, the experiment still produces a clean, publishable-looking
+      result. It just means something different from what your figure legend says, and nothing
+      in the output tells you so.
+
+      That is why reagent reliability is treated as a recognized contributor to the wider
+      reproducibility problem in biomedical research, and has been for about a decade.
+
+      The field's long-standing framing asks for three things: specificity, whether the signal
+      comes from your intended target rather than something else; sensitivity, whether the
+      antibody detects the target at the abundance your experiment will actually encounter;
+      and reproducibility, whether the same reagent behaves the same way across lots and
+      across days. Most published guidance is written in those terms, which is worth knowing
+      when you read it. IPI organizes the same evidence differently, into four dimensions.
+
+      The cost is also asymmetric. Running the controls is a bounded amount of work, done once
+      per application. Discovering afterward that a reagent was not selective can invalidate a
+      body of results built on it, sometimes years later and from someone else.
+
+      Want to see how IPI organizes that evidence, or why two lots of the same catalog
+      antibody may not be the same molecule?
+    notes: |
+      Added 2026-08-15 to cover why-validation-matters, which had no case despite being where
+      d78a6a9 moved the specificity/sensitivity/reproducibility triad. The triad must read as
+      the field's framing rather than IPI's, which is the distinction that commit drew and the
+      reason this case exists separately from q-what-is-validation. The five-pillar framework
+      is background-only and must not be volunteered here either.
 
   - id: q-molecular-integrity
     form: definitional
@@ -437,6 +477,39 @@ cases:
       case most likely to provoke that rule. The direction-of-transfer finding (IF reported as
       the best predictor of WB, not the reverse) stays out of the ideal, but the corpus
       supports it if a user pushes.
+
+  - id: q-species-cross-reactivity
+    added: 2026-08-15
+    form: conceptual
+    question: This antibody was validated in human cells. Will it work in mouse?
+    behavior: answer
+    must_cite: [species-cross-reactivity]
+    ideal: |
+      Not necessarily, and the reason is worth knowing before you order anything.
+
+      An antibody grips one small patch on its target. The mouse version of your protein is not
+      quite the same protein: orthologs pick up sequence differences over evolutionary time, and
+      if those differences land where the antibody makes contact, it stops recognizing it.
+
+      How little difference that takes can be surprising. Two antibodies raised against human
+      LAMP-1 were mapped residue by residue and then compared across species. The mouse version
+      carried multiple changes in both epitopes, but in the macaque version a single substitution
+      was enough to block one antibody and two were enough for the other. A macaque is a close
+      primate relative, and that closeness did not preserve binding.
+
+      Sequence comparison can tell you whether the site looks conserved, which is a reasonable way
+      to shortlist candidates. It is not evidence that the antibody works. For mouse work, look
+      for evidence generated in mouse, with controls that make the signal attributable there.
+
+      Want to look at what makes a signal attributable, or why the same antibody can behave
+      differently between applications?
+    notes: |
+      Added 2026-08-15 alongside the species-cross-reactivity concept, which until then had no
+      golden coverage and so passed none of the three tests in corpus/README.md for earning its
+      own file. Species is the sibling axis to q-does-validation-transfer's application axis, and
+      this case sits beside it deliberately. The reply must not state that the antibody will fail
+      in mouse, only that human evidence is evidence about human samples - the same
+      evidence-not-verdict rule that case guards.
 
   - id: q-unknown-antibody-datasheet
     added: 2026-08-11
@@ -873,7 +946,7 @@ cases:
     form: procedural
     question: How do I validate an antibody for a Western blot experiment?
     behavior: answer
-    must_cite: [antibody-validation]
+    must_cite: [application-western-blot, controls-in-validation]
     ideal: |
       Validating for Western blot means building evidence in that assay, because a reagent
       that performs in imaging has not thereby been shown to perform on a blot.
@@ -890,6 +963,15 @@ cases:
 
       I can tell you what the blot is allowed to conclude rather than how to run one. Do you
       have a knockout or knockdown line for your target?
+    notes: |
+      must_cite corrected on 2026-08-15. The case previously required antibody-validation and
+      failed 3/3 in every recorded run since it was added, because it asserts the definitional
+      concept against a procedural question. The three moves the ideal actually makes are
+      evidence built in the assay, a positive control at endogenous level, and attribution by
+      knockout lane, which is application-western-blot plus controls-in-validation. Both were
+      cited in 3/3 trials at 5bdac51 while antibody-validation was cited in none.
+      genetic-perturbation-controls is deliberately excluded despite carrying the attribution
+      move, because it appeared in only 2 of 3 trials and would make the case flaky.
 
   - id: q-validate-for-westernblot-unlock
     added: 2026-08-12

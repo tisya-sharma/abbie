@@ -128,16 +128,16 @@ class CitationNumberingTests(TurnHarness, unittest.TestCase):
     Run against the real corpus rather than a fixture, because the property at
     risk is agreement with actual frontmatter: what-is-an-antibody carries one
     paper, antibody-characterization carries three, and one of those is the
-    same Uhlén 2016 that what-is-binding cites. A reply touching all three has
-    to reuse the shared paper rather than number it twice, and leave nothing
-    dangling.
+    same Uhlén 2016 that what-is-binding cites alongside the Janeway glossary.
+    A reply touching all three has to reuse the shared paper rather than number
+    it twice, and leave nothing dangling.
 
     The coupling is deliberate and these assertions are expected to move when
     the corpus does. They last moved when IPI-authored concepts began citing
     IPI's own public quality page, which is why the last test below asserts
     exclusivity rather than silence: the framework sentence used to render
     nothing because IPI published nothing to point at, and now renders one
-    source, still never a neighbour's.
+    source, still never a neighbor's.
     """
 
     REPLY = (
@@ -164,16 +164,23 @@ class CitationNumberingTests(TurnHarness, unittest.TestCase):
             self.visible,
             "An antibody is a protein [1]."
             " Characterization describes the reagent [2, 3, 4]."
-            " Binding is the interaction itself [3]."
-            " IPI reads all of it one way [5].",
+            " Binding is the interaction itself [3, 5]."
+            " IPI reads all of it one way [6].",
         )
 
     def test_rows_resolve_to_the_papers_the_numbers_name(self):
+        # Janeway appears twice by design: what-is-an-antibody cites the
+        # antibody-antigen chapter, what-is-binding cites the glossary for the
+        # avidity definition. Same book, different sections, different URLs, so
+        # they are two rows the titles tell apart rather than one shared source.
         shorts = [s.get("short") for s in self.done["sources"]]
         self.assertEqual(
             shorts,
-            ["Janeway 2001", "Ayoubi 2025", "Uhlén 2016", "Kahn 2024", "IPI Quality"],
+            ["Janeway 2001", "Ayoubi 2025", "Uhlén 2016", "Kahn 2024",
+             "Janeway 2001", "IPI Quality"],
         )
+        titles = [s.get("title") for s in self.done["sources"]]
+        self.assertNotEqual(titles[0], titles[4])
 
     def test_an_ipi_claim_cites_only_ipi(self):
         # The framework sentence carries IPI's own page and nothing else. The

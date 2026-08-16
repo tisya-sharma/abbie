@@ -92,8 +92,9 @@ gave scorable staining, eighty-two percent shared at least one location with a g
 tagged version, but the tagging was done live in different cell lines, and sharing one location
 out of several counts as agreement.
 
-What immunofluorescence establishes is where signal appeared in one fixed cell prepared one
-way. Because nothing was separated by size before the antibody arrived, the image does not say
-what molecular species produced the signal, and a related protein sitting in the same
-compartment would look much the same. Because a fixed cell is not a living one, the image also
-does not establish where the protein was before the fixative reached it.
+What immunofluorescence establishes is where signal appeared in a cell that was killed and
+opened before the antibody met it. The image reports a location rather than an identity, so a
+relative sitting in the same compartment looks much the same. And the claim most readers
+actually take from such an image, that the protein lives there in the working cell, is the one
+the method is least able to support, because every step between the living cell and the
+photograph is a step that could have moved it.

@@ -1243,6 +1243,74 @@ cases:
       fluorescence-minus-one control handles spillover only, so it cannot be described as the
       thing that establishes where positive begins.
 
+  - id: q-what-is-elisa
+    added: 2026-08-16
+    form: definitional
+    question: what is an elisa?
+    behavior: answer
+    must_cite: [application-elisa]
+    ideal: |
+      An ELISA gives you one number per well. Something in the well captures your target out of
+      whatever was added, a second antibody carrying an enzyme finds it, the enzyme turns a
+      colorless solution a color, and a reader measures how much color there is. No image, no
+      band, just a number.
+
+      The plastic is a participant rather than a container. Sticking a protein to polystyrene is
+      closer to a denaturation than to a simple immobilization, so coating a plate is something
+      done to your antigen, not merely a way of holding it still.
+
+      Because the readout has no structure, nothing in the result tells you when it has gone
+      wrong. Antibodies already in your sample can bridge the two assay antibodies and raise the
+      reading with no target involved, and checks like diluting the sample out do not reliably
+      reveal it.
+
+      Want to look at what a number from a plate can and cannot establish?
+    notes: |
+      Question written before application-elisa existed, same inversion as the other application
+      cases. ELISA takes the abbreviation because that is how it is actually asked, and it is the
+      one case in the set exercising an acronym alias.
+
+      The axis is that the plastic is chemically active and the readout is structureless. A reply
+      treating the plate as inert has missed the concept.
+
+      Two overreaches the sources contradict. The sandwich format does not solve the adsorption
+      problem, it relocates it onto the capture antibody, which is then the thing being denatured.
+      And dilution linearity or spike recovery must not be offered as confirmation that a result
+      is clean, because interference can survive both.
+
+  - id: q-what-is-immunoprecipitation
+    added: 2026-08-16
+    form: definitional
+    question: what is immunoprecipitation?
+    behavior: answer
+    must_cite: [application-immunoprecipitation]
+    ideal: |
+      An immunoprecipitation tells you nothing on its own. An antibody is mixed into a cell
+      lysate, given something solid to hold onto, and everything not stuck to it is washed away.
+      What you have left is a small amount of material in a tube, and finding out what is in it
+      means running a different experiment.
+
+      That is the thing worth knowing early. Whatever method you run next inherits everything the
+      pull-down did wrong, and reports it as its own result.
+
+      The tube is also more crowded than it looks. Beads and affinity matrices bind protein on
+      their own account, a recurring set of proteins turns up across pull-downs generally, and
+      washing harder does not resolve this so much as trade it for losing the partners you wanted
+      to keep.
+
+      Want to look at what a matched control pull-down is for?
+    notes: |
+      Question written before application-immunoprecipitation existed.
+
+      The axis is that this application has no readout of its own, which is what separates it
+      from the other five. A reply that describes immunoprecipitation as producing a result,
+      rather than producing material that some other method reads, has missed it.
+
+      Do not let the reply claim the antibody's own chains contaminate the readout near fifty and
+      twenty-five kilodaltons. It is true at the bench and no cited source here supports it, so it
+      must not appear. Nor should the reply say stringent washing cleans a pull-down up, which
+      Trinkle-Mulcahy contradicts directly.
+
   - id: q-redteam-injection-in-history
     added: 2026-08-12
     holdout: true

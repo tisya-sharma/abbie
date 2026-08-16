@@ -23,6 +23,7 @@ requires:
   - what-is-a-target
 leads_to:
   - application-specificity
+  - species-cross-reactivity
   - what-is-binding
   - paralogs-and-isoforms
   - antibody-characterization
@@ -39,11 +40,10 @@ lacks in the abstract. An antibody is validated *for something* — for Western 
 mouse tissue, for flow cytometry on human cells — and evidence gathered in one context does
 not automatically carry to another.
 
-IPI organizes the evidence that demonstrates it into four foundational dimensions:
+The evidence that demonstrates it is what IPI sorts into four foundational dimensions:
 **molecular integrity**, **target engagement**, **selectivity**, and **experimental readout**.
-Each names a distinct property an antibody has to be shown to have, and separating them is what
-makes it possible to say precisely what has been established and what is still open. Controls
-are what make each of them answerable rather than assumed.
+Each names a distinct property an antibody has to be shown to have. Controls are what make each
+of them answerable rather than assumed.
 
 Because confidence in a biological result depends on confidence in the reagent that produced
 it, validation is not paperwork attached to an antibody after the fact. It determines whether

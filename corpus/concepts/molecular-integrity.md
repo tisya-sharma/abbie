@@ -29,7 +29,7 @@ leads_to:
   - assay-sec
 ---
 
-**Molecular Integrity**, the first of IPI's four dimensions, asks the plainest question in validation:
+**Molecular integrity**, the first of IPI's four dimensions, asks the plainest question in validation:
 is the material in the tube actually the molecule it says it is? Everything else rests on the
 answer — if the identity of the reagent is uncertain, nothing measured downstream can be
 attributed to it with confidence.

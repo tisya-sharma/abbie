@@ -44,6 +44,7 @@ requires:
 leads_to:
   - experimental-readout
   - genetic-perturbation-controls
+  - species-cross-reactivity
 ---
 
 An application is a specific experimental use of an antibody — Western blot, immunofluorescence,

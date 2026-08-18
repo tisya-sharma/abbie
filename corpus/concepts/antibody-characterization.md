@@ -14,18 +14,22 @@ sources:
     short: "Ayoubi 2025"
     journal: "Nat Protoc"
     title: "A consensus platform for antibody characterization"
-  - label: "Uhlén M, Bandrowski A, Carr S, et al. A proposal for validation of antibodies. Nat Methods. 2016;13(10):823-827."
+    depth: full-text
+  - label: "Uhlén M, Bandrowski A, Carr S, et al. A proposal for validation of antibodies. Nat Methods. 2016;13(10):823-827. Source for characterization methods yielding useful information without gauging specificity in an application-specific way."
     url: https://doi.org/10.1038/nmeth.3995
     short: "Uhlén 2016"
     journal: "Nat Methods"
     title: "A proposal for validation of antibodies"
-  - label: "Kahn RA, Ahmed SM, Ampah SB, et al. Antibody characterization is critical to enhance reproducibility in biomedical research. eLife. 2024;13:e100211. Source for characterization being where reproducibility problems are most tractable."
+    depth: full-text
+  - label: "Kahn RA, Virk H, Laflamme C, et al. Antibody characterization is critical to enhance reproducibility in biomedical research. eLife. 2024;13:e100211. Source for how reagent format drives lot-to-lot variation, and for sequence-defined recombinants being stable renewable reagents."
     url: https://doi.org/10.7554/eLife.100211
     short: "Kahn 2024"
     journal: "eLife"
     title: "Antibody characterization is critical to enhance reproducibility in biomedical research"
+    depth: full-text
   - label: IPI 4D framework, internal draft — grounds the statements of IPI's own position. No manuscript text is reproduced.
-status: draft
+    depth: full-text
+status: sourced
 reviewed_by:
 clearance: public
 level: core
@@ -41,9 +45,9 @@ Characterization establishes what an antibody reagent is. It measures properties
 itself — its sequence or clonal definition, identity, purity, structural integrity, and
 consistency between lots — independently of any experiment the antibody will later be used in.
 
-These are measurements on a preparation in a tube. Size-exclusion chromatography reports whether
-the material is monomeric or carries aggregate. Intact mass confirms the molecule matches its
-expected composition. Concentration and yield describe what is actually in the vial. None of
+At IPI these are measurements on a preparation in a tube. Size-exclusion chromatography reports
+whether the material is monomeric or carries aggregate. Intact mass confirms the molecule matches
+its expected composition. Concentration and yield describe what is actually in the vial. None of
 these involve the biological system the antibody is eventually pointed at, which is precisely
 what makes them reusable: a characterization result holds for that lot regardless of application.
 
@@ -53,9 +57,11 @@ produced the data. When identity or purity is unestablished, a downstream result
 attributed with confidence to any particular molecule, and a failure has no unambiguous cause —
 the antibody, the preparation, and the assay all remain candidates.
 
-It is also where reproducibility problems are most tractable. Lot-to-lot variation is a
-characterization question with a characterization answer, and a defined, sequence-known reagent
-removes an entire class of irreproducibility before any experiment is run.
+It is also where one class of reproducibility problem can be removed before any experiment is
+run. Lot-to-lot variation traces back to how a reagent was made: a polyclonal population differs
+between bleeds and between animals even when the vials carry one catalog number, and a hybridoma
+line can change over time. An antibody defined by its sequence and expressed recombinantly is a
+stable, renewable reagent, and that is a property of the preparation rather than of any assay.
 
 What characterization cannot do is establish that the antibody works. Knowing exactly what a
 molecule is says nothing about whether it binds its intended target, binds only that target, or

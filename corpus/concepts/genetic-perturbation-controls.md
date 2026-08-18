@@ -14,22 +14,26 @@ sources:
     short: "Uhlén 2016"
     journal: "Nat Methods"
     title: "A proposal for validation of antibodies"
+    depth: full-text
   - label: "Ayoubi R, et al. Scaling of an antibody validation procedure enables quantification of antibody performance in major research applications. eLife. 2023;12:RP91645. Source for the split of manufacturer-recommended validation strategies by application, and for the knockout-control retest rates in both Western blot and immunofluorescence."
     url: https://doi.org/10.7554/eLife.91645
     short: "Ayoubi 2023"
     journal: "eLife"
     title: "Scaling of an antibody validation procedure enables quantification of antibody performance in major research applications"
-  - label: "Ayoubi R, Ryan J, Gonzalez Bolivar S, et al. A consensus platform for antibody characterization. Nat Protoc. 2025;20(6):1509-1545."
+    depth: full-text
+  - label: "Ayoubi R, Ryan J, Gonzalez Bolivar S, et al. A consensus platform for antibody characterization. Nat Protoc. 2025;20(6):1509-1545. Source for the share of genotype-verified knockout lines that still carry target protein."
     url: https://doi.org/10.1038/s41596-024-01095-8
     short: "Ayoubi 2025"
     journal: "Nat Protoc"
     title: "A consensus platform for antibody characterization"
-  - label: "Smits AH, Ziebell F, Joberty G, et al. Biological plasticity rescues target activity in CRISPR knock outs. Nat Methods. 2019;16(11):1087-1093. Source for residual protein expression across verified CRISPR deletions, and for the two mechanisms that produce it."
+    depth: full-text
+  - label: "Smits AH, Ziebell F, Joberty G, et al. Biological plasticity rescues target activity in CRISPR knock outs. Nat Methods. 2019;16(11):1087-1093. Source for the two mechanisms that leave protein behind after a verified CRISPR deletion."
     url: https://doi.org/10.1038/s41592-019-0614-5
     short: "Smits 2019"
     journal: "Nat Methods"
     title: "Biological plasticity rescues target activity in CRISPR knock outs"
-status: draft
+    depth: abstract
+status: sourced
 reviewed_by:
 clearance: public
 level: advanced
@@ -62,9 +66,12 @@ evidence in imaging specifically rather than a general indictment of orthogonal 
 Two limits. Genetic strategies cannot be used for some sample types, in particular human
 tissue samples and body fluids such as plasma and serum. And residual signal is not infallible
 proof of cross-reactivity, because a knockout is not always as complete as its paperwork
-suggests. A frameshift can be rescued by translation reinitiation or by skipping the edited
-exon, leaving a truncated or internally deleted product behind. Across 193 verified deletions,
-roughly a third of targets still expressed protein at some level. Confirming the edit in the
-DNA therefore does not settle the question: the knockout has to be confirmed at the protein
+suggests. In one large characterization program, about 14% of the knockout lines tested still
+carried some target protein on a blot despite the edit having been verified by genomic PCR and
+DNA sequencing, in some cases as a truncated protein rather than as complete loss. The authors
+of a systematic survey of CRISPR knockouts report two mechanisms that rescue
+a frameshift: translation can reinitiate downstream, leaving a protein missing its front end,
+or the edited exon can be skipped, leaving one with an internal deletion. Confirming the edit in
+the DNA therefore does not settle the question: the knockout has to be confirmed at the protein
 level, using an independent measurement or a second antibody raised against a different
 epitope, before residual signal is read as cross-reactivity.

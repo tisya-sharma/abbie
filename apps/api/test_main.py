@@ -134,8 +134,8 @@ class CitationNumberingTests(TurnHarness, unittest.TestCase):
     """Inline numbers and the sources block are one numbering, not two.
 
     Run against the real corpus rather than a fixture, because the property at
-    risk is agreement with actual frontmatter: what-is-an-antibody carries one
-    paper, antibody-characterization carries three, and one of those is the
+    risk is agreement with actual frontmatter: what-is-an-antibody carries four
+    sources, antibody-characterization carries three, and one of each is the
     same Uhlén 2016 that what-is-binding cites alongside the Janeway glossary.
     A reply touching all three has to reuse the shared paper rather than number
     it twice, and leave nothing dangling.
@@ -168,27 +168,38 @@ class CitationNumberingTests(TurnHarness, unittest.TestCase):
         self.assertLessEqual(max(cited), len(self.done["sources"]))
 
     def test_numbers_follow_reading_order_and_reuse_a_shared_paper(self):
+        # A number is assigned where its row is first read, so the shared
+        # Uhlén 2016 takes 4 from what-is-an-antibody and comes back out of
+        # ascending order in the two later groups. That is the reuse, not a
+        # sorting bug: an ascending [4, 5, 6] there would mean the paper had
+        # been numbered a second time.
         self.assertEqual(
             self.visible,
-            "An antibody is a protein [1]."
-            " Characterization describes the reagent [2, 3, 4]."
-            " Binding is the interaction itself [3, 5]."
-            " IPI reads all of it one way [6].",
+            "An antibody is a protein [1, 2, 3, 4]."
+            " Characterization describes the reagent [5, 4, 6]."
+            " Binding is the interaction itself [4, 7]."
+            " IPI reads all of it one way [8].",
         )
 
     def test_rows_resolve_to_the_papers_the_numbers_name(self):
-        # Janeway appears twice by design: what-is-an-antibody cites the
-        # antibody-antigen chapter, what-is-binding cites the glossary for the
-        # avidity definition. Same book, different sections, different URLs, so
-        # they are two rows the titles tell apart rather than one shared source.
+        # Janeway appears four times by design: what-is-an-antibody cites the
+        # structure, antibody-antigen, and diversity sections, and
+        # what-is-binding cites the glossary for the avidity definition. Same
+        # book, four sections, four URLs, so they are four rows the titles tell
+        # apart rather than one shared source collapsed onto a single number.
         shorts = [s.get("short") for s in self.done["sources"]]
         self.assertEqual(
             shorts,
-            ["Janeway 2001", "Ayoubi 2025", "Uhlén 2016", "Kahn 2024",
-             "Janeway 2001", "IPI Quality"],
+            ["Janeway 2001", "Janeway 2001", "Janeway 2001", "Uhlén 2016",
+             "Ayoubi 2025", "Kahn 2024", "Janeway 2001", "IPI Quality"],
         )
         titles = [s.get("title") for s in self.done["sources"]]
-        self.assertNotEqual(titles[0], titles[4])
+        self.assertNotEqual(titles[0], titles[1])
+        self.assertNotEqual(titles[0], titles[2])
+        self.assertNotEqual(titles[0], titles[6])
+        self.assertNotEqual(titles[1], titles[2])
+        self.assertNotEqual(titles[1], titles[6])
+        self.assertNotEqual(titles[2], titles[6])
 
     def test_an_ipi_claim_cites_only_ipi(self):
         # The framework sentence carries IPI's own page and nothing else. The

@@ -14,13 +14,16 @@ sources:
     short: "Uhlén 2016"
     journal: "Nat Methods"
     title: "A proposal for validation of antibodies"
+    depth: full-text
   - label: "Ayoubi R, Ryan J, Gonzalez Bolivar S, et al. A consensus platform for antibody characterization. Nat Protoc. 2025;20(6):1509-1545."
     url: https://doi.org/10.1038/s41596-024-01095-8
     short: "Ayoubi 2025"
     journal: "Nat Protoc"
     title: "A consensus platform for antibody characterization"
+    depth: full-text
   - label: "IPI 4D framework, internal draft — grounds the statements of IPI's own position. No manuscript text is reproduced."
-status: draft
+    depth: full-text
+status: sourced
 reviewed_by:
 clearance: public
 level: core

@@ -10,12 +10,15 @@ ask: What does intact mass analysis confirm?
 provenance: ipi-authored
 sources:
   - label: IPI-CHR-001, internal antibody QC standard — grounds the description of IPI's own process. No criteria or record values are reproduced.
+    depth: full-text
   - label: "Institute for Protein Innovation. Quality. proteininnovation.org/quality/. IPI's own public statement of its antibody quality and validation standards, which describes these tiers and assays directly."
     url: https://proteininnovation.org/quality/
     short: "IPI Quality"
     title: "Quality"
+    depth: full-text
   - label: IPI 4D framework, internal draft — defines the dimensions this concept names. No manuscript text is reproduced.
-status: draft
+    depth: full-text
+status: sourced
 reviewed_by:
 clearance: public
 level: advanced
@@ -36,13 +39,14 @@ together so the heavy and light chains can be weighed separately. Measuring the 
 individually is more informative than measuring the assembled molecule: a discrepancy can be
 localized to one chain, and a problem affecting only the light chain is not hidden inside a much
 larger total. Antibodies also normally carry a sugar on the heavy chain, Fc N-glycosylation, which
-adds to the measured mass, so the comparison accounts for it either by removing the sugar before
-weighing or by including it in the expected value.
+adds to the measured mass of that chain, so the expected value it is compared against has to
+account for it.
 
-The measurement is sensitive enough to be a real identity check rather than a formality. Mass
-differences arising from a wrong construct, an incomplete sequence, an unexpected modification,
-or a contaminating protein are all resolvable, and the comparison is against a theoretical value
-computed from the sequence rather than against another sample.
+The measurement is sensitive enough to be a real identity check rather than a formality. A wrong
+construct, an incomplete sequence, or an unexpected modification all shift a chain away from its
+predicted mass, which is what the comparison is looking for, and the same measurement also detects
+contaminating protein. The value compared against is theoretical, computed from the sequence
+rather than measured on another sample.
 
 This makes intact mass a **molecular integrity** measurement, and specifically the identity half of
 it, where size-exclusion chromatography covers the purity half. At IPI it is performed after

@@ -14,7 +14,8 @@ sources:
     short: "Uhlén 2016"
     journal: "Nat Methods"
     title: "A proposal for validation of antibodies"
-status: draft
+    depth: full-text
+status: sourced
 reviewed_by:
 clearance: public
 level: core
@@ -28,11 +29,11 @@ leads_to:
 A band on a blot or a glow in a cell is a signal. It does not arrive labeled with which protein
 produced it, and that is the whole difficulty.
 
-Proteins come in families. Paralogs are related proteins encoded by different genes in the
-same family, often sharing substantial stretches of sequence. An antibody raised against one
-family member can bind its relatives, because the patch it recognizes may be present on several
-of them. Deciding that an observed signal came from the intended protein rather than a relative
-is a question the signal itself cannot answer.
+Proteins come in families. Paralogs are the members of such a multigene family, proteins that
+come from related genes. An antibody raised against one member can bind its relatives, because a
+related protein may contain an epitope similar to the one on the intended target. Deciding that
+an observed signal came from the intended protein rather than a relative is a question the signal
+itself cannot answer.
 
 This is the case genetic evidence is specifically suited to. Removing or reducing the target
 protein and repeating the experiment provides a direct link between the gene, the protein, and

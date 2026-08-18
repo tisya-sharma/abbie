@@ -98,10 +98,11 @@ support are exactly the ones a reader would most want to check.
 **`depth`** records which of the two happened, per source row: `full-text` or `abstract`. It is
 recorded rather than enforced, because a body may legitimately contain a numeral that is not a
 claim, and a CI rule keyed on digits would fail on a year. **An absent `depth` means unrecorded,
-not full text.** The thirty-one concepts written before this rule existed carry no marker, because
+not full text.** The thirty-one concepts written before this rule existed carried no marker, because
 nobody wrote down how they were read and asserting otherwise would be the exact unverified claim
-the rule exists to prevent. Stage 1's sourcing pass fills them in one concept at a time.
-`what-is-an-isotype`, written after the rule from reference works, carries no marker either.
+the rule exists to prevent. Stage 1's sourcing pass filled them in, and the last two files without
+a marker, `what-is-an-antibody` and `what-is-an-isotype`, got theirs on August 18 when both were
+converted from `established` to `summarized`. Every source row in the corpus now carries one.
 
 The immunofluorescence concept is the worked example of why the distinction earns its keep. Written
 from abstracts it said five hundred proteins agreed eighty percent of the time. The full text
@@ -141,9 +142,11 @@ whichever direction it is done wrong rather than shipping.
 input to this project.
 
 - `draft` — written, not yet checked. Nothing downstream should assume anything about it
-- `sourced` — every claim has been traced back to a cited public source and checked against it.
-  This is a claim about provenance, not a scientific endorsement, and it is the highest status
-  reachable without a scientist
+- `sourced` — every claim has been traced back to the source the file cites and checked against
+  it by reading that source. For a `summarized` concept that source is public and citable; for an
+  `ipi-authored` concept it is the internal IPI material the file names, and `sourced` records
+  that no claim outruns what those documents say. Either way this is a claim about provenance
+  rather than a scientific endorsement, and it is the highest status reachable without a scientist
 - `approved` — a named scientist has read it and signed off. `reviewed_by` is set only here
 
 Keeping these separate is the point. Collapsing `sourced` into `approved` to unblock a demo
@@ -286,6 +289,15 @@ the scientist reviewer is the actual check.
 framing is the field's, traceable to Ayoubi 2025, and both its source labels already described
 themselves as claim-level. It is `summarized`.
 
+The last two holders followed on August 18. `what-is-an-antibody` and `what-is-an-isotype` each
+failed the second test in one paragraph. Cross-reactivity between two antibodies raised against
+the same target, and what a class-matched control does in a stained sample, are neither of them
+things an expert would expect to see uncited, and `established` gave neither file a route to
+`sourced` either. Both are now `summarized`. **The value remains legal and currently tags
+nothing.** It is kept because the category it names is real, and a future concept that genuinely
+fits it should not have to argue the case from scratch. Read the two tests above before using it
+again.
+
 **A `summarized` concept may still state IPI's position in one place**, and several do —
 `antibody-characterization`, `five-pillars-iwgav`, `orthogonal-validation` and
 `validation-vs-characterization` each end by locating their subject inside IPI's framework. Give
@@ -378,12 +390,16 @@ August 13 covering the framework and the assays, `species-cross-reactivity` adde
 August 15, the per-application concepts written from August 16, and `what-is-an-isotype` added on
 August 17.
 
-Five files are at `status: sourced`, all written from the full text of every source they cite and
-all carrying `depth: full-text` on each source row. They are the five per-application concepts
-added on August 16, and together with `application-western-blot` they close the six applications. The rest of the corpus is still at
-`status: draft` and carries no depth marker, which means unrecorded rather than shallow. No file
-names a reviewer, so the grounding column below records what a concept was written from rather
-than a claim that a scientist has checked it.
+All thirty-seven files are at `status: sourced`, and every source row in them now carries a `depth`
+marker — `full-text` throughout except for two rows read at the abstract, in `what-is-a-target`
+and `genetic-perturbation-controls`. The five per-application concepts added on August 16 got
+there first, and together with `application-western-blot` they close the six applications; the
+August 18 sourcing pass brought the rest of the corpus with them. The last two, `what-is-an-antibody`
+and `what-is-an-isotype`, arrived on August 18 by a different route: `established` gave them no
+path to `sourced` at all, so both were converted to `summarized` and every claim traced to a cited
+section, following the `what-is-a-reagent` precedent. No file names a reviewer, so the grounding
+column below records what a concept was written from rather than a claim that a scientist has
+checked it.
 
 ### Written
 
@@ -391,20 +407,20 @@ than a claim that a scientist has checked it.
 |---|---|---|---|
 | `what-is-a-target` | foundational | public | Kumar 2023, Janeway, Van Regenmortel |
 | `reagent-reproducibility` | foundational | public | Bradbury 2018/2015, Ayoubi 2023/2025, Uhlen 2016, Freedman 2015 |
-| `antibody-validation` | core | public | Deb, kickoff notes |
+| `antibody-validation` | core | public | 4D draft, kickoff notes, IPI Quality page |
 | `what-is-binding` | core | public | Uhlen 2016, Janeway glossary |
 | `species-cross-reactivity` | core | public | Pruvost 2023, Hu 2025 |
 | `paralogs-and-isoforms` | core | public | Uhlen 2016 |
 | `five-pillars-iwgav` | core | public | Uhlen 2016, Ayoubi 2025 |
 | `application-specificity` | core | public | Uhlen 2016, Taussig 2018, Biddle 2024, Ayoubi 2025 |
-| `four-dimensional-framework` | core | public | 4D draft, kickoff notes |
-| `molecular-integrity` | core | public | Deb, kickoff notes |
-| `target-engagement` | core | public | Deb, kickoff notes |
-| `selectivity` | core | public | Deb, kickoff notes |
-| `what-is-an-antibody` | foundational | public | established, reference works |
+| `four-dimensional-framework` | core | public | 4D draft, kickoff notes, IPI Quality page |
+| `molecular-integrity` | core | public | 4D draft, kickoff notes, IPI Quality page |
+| `target-engagement` | core | public | 4D draft, kickoff notes, IPI Quality page |
+| `selectivity` | core | public | 4D draft, kickoff notes, IPI Quality page |
+| `what-is-an-antibody` | foundational | public | Janeway 2001, Uhlen 2016 |
 | `what-is-a-reagent` | foundational | public | Ayoubi 2025, Uhlen 2016 |
 | `genetic-perturbation-controls` | advanced | public | Uhlen 2016, Ayoubi 2023/2025, Smits |
-| `experimental-readout` | core | public | 4D draft, kickoff notes |
+| `experimental-readout` | core | public | 4D draft, kickoff notes, IPI Quality page |
 | `controls-in-validation` | core | public | Pillai-Kastoori 2020, Ayoubi 2023/2025 |
 | `application-western-blot` | core | public | Pillai-Kastoori 2020, Ghosh 2014, Tsuji 2020 |
 | `why-validation-matters` | foundational | public | Uhlen 2016, Taussig 2018, Biddle 2024, Baker 2016, Bordeaux 2010, Polakiewicz 2015 |
@@ -416,16 +432,16 @@ than a claim that a scientist has checked it.
 | `interpretive-principles` | core | public | 4D draft |
 | `evidence-strengthening-approaches` | core | public | 4D draft |
 | `orthogonal-validation` | advanced | public | Uhlen 2016, Ayoubi 2025, Edfors 2018, 4D draft |
-| `assay-sec` | advanced | public | IPI QC standard, internal |
-| `assay-mass-spectrometry` | advanced | public | IPI QC standard, internal |
-| `assay-spr-bli` | advanced | public | IPI QC standard, internal |
-| `assay-cell-display` | advanced | public | IPI QC standard, internal |
+| `assay-sec` | advanced | public | IPI-CHR-001, IPI Quality page, 4D draft |
+| `assay-mass-spectrometry` | advanced | public | IPI-CHR-001, IPI Quality page, 4D draft |
+| `assay-spr-bli` | advanced | public | IPI-CHR-001, IPI Quality page, 4D draft |
+| `assay-cell-display` | advanced | public | IPI-CHR-001, IPI Quality page, 4D draft |
 | `application-immunofluorescence` | core | public | Stadler 2010, Schnell 2012, Stadler 2013 |
 | `application-immunohistochemistry` | core | public | Shi 2011, Howat 2014, Hewitt 2014 |
 | `application-flow-cytometry` | core | public | Cossarizza 2021, Andersen 2016 |
 | `application-elisa` | core | public | Butler 2000, Sturgeon 2011, Hoofnagle 2009 |
 | `application-immunoprecipitation` | core | public | Trinkle-Mulcahy 2008, Mellacheruvu 2013, Marcon 2015 |
-| `what-is-an-isotype` | core | public | established, reference works |
+| `what-is-an-isotype` | core | public | Janeway 2001 |
 
 The four assay concepts carry no numeric criteria. The bands live in IPI's internal release-gate
 standard, and what "good" means per application is recorded below as deferred pending a
@@ -438,9 +454,9 @@ describing its own process rather than a performance grade, which is the line th
 ### Still to write
 
 Nothing per-application. The six applications are complete as of August 16, and the corpus has no
-concept it knows it is missing. What remains is depth rather than coverage: thirty-two files
-carry no `depth` marker, thirty-one of them predating the full-text sourcing rule, and no file
-has been read by a scientist.
+concept it knows it is missing. What remains is review rather than coverage: no source row is
+without a `depth` marker and no concept is below `sourced`, but no file has been read by a
+scientist.
 
 `recombinant-vs-conventional` was dropped rather than written. `reagent-reproducibility` already
 covers monoclonal, polyclonal, and recombinant with verified figures, down to its aliases, so a
@@ -452,10 +468,10 @@ Recorded rather than papered over. Each blocks a concept, and none should be wri
 background knowledge — an unsourced claim in a scientific corpus is the exact failure this
 project exists to prevent.
 
-Resolved since first recorded: `what-is-an-antibody` and `what-is-a-reagent` are now written
-under the `established` provenance, which exists for settled knowledge no single source owns.
-They carry reference-work pointers rather than claim-level citations, and their check is
-scientist sign-off — flag them for particular attention in review.
+Resolved since first recorded: `what-is-an-antibody` and `what-is-a-reagent` were both written
+under the `established` provenance and both have since left it. `what-is-a-reagent` moved because
+its fit-for-purpose framing is the field's, and `what-is-an-antibody` moved on August 18 with
+`what-is-an-isotype`, when the two gaps below closed. All three are `summarized` and `sourced`.
 
 **Avidity closed on August 15.** The definition was retrieved from the Immunobiology glossary,
 which distinguishes affinity as binding at a single site from avidity as the sum of binding at
@@ -466,9 +482,13 @@ was leaning on a word it never defined.
 | Gap | Effect | What would close it |
 |---|---|---|
 | **Isoform and splice-variant attribution** — only paralogs are sourced | Stated as an explicit limit inside `paralogs-and-isoforms` | Unknown whether published guidance exists |
-| **What each application measures** — beyond the conformation and sample-preparation axis | **Closed on August 16.** All six applications now have a concept written from the full text of its sources | Retired. The per-application methods literature closed it: Pillai-Kastoori 2020, Ghosh 2014 and Tsuji 2020 for blotting, then Stadler, Schnell, Shi, Buchwalow, Howat, Hewitt, Cossarizza, Andersen, Butler, Sturgeon, Hoofnagle, Trinkle-Mulcahy, Mellacheruvu and Marcon across the other five |
-| **Mechanism of lot-to-lot variation** — beyond "finite resource" and "genetic drift" | `reagent-reproducibility` stops at those two mechanisms | Not yet identified |
+| **What each application measures** — beyond the conformation and sample-preparation axis | **Closed on August 16.** All six applications now have a concept written from the full text of its sources | Retired. The per-application methods literature closed it: Pillai-Kastoori 2020, Ghosh 2014 and Tsuji 2020 for blotting, then Stadler, Schnell, Shi, Howat, Hewitt, Cossarizza, Andersen, Butler, Sturgeon, Hoofnagle, Trinkle-Mulcahy, Mellacheruvu and Marcon across the other five |
+| **Mechanism of lot-to-lot variation** | **Closed on August 18, 2026.** `reagent-reproducibility` now carries the mechanism per format instead of "finite resource" and "genetic drift": re-immunizing an animal, even the same animal, never yields the same mix of antibodies, and hybridoma lines acquire post-fusion rearrangements and mutations after prolonged culture. `antibody-characterization` adds that polyclonal serum from different bleeds and animals is sold under one catalog number, and that sequence-defined recombinants are stable and renewable | Retired. Bradbury 2015, Bradbury 2018, Kahn 2024 |
 | **Communicating validation to non-experts** | No published guidance found; Abbie's approach is adapted from scientist-to-scientist reporting principles by analogy, which should be stated rather than implied | Science communication literature, or portal documentation |
+| **Completeness of CRISPR knockouts** — the systematic survey is paywalled | `genetic-perturbation-controls` states the two rescue mechanisms as an attributed author statement from the Smits 2019 abstract, and carries the quantitative figure from Ayoubi 2025 instead (about 14% of genotype-verified knockout lines still carried target protein) | Institutional-license retrieval of Smits 2019 (Nat Methods 2019;16(11):1087-1093); no open-access route exists. The abstract's "about one third" is of quantified targets, a denominator the abstract never gives, so the full text is needed before any figure from it is stated |
+| **No `sourced` path for `established` concepts** | **Closed on August 18, 2026.** Both files converted to `summarized` with claim-level citations, following the `what-is-a-reagent` precedent, and both are now `sourced`. `what-is-an-antibody`'s single Janeway pointer went to a section carrying only the small-patch binding claim, so it was split into the three sections that actually carry the structure, the binding, and the diversity, plus Uhlén 2016 | Retired. The third option in the original entry was the one taken: convert rather than redefine `sourced` or wait on sign-off |
+| **`established` content that fails the expert-surprise test** | **Closed on August 18, 2026.** The closing paragraph of `what-is-an-antibody` now cites Uhlén 2016 for off-target binding and for two antibodies against one target binding different regions of it. The isotype-control passage of `what-is-an-isotype` was cut back to the anti-isotype detection mechanism Janeway's Appendix I states, and its close now sends what a class-matched control establishes to the assay it is run in, so it no longer competes with the qualified account in `application-flow-cytometry` | Retired. Janeway 2001 Appendix I A-10, Uhlén 2016 |
+| **How the QC assays physically work** | IPI's internal documents specify procedures and criteria but state no assay principles, so the four assay concepts describe pore exclusion, Fc N-glycosylation, label-free real-time sensing, and cell-surface conformation from textbook knowledge under `ipi-authored`, with no claim-level citation; BLI is the thinnest case, named in IPI-CHR-001 but absent from the public Quality page, its mechanism entirely uncited | Scientist sign-off, which is the check `ipi-authored` and `established` both rely on. Method-review citations would conflict with `ipi-authored` and are not recommended without a decision |
 
 ## Claims that must never enter this corpus
 
@@ -476,14 +496,22 @@ Refuted during adversarial verification on August 7. Several are widely repeated
 resurface — this list exists so they can be rejected on sight rather than re-litigated.
 
 - **"More than half of commercial antibodies failed in at least one application."** The most
-  quotable line in this field, and not supported by the paper it is attributed to.
+  quotable line in this field, and not supported by the paper it is attributed to. Ayoubi 2023's
+  own abstract does state that "more than 50% of all antibodies failed in one or more
+  applications," but about its own sample of 614 antibodies — what is unsupported is the
+  field-wide figure, not the existence of the sentence.
 - **The Human Protein Atlas figure** of roughly 55,000 polyclonal and 5,000 monoclonal antibodies
   with about half performing satisfactorily.
 - **The clean two-class taxonomy of linear versus conformational epitopes.** Discontinuous
   epitopes may be described, but not as a settled binary.
 - **That extra hybridoma antibody chains measurably degrade specificity and signal.** The 31.9%
-  figure stands; the performance consequence does not.
-- **That the five pillars each work without prior knowledge of the target.**
+  figure stands; the performance consequence does not. Bradbury 2018's own comparisons show the
+  same recombinant-over-hybridoma improvement in hybridomas carrying a single VH/VL pair (EED,
+  MUC1, WT1), and the authors state the mechanism "remains to be identified."
+- **That the five pillars each work without prior knowledge of the target.** Edfors 2018 states
+  this claim in its own abstract and discussion, and Edfors is a cited source of
+  `orthogonal-validation`, so a future sourcing pass will meet it there and must still not
+  import it.
 
 ## Two questions left blank in the kickoff notes
 
@@ -496,10 +524,10 @@ One is now answered; the other is still deferred.
    thresholds Abbie states would be IPI's position rather than the field's. This waits for a
    scientist. Until then no concept grades antibody performance, and questions that ask for a
    band are answered qualitatively or abstained on. This is narrower than "no concept states a
-   number": `controls-in-validation` says a knockdown is generally expected to remove at least
-   half the target protein, and reports the expression range one program screened its cell lines
-   for. Those describe whether a control is fit to interpret, which is a methodological
-   requirement rather than a verdict on a reagent.
+   number": `controls-in-validation` reports the affinity range one program required its parental
+   cell lines to be detectable at, and the fivefold steps another protocol uses to titrate a
+   primary antibody into its linear range. Those describe whether a control is fit to interpret,
+   which is a methodological requirement rather than a verdict on a reagent.
 2. **Monoclonal versus polyclonal, and why recombinant antibodies are preferable.** Answered,
    and not in a file of its own. It was resolvable from published sources, and
    `reagent-reproducibility` now carries it: all three formats, the head-to-head Western blot

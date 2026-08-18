@@ -14,27 +14,32 @@ sources:
     short: "Uhlén 2016"
     journal: "Nat Methods"
     title: "A proposal for validation of antibodies"
+    depth: full-text
   - label: "Taussig MJ, Fonseca C, Trimmer JS. Antibody validation: a view from the mountains. N Biotechnol. 2018;45:1-8."
     url: https://doi.org/10.1016/j.nbt.2018.08.002
     short: "Taussig 2018"
     journal: "N Biotechnol"
     title: "Antibody validation: a view from the mountains"
-  - label: "Biddle et al. Improving the integrity and reproducibility of research that uses antibodies. mAbs. 2024;16(1):2323706."
+    depth: full-text
+  - label: "Biddle M, Stylianou P, Rekas M, et al. Improving the integrity and reproducibility of research that uses antibodies: a technical, data sharing, behavioral and policy challenge. mAbs. 2024;16(1):2323706."
     url: https://doi.org/10.1080/19420862.2024.2323706
     short: "Biddle 2024"
     journal: "mAbs"
     title: "Improving the integrity and reproducibility of research that uses antibodies: a technical, data sharing, behavioral and policy challenge"
+    depth: full-text
   - label: "Ayoubi R, Ryan J, Gonzalez Bolivar S, et al. A consensus platform for antibody characterization. Nat Protoc. 2025;20(6):1509-1545."
     url: https://doi.org/10.1038/s41596-024-01095-8
     short: "Ayoubi 2025"
     journal: "Nat Protoc"
     title: "A consensus platform for antibody characterization"
+    depth: full-text
   - label: "Ayoubi R, et al. Scaling of an antibody validation procedure enables quantification of antibody performance in major research applications. eLife. 2023;12:RP91645. Source for the direction-of-transfer finding."
     url: https://doi.org/10.7554/eLife.91645
     short: "Ayoubi 2023"
     journal: "eLife"
     title: "Scaling of an antibody validation procedure enables quantification of antibody performance in major research applications"
-status: draft
+    depth: full-text
+status: sourced
 reviewed_by:
 clearance: public
 level: core

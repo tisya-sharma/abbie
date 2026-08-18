@@ -13,12 +13,14 @@ sources:
     short: "Ayoubi 2025"
     journal: "Nat Protoc"
     title: "A consensus platform for antibody characterization"
+    depth: full-text
   - label: "Uhlén M, Bandrowski A, Carr S, et al. A proposal for validation of antibodies. Nat Methods. 2016;13(10):823-827. Source for protocol parameters altering reagent performance."
     url: https://doi.org/10.1038/nmeth.3995
     short: "Uhlén 2016"
     journal: "Nat Methods"
     title: "A proposal for validation of antibodies"
-status: draft
+    depth: full-text
+status: sourced
 reviewed_by:
 clearance: public
 level: foundational

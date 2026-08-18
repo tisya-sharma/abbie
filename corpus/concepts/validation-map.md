@@ -10,7 +10,8 @@ ask: What is a Validation Map?
 provenance: ipi-authored
 sources:
   - label: IPI 4D framework, internal draft — grounds the statements of IPI's own position. No manuscript text is reproduced.
-status: draft
+    depth: full-text
+status: sourced
 reviewed_by:
 clearance: public
 level: core
@@ -34,15 +35,17 @@ through occupies a point defined by that pair.
 
 The map records context, not quality. A point on it says an experiment was performed in a
 particular system with a particular assay; it says nothing about whether the result was good.
-That separation is deliberate, because the same result means different things in different
-places. Signal in a system where the target is not expected to be present is uninformative
-rather than reassuring, and absence of signal in such a system is not evidence that the antibody
-failed.
+That separation is deliberate, because what a result supports depends on whether the system it
+was generated in is biologically informative for the target and the intended application. Target
+expression, accessibility, the presence of related proteins, and experimental design all shape
+the conclusions an observed signal can carry, and absence of signal in a system that is not
+biologically informative is not evidence that the antibody failed.
 
 The map also imposes no order. Validation may run from simple to complex, beginning with
 purified protein and moving toward tissue, or it may begin directly in the intended application
-and work backward to resolve whatever the first result left open. Both routes assemble the same
-evidence. The framework defines what is needed, not the sequence in which it must be gathered.
+and work backward to resolve whatever the first result left open. Both are routes to the same
+goal, assembling the complementary evidence that confidence in antibody performance requires.
+The framework defines what is needed, not the sequence in which it must be gathered.
 
 What the map makes visible is coverage: which regions of the possible evidence space an antibody
 has actually been examined in, and which remain empty. Reading conclusions from it is a separate

@@ -14,21 +14,6 @@ rule and is committed under `packages/eval/results/`. The corpus is still mostly
 `status: draft`: 32 of the 37 concepts await a sourcing pass, and only the five newer
 application concepts are `sourced`.
 
-## The documents, and who each is for
-
-| Document | Audience | Purpose |
-|---|---|---|
-| [roadmap.md](roadmap.md) | me | The operational sequence — stages, deliverables, gates, blockers. **Start here.** |
-| [architecture.md](architecture.md) | me, and any future engineer | Architecture, technology choices, and the reasoning behind them. The source of truth for design and cost. |
-| [chatbot-proposal.md](chatbot-proposal.md) | Deb and leadership | The proposal and the asks. Non-technical. |
-| [hosting-decision.md](hosting-decision.md) | IT | Why Abbie needs its own environment and what the Google Cloud footprint is. |
-| [warehouse-findings.md](warehouse-findings.md) | the science team, and me | What the Benchling warehouse actually contains, recorded as measurements rather than conclusions. |
-
-Where these overlap, precedence runs: **roadmap.md** for sequence, **architecture.md** for design
-and cost, **warehouse-findings.md** for what the data actually is. The proposal and hosting
-documents restate conclusions for their audiences and should be updated to follow rather than
-lead.
-
 ## The short version
 
 Abbie is built on **IPI's own 4D framework** — Molecular Integrity, Target Engagement,
@@ -50,8 +35,7 @@ in IPI's framework and cited throughout. It needs no data decisions, it is usefu
 and it is where every abstention about an unknown antibody has to land.
 
 One constraint to know before reading further: the 4D framework is an **unpublished draft
-manuscript**, so what the public surface may say about it is an open question with Deb. See
-[roadmap.md](roadmap.md).
+manuscript**, so what the public surface may say about it is an open question with Deb.
 
 ## Repository layout
 
@@ -72,9 +56,8 @@ schema-audit/   audit output, gitignored
 config/         local connection configuration, gitignored
 ```
 
-The rest of the application layout is specified in [architecture.md](architecture.md), which also
-records the approved-but-unbuilt web search design (server-side tool, hard cost caps, staged
-rollout) under "Web search (planned, not yet built)".
+Web search is designed and approved but not yet built: a server-side tool, hard cost caps, and a
+staged rollout.
 
 ## Running the baseline
 

@@ -4,11 +4,11 @@ Design handoff for the Institute for Protein Innovation's chatbot widget. Everyt
 
 ## How to use this package
 
-**Read `SPEC.md` first, then write the implementation plan yourself.** The division of labour is deliberate: the spec says *what* to build and why, because those decisions are made and signed off. The plan — sequencing, file-level diffs, checkpoints — should come from you after reading the actual current code, because you can verify function names and catch anything that has drifted since the design was written.
+**Read the specification first, then write the implementation plan yourself.** The spec is a working document kept next to this README rather than in the repo. The division of labour is deliberate: the spec says *what* to build and why, because those decisions are made and signed off. The plan — sequencing, file-level diffs, checkpoints — should come from you after reading the actual current code, because you can verify function names and catch anything that has drifted since the design was written.
 
 Suggested opening prompt:
 
-> Read SPEC.md in full, then read apps/api/static/index.html and apps/api/main.py. Produce an implementation plan that sequences the work into reviewable steps, names the exact functions and CSS blocks each step touches, and flags anything in the spec that no longer matches the code. Do not start editing until I approve the plan.
+> Read the specification in full, then read apps/api/static/index.html and apps/api/main.py. Produce an implementation plan that sequences the work into reviewable steps, names the exact functions and CSS blocks each step touches, and flags anything in the spec that no longer matches the code. Do not start editing until I approve the plan.
 
 ## What the design touches
 
@@ -29,7 +29,6 @@ Worth locating before you start: `createTurn()` (where the three grey dots live)
 
 | file | what it is |
 |---|---|
-| `SPEC.md` | **The specification.** 14 sections, matching the kit's numbered sections. |
 | `Abbie Widget Kit.dc.html` | **Visual reference.** Open in a browser — every state rendered at real size, with live animation. Sections 01–12. |
 | `Abbie Widget Explorations.dc.html` | Record of rejected options and why. Context only — **never build from this file.** |
 | `assets/mark-solid.svg` | The mark below 48 px. Launcher, avatar, activity, favicon. |

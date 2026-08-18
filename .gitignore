@@ -17,8 +17,14 @@ schema-audit/
 # with staff contact details. Reference only, never distributed with the repo.
 answer_references/
 
-# Unrelated prototype kept out of Abbie's history, untouched on disk
-/Travis Codex Vibecoded No Plan/
+# Planning and design documents. Working drafts that change faster than the code
+# they describe, kept local rather than carried by the repo.
+/roadmap.md
+/architecture.md
+/hosting-decision.md
+/warehouse-findings.md
+/chatbot-proposal.md
+/abbie-widget-handoff/SPEC.md
 
 # Eval runs reference commit SHAs; promoting one to a committed baseline is deliberate
 packages/eval/results/

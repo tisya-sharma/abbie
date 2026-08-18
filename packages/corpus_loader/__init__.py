@@ -59,7 +59,7 @@ def load_corpus(include_pre_publication: bool = False) -> dict[str, "Concept"]:
     """Read every concept file and return the set visible to this build.
 
     Clearance filtering happens here, before anything downstream can see the
-    content, which is the physical-separation rule from architecture.md.
+    content, which is the physical-separation rule.
     """
     concepts: dict[str, Concept] = {}
     for path in sorted(CONCEPTS_DIR.rglob("*.md")):

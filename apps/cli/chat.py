@@ -6,8 +6,8 @@ generation, and each behavior composes its reply from only the context it
 needs: answers see the full corpus, redirects see redirect instructions alone,
 and refusals and abstentions are deterministic text with no model call.
 --baseline skips routing and runs the original single-call full-context
-pipeline. Conversation state is the covered set from architecture.md: concept
-ids already cited, used to keep follow-up offers fresh.
+pipeline. Conversation state is the covered set: concept ids already cited,
+used to keep follow-up offers fresh.
 
 Usage:
     python3 apps/cli/chat.py

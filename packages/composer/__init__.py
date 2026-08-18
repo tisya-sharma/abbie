@@ -5,8 +5,8 @@ behavior's reply is built from. refuse and abstain are deterministic text with
 no model call. redirect calls the model with redirect instructions only, so no
 corpus content can appear in the reply. answer is the full-context path. The
 separation is the point: a path that never receives the corpus cannot cite it
-or lecture from it, which is the physical-separation principle from
-architecture.md applied to behaviors.
+or lecture from it, which is the physical-separation principle applied to
+behaviors.
 """
 
 from __future__ import annotations

@@ -15,8 +15,8 @@ uvicorn's `--reload` watches `*.py` only, so an edit here reaches a running serv
 restart. A file that breaks a graph invariant stops startup rather than shipping a broken build.
 
 Retrieval at query time was built and then superseded, and returns only if it beats the
-full-context baseline on the golden set. [roadmap.md](../roadmap.md) records the measurement
-that would reopen it.
+full-context baseline on the golden set — a comparison re-run at every corpus milestone rather
+than a threshold checked once.
 
 ## Why concepts rather than question-and-answer pairs
 
@@ -204,7 +204,7 @@ and both are core. Acyclicity is the invariant that matters.
 **`requires` is consumed in learning mode only; `leads_to` is global.** A scientist asking to
 rank antibodies for IHC in mouse brain does not want `paralog` defined inline, so prerequisite
 expansion is scoped to questions that read as foundational. Follow-up offers are useful to
-everyone. See [architecture.md](../architecture.md), Answer composition.
+everyone.
 
 **Antibodies never enter this graph.** It models concepts, which are authored prose in the tens
 of files. Antibody records are rows in Postgres reached by typed SQL tools, in the tens of

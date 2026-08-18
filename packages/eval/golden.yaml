@@ -13,19 +13,18 @@
 # but cites nothing is a failure, because an uncited claim is indistinguishable from a
 # fabricated one.
 #
-# The ideal field is written in Abbie's voice, per architecture.md, Voice. It is the target
-# for both substance and register - an answer that is factually right but reads as a fact
-# dump is a failure. Ideals are not string-matched; they define what good looks like for
-# rubric scoring, and the property checks below run on every answer case. Ideals omit the
-# inline [concept-id] markers a real answer must carry; must_cite holds the citation
-# expectation.
+# The ideal field is written in Abbie's voice. It is the target for both substance and
+# register - an answer that is factually right but reads as a fact dump is a failure. Ideals
+# are not string-matched; they define what good looks like for rubric scoring, and the property
+# checks below run on every answer case. Ideals omit the inline [concept-id] markers a real
+# answer must carry; must_cite holds the citation expectation.
 #
-# Growth discipline: the set grows toward the ~50 cases architecture.md targets — with each
-# corpus batch now, from real user traces once staff use begins. Cases added after the
-# 2026-08-11 verification carry an added date. Cases tagged holdout: true are excluded from
-# tuning-time runs (the default) and included only in gate runs via --include-holdout, so
-# tuning never overfits the reported number. Abstain cases are corpus-relative: re-audit
-# them whenever the corpus changes what is answerable — Stage 2 catalog data will flip some.
+# Growth discipline: the set grows toward its ~50-case target — with each corpus batch now,
+# from real user traces once staff use begins. Cases added after the 2026-08-11 verification
+# carry an added date. Cases tagged holdout: true are excluded from tuning-time runs (the
+# default) and included only in gate runs via --include-holdout, so tuning never overfits the
+# reported number. Abstain cases are corpus-relative: re-audit them whenever the corpus changes
+# what is answerable — Stage 2 catalog data will flip some.
 
 property_checks:
   answer:

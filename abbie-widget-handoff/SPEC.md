@@ -239,13 +239,15 @@ A cited answer with seven references is cramped at 380 px. Expanded is a **centr
 
 The SSE parser, the scrubber contract, markdown-lite rendering, follow-up chips, the launcher's `localStorage` keys, and the routing pipeline itself. The only server-side changes anywhere in this spec are adding `form` to the route frame and `short`/`journal`/`title` to source items.
 
+**Amended 2026-08-17.** `POST /feedback` is a third: the thumbs buttons post a verdict, which is recorded as a telemetry span and stored nowhere else. See the open call in section 14.
+
 ---
 
 ## 14 · Open product calls
 
 None of these block the build; pick a default and note it.
 
-- **Thumbs up/down storage** — no feedback endpoint exists. Keep it local per turn (visual only) or add one. Do not invent an endpoint silently.
+- ~~**Thumbs up/down storage** — no feedback endpoint exists. Keep it local per turn (visual only) or add one. Do not invent an endpoint silently.~~ Settled 2026-08-17: the endpoint exists. A verdict posts to `POST /feedback` and is stored as a telemetry span and nowhere else, no file and no database, and the buttons stay one shot per turn.
 - **Retry** — replace the previous answer or append a second one. Appending is safer; replacing is tidier.
 - ~~**`MAX_SOURCES`** — leaving it at 3 means the "N more" state never appears in practice. Build it anyway.~~ Settled 2026-08-15: the cap is removed and the expanded list shows every source, so there is no "N more" state. See the amendment in section 7.
 - **Font delivery** — self-host or CDN.

@@ -40,6 +40,15 @@ class TracingTests(unittest.TestCase):
         self.assertEqual(attrs["gen_ai.conversation.id"], "sess-abc")
         self.assertEqual(attrs["abbie.turn_index"], 3)
 
+    def test_feedback_span_records_the_verdict_as_an_evaluation_label(self):
+        telemetry.record_feedback("sess-abc", 2, "down", session_live=False)
+        attrs = self.attrs("abbie.feedback")
+        self.assertEqual(attrs["gen_ai.conversation.id"], "sess-abc")
+        self.assertEqual(attrs["abbie.turn_index"], 2)
+        self.assertEqual(attrs["gen_ai.evaluation.name"], "user_feedback")
+        self.assertEqual(attrs["gen_ai.evaluation.score.label"], "down")
+        self.assertFalse(attrs["abbie.session_live"])
+
     def test_llm_span_uses_genai_convention_attributes(self):
         with telemetry.llm_span("abbie.router", "gpt-5-mini"):
             pass

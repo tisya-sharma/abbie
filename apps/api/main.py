@@ -148,6 +148,17 @@ class ChecklistRequest(BaseModel):
     turn_index: int
 
 
+FEEDBACK_VERDICTS = ("up", "down")
+
+
+class FeedbackRequest(BaseModel):
+    """One thumbs verdict on an answered turn, keyed the way the page knows it."""
+
+    session_id: str
+    turn_index: int
+    verdict: str
+
+
 def follow_ups_for(cited: list[str], concepts: dict, covered: set[str]) -> list[str]:
     """Graph-derived next topics: leads_to of cited concepts, minus covered.
 
@@ -544,3 +555,32 @@ def export_checklist(req: ChecklistRequest, request: Request) -> Response:
             "Content-Disposition": f'attachment; filename="{document.filename}"'
         },
     )
+
+
+@app.post("/feedback")
+def feedback(req: FeedbackRequest, request: Request) -> Response:
+    """Record a thumbs verdict on one answered turn onto the trace.
+
+    Telemetry is the only store. Nothing is written to disk or a database,
+    which keeps this module's no-persistence rule intact, and with no exporter
+    configured the span is created against the no-op tracer and discarded like
+    every other span here. That is a deliberate default rather than silent data
+    loss: recording verdicts anywhere means configuring a backend.
+
+    A verdict can arrive for a session the server no longer holds, because
+    sessions live in memory and a restart clears them. It is accepted either
+    way, since the visitor's opinion is the datum and the turn it refers to is
+    already on the trace; the span carries whether the session was still live.
+    """
+    origin = request.headers.get("origin")
+    if origin is not None and not origin_is_local(origin):
+        raise HTTPException(status_code=403, detail="cross-origin requests are refused")
+    if req.verdict not in FEEDBACK_VERDICTS:
+        raise HTTPException(status_code=400, detail="verdict must be up or down")
+    telemetry.record_feedback(
+        req.session_id,
+        req.turn_index,
+        req.verdict,
+        session_live=req.session_id in SESSIONS,
+    )
+    return Response(status_code=204)

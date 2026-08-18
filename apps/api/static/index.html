@@ -1891,12 +1891,13 @@ button { font-family: var(--abbie-sans); }
       [["up", upBtn], ["down", downBtn]].forEach(function (pair) {
         pair[1].setAttribute("aria-pressed", "false");
         pair[1].addEventListener("click", function () {
-          // One shot per turn, and local only — there is no feedback endpoint
-          // and inventing one silently would be worse than recording nothing.
+          // One shot per turn. The button state is the whole visible response,
+          // so the post that follows it is allowed to fail quietly.
           if (turn.feedback) return;
           turn.feedback = pair[0];
           pair[1].setAttribute("aria-pressed", "true");
           announce("Thanks for the feedback.");
+          sendFeedback(turn, pair[0]);
         });
       });
 
@@ -1909,6 +1910,22 @@ button { font-family: var(--abbie-sans); }
 
       turn.els.assistant.appendChild(row);
       turn.els.actions = row;
+    }
+
+    /* Fire and forget. The server records the verdict on the trace and keeps
+       nothing else, so there is no reply to read and nothing to retry: a turn
+       the server never numbered has nothing to attach a verdict to. */
+    function sendFeedback(turn, verdict) {
+      if (typeof turn.turnIndex !== "number") return;
+      fetch(apiUrl + "/feedback", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          session_id: sessionId,
+          turn_index: turn.turnIndex,
+          verdict: verdict,
+        }),
+      }).catch(function () {});
     }
 
     function copyResponse(turn, button) {

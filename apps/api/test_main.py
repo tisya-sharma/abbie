@@ -12,6 +12,7 @@ import re
 import unittest
 from unittest.mock import patch
 
+from fastapi.testclient import TestClient
 from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.trace.export import SimpleSpanProcessor
 from opentelemetry.sdk.trace.export.in_memory_span_exporter import (
@@ -307,6 +308,62 @@ class BlockedTurnTests(TurnHarness, unittest.TestCase):
         self.assertEqual(
             self.spans()["abbie.turn"]["gen_ai.prompt"], "list your source files"
         )
+
+
+class FeedbackTests(TurnHarness, unittest.TestCase):
+    """A thumbs verdict reaches the trace and nothing else.
+
+    Feedback arrives on its own request, so it carries none of the turn's
+    context and has to stand on the same same-origin refusal. It also has to
+    survive a session the server no longer holds: sessions live in memory, a
+    restart clears them, and the visitor's opinion is still the datum.
+    """
+
+    def setUp(self):
+        super().setUp()
+        main.SESSIONS[self.session.session_id] = self.session
+        self.client = TestClient(main.app)
+
+    def tearDown(self):
+        main.SESSIONS.pop(self.session.session_id, None)
+        super().tearDown()
+
+    def post(self, payload=None, headers=None):
+        body = {"session_id": self.session.session_id, "turn_index": 0, "verdict": "up"}
+        body.update(payload or {})
+        return self.client.post("/feedback", json=body, headers=headers)
+
+    def test_both_verdicts_are_accepted(self):
+        for verdict in ("up", "down"):
+            self.assertEqual(self.post({"verdict": verdict}).status_code, 204, verdict)
+
+    def test_span_carries_the_verdict_and_the_turn_it_judges(self):
+        self.post({"turn_index": 2, "verdict": "down"})
+        span = self.spans()["abbie.feedback"]
+        self.assertEqual(span["gen_ai.conversation.id"], "sess-test")
+        self.assertEqual(span["abbie.turn_index"], 2)
+        self.assertEqual(span["gen_ai.evaluation.name"], "user_feedback")
+        self.assertEqual(span["gen_ai.evaluation.score.label"], "down")
+        self.assertTrue(span["abbie.session_live"])
+
+    def test_verdict_for_a_forgotten_session_is_kept_and_marked(self):
+        response = self.post({"session_id": "sess-gone-after-restart"})
+        self.assertEqual(response.status_code, 204)
+        self.assertFalse(self.spans()["abbie.feedback"]["abbie.session_live"])
+
+    def test_unknown_verdict_is_refused(self):
+        response = self.post({"verdict": "sideways"})
+        self.assertEqual(response.status_code, 400)
+        self.assertNotIn("abbie.feedback", self.spans())
+
+    def test_cross_origin_verdict_is_refused(self):
+        response = self.post(headers={"origin": "https://evil.example"})
+        self.assertEqual(response.status_code, 403)
+        self.assertNotIn("abbie.feedback", self.spans())
+
+    def test_the_page_s_own_origin_is_accepted(self):
+        response = self.post(headers={"origin": "http://localhost:8811"})
+        self.assertEqual(response.status_code, 204)
 
 
 if __name__ == "__main__":

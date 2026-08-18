@@ -144,6 +144,29 @@ def step_span(name: str) -> Iterator[trace.Span]:
         yield span
 
 
+def record_feedback(
+    session_id: str, turn_index: int, verdict: str, session_live: bool
+) -> None:
+    """Emit the span for one thumbs verdict on an answered turn.
+
+    A standalone span rather than a context manager, because a verdict is a
+    point event that arrives long after its turn's span closed and has no work
+    nested under it. The GenAI conventions model a judgment about a reply as an
+    evaluation, so the verdict travels as a score label rather than a value: a
+    thumb has no scale behind it to report a number from.
+
+    session_live records whether the server still held the session when the
+    verdict arrived, so a trace does not read as though the turn was found when
+    it was not.
+    """
+    with _tracer().start_as_current_span("abbie.feedback") as span:
+        span.set_attribute(gen_ai.GEN_AI_CONVERSATION_ID, session_id)
+        span.set_attribute("abbie.turn_index", turn_index)
+        span.set_attribute(gen_ai.GEN_AI_EVALUATION_NAME, "user_feedback")
+        span.set_attribute(gen_ai.GEN_AI_EVALUATION_SCORE_LABEL, verdict)
+        span.set_attribute("abbie.session_live", session_live)
+
+
 def record_usage(
     span: trace.Span,
     model: str,

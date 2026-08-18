@@ -13,6 +13,7 @@ Usage:
     python3 packages/eval/run.py --dry-run
     python3 packages/eval/run.py --configs full-context
     python3 packages/eval/run.py --models gpt-5-mini,gpt-5 --configs full-context,routed
+    python3 packages/eval/run.py --rescore packages/eval/results/eval-ID.json --judge
 """
 
 from __future__ import annotations
@@ -45,6 +46,12 @@ from packages.composer import (
 from packages.corpus_loader import build_system_message, estimate_tokens
 from packages.envfile import load_env_file
 from packages.eval.checks import score_case
+from packages.eval.judge import (
+    JUDGE_MAX_OUTPUT_TOKENS,
+    JUDGE_REASONING_EFFORT,
+    build_judge_messages,
+    judge_reply,
+)
 from packages.pricing import PRICING, estimate_cost
 from packages.router import classify
 
@@ -56,6 +63,7 @@ RESULTS_DIR = REPO_ROOT / "packages" / "eval" / "results"
 CACHE_DIR = REPO_ROOT / "packages" / "eval" / ".cache"
 DEFAULT_MODEL = os.environ.get("ABBIE_MODEL", "gpt-5-mini")
 DEFAULT_ROUTER_MODEL = os.environ.get("ABBIE_ROUTER_MODEL", "gpt-5-mini")
+DEFAULT_JUDGE_MODEL = os.environ.get("ABBIE_JUDGE_MODEL", DEFAULT_MODEL)
 
 DRY_RUN_OUTPUT_GUESS = 800
 DRY_RUN_ROUTER_OUTPUT_GUESS = 40
@@ -119,6 +127,53 @@ def cache_put(key: str, measured: dict) -> None:
     (CACHE_DIR / f"{key}.json").write_text(
         json.dumps(measured), encoding="utf-8"
     )
+
+
+def resolve_judge_model(enabled: bool, model: str) -> str | None:
+    """The judge model for this run, or None when the flag is off.
+
+    None is the off switch carried through the whole run: no client call, no
+    cache entry, and judge left at the None that checks.score_case already
+    returns, so an unjudged run stays byte-identical to the committed baselines.
+    """
+    return model if enabled else None
+
+
+def judge_cache_key(judge_model: str, question: str, messages: list[dict]) -> str:
+    """Key one judgment by the judge model and the exact prompt it graded.
+
+    The message list carries the rubric, the question, the ideal, and the
+    reply, so editing the rubric or judging a changed reply misses the cache
+    instead of replaying a stale verdict. The trial index is pinned at zero
+    because the judge grades text rather than sampling it: two trials that
+    produced the same reply deserve one judgment, not two.
+    """
+    return cache_key(
+        _text_hash(json.dumps(messages)), judge_model, question,
+        JUDGE_REASONING_EFFORT, JUDGE_MAX_OUTPUT_TOKENS, 0,
+    )
+
+
+def maybe_judge(client, case: dict, reply: str, judge_model: str | None,
+                use_cache: bool) -> dict | None:
+    """Grade one reply against its ideal, or return None when judging is off.
+
+    Errors are returned but never cached: an API failure is a fact about one
+    moment rather than about the reply, and caching it would make the next run
+    replay the outage for free instead of retrying it.
+    """
+    if judge_model is None:
+        return None
+    messages = build_judge_messages(case, reply)
+    key = judge_cache_key(judge_model, case["question"], messages)
+    if use_cache:
+        cached = cache_get(key)
+        if cached is not None:
+            return cached
+    result = judge_reply(client, judge_model, case, reply)
+    if use_cache and "error" not in result:
+        cache_put(key, result)
+    return result
 
 
 class SingleCallStrategy:
@@ -407,6 +462,17 @@ def summarize(cases: list[dict]) -> dict:
         },
         "cost_usd": round(sum(costs), 4) if costs else None,
     }
+    judged = [
+        c["judge"] for c in cases
+        if c.get("judge") and c["judge"].get("verdict") is not None
+    ]
+    if judged:
+        # Tracked, not gated. It sits beside pass_rate rather than inside it
+        # because no model-graded number has enough runs behind it yet to carry
+        # a defensible trigger value.
+        summary["judge_pass_rate"] = round(
+            sum(1 for j in judged if j["verdict"] == "pass") / len(judged), 3
+        )
     repetition = {
         behavior: worst
         for behavior in ("answer", "redirect")
@@ -433,8 +499,13 @@ def summarize(cases: list[dict]) -> dict:
 
 
 def score_trial(case: dict, measured: dict, model: str, concepts: dict,
-                property_spec: dict) -> dict:
-    """Score one measured trial and fold in its measurements."""
+                property_spec: dict, judge: dict | None = None) -> dict:
+    """Score one measured trial and fold in its measurements.
+
+    A judgment attaches to the record and nothing else. It is deliberately
+    applied after passed and failures are settled, because the model-graded
+    tier is tracked and non-blocking: no verdict from it can fail a case.
+    """
     result = score_case(case, measured["reply"], concepts, property_spec)
     if measured["finish_reason"] == "length":
         result["failures"].append("infrastructure: hit max_completion_tokens")
@@ -449,6 +520,8 @@ def score_trial(case: dict, measured: dict, model: str, concepts: dict,
         reply=measured["reply"],
         cached=measured.get("cached", False),
     )
+    if judge is not None:
+        result["judge"] = judge
     for key in ROUTER_RESULT_KEYS:
         if key in measured:
             result[key] = measured[key]
@@ -465,6 +538,35 @@ def _fold_failures(trials: list[dict], n: int) -> list[str]:
         f if n == 1 else f"{f} [{count}/{n} trials]"
         for f, count in sorted(counts.items(), key=lambda kv: -kv[1])
     ]
+
+
+def _fold_judge(trials: list[dict]) -> dict | None:
+    """Fold N judgments into one majority verdict, or None if none were made.
+
+    Mirrors how pass_fraction folds the deterministic checks, with one
+    difference: trials whose judgment errored leave the denominator entirely.
+    Counting a judge outage as a failed reply would move a fact about the judge
+    into the number that reads as a fact about Abbie.
+    """
+    judged = [t["judge"] for t in trials if t.get("judge")]
+    if not judged:
+        return None
+    graded = [j for j in judged if "verdict" in j]
+    folded = {
+        "model": judged[0]["model"],
+        "graded_trials": len(graded),
+        "errors": len(judged) - len(graded),
+    }
+    if not graded:
+        folded["verdict"] = None
+        folded["pass_fraction"] = None
+        folded["rationale"] = None
+        return folded
+    passes = sum(1 for j in graded if j["verdict"] == "pass")
+    folded["verdict"] = "pass" if passes > len(graded) / 2 else "fail"
+    folded["pass_fraction"] = round(passes / len(graded), 3)
+    folded["rationale"] = graded[0]["rationale"]
+    return folded
 
 
 def aggregate_trials(case: dict, trials: list[dict]) -> dict:
@@ -497,7 +599,7 @@ def aggregate_trials(case: dict, trials: list[dict]) -> dict:
         "latency_ms": round(statistics.median(t["latency_ms"] for t in trials)),
         "cost_usd": round(sum(costs), 6) if costs else None,
         "reply": trials[0]["reply"],
-        "judge": None,
+        "judge": _fold_judge(trials),
     }
     for key in ROUTER_RESULT_KEYS:
         if key in trials[0]:
@@ -522,6 +624,7 @@ def run_matrix(
     reasoning_effort: str,
     repeats: int,
     use_cache: bool,
+    judge_model: str | None = None,
 ) -> list[dict]:
     """Score every model x config x case x trial combination, printing progress."""
     runs = []
@@ -548,8 +651,12 @@ def run_matrix(
                         measured["cached"] = False
                     else:
                         measured["cached"] = True
+                    judged = maybe_judge(
+                        client, case, measured["reply"], judge_model, use_cache
+                    )
                     trials.append(
-                        score_trial(case, measured, model, concepts, property_spec)
+                        score_trial(case, measured, model, concepts, property_spec,
+                                    judged)
                     )
                 record = aggregate_trials(case, trials)
                 scored.append(record)
@@ -635,12 +742,18 @@ def write_report(payload: dict, cases: list[dict]) -> Path:
 
 
 def rescore_payload(stored: dict, cases: list[dict], property_spec: dict,
-                    concepts: dict) -> dict:
+                    concepts: dict, client=None,
+                    judge_model: str | None = None, use_cache: bool = True) -> dict:
     """Re-run the deterministic checks over a stored run's replies, spending nothing.
 
     Measurements (tokens, cost, latency) carry over unchanged; only the scoring
     layer is recomputed, which makes scorer iteration free. Cases absent from
     the current golden set are dropped with a notice.
+
+    The judge is the one part that can cost money here, and only on a cache
+    miss: a stored run re-judged with the same rubric and model replays its
+    verdicts for nothing. With judge_model None the stored judge field is left
+    exactly as it was found.
     """
     case_by_id = {c["id"]: c for c in cases}
     for run in stored["runs"]:
@@ -652,6 +765,10 @@ def rescore_payload(stored: dict, cases: list[dict], property_spec: dict,
                 continue
             replies = [t["reply"] for t in old.get("trials", [])] or [old["reply"]]
             scores = [score_case(case, r, concepts, property_spec) for r in replies]
+            for score, reply in zip(scores, replies):
+                score["judge"] = maybe_judge(
+                    client, case, reply, judge_model, use_cache
+                )
             n = len(scores)
             passes = sum(1 for s in scores if s["passed"])
             old.update(
@@ -664,13 +781,17 @@ def rescore_payload(stored: dict, cases: list[dict], property_spec: dict,
                 trial_count=n,
                 failures=_fold_failures(scores, n),
             )
+            folded_judge = _fold_judge(scores)
+            if folded_judge is not None:
+                old["judge"] = folded_judge
             fresh.append(old)
         run["cases"] = fresh
         run["summary"] = summarize(fresh)
     return stored
 
 
-def dry_run(models: list[str], strategies: list, cases: list[dict], repeats: int) -> None:
+def dry_run(models: list[str], strategies: list, cases: list[dict], repeats: int,
+            judge_model: str | None = None) -> None:
     """Print the run matrix and a cost projection without any API calls."""
     print(
         f"{len(cases)} cases x {len(strategies)} config(s) x {len(models)} model(s)"
@@ -690,7 +811,31 @@ def dry_run(models: list[str], strategies: list, cases: list[dict], repeats: int
                 f"  {model} / {strategy.name}: ~{prompt_total} prompt tokens, "
                 f"~{completion_total} completion tokens, {cost_text}"
             )
+    if judge_model:
+        # Named rather than projected: the judge prompt carries each reply, and
+        # a reply that has not been sampled yet has no length to project from.
+        print(
+            f"  plus one {judge_model} judge call per uncached case x trial,"
+            " not included above"
+        )
     print("no API calls made")
+
+
+def require_client():
+    """Build the OpenAI client, failing with an actionable message if unkeyed.
+
+    Every path that can spend money goes through here, so --dry-run and an
+    unjudged --rescore stay runnable with no key at all.
+    """
+    if not os.environ.get("OPENAI_API_KEY"):
+        raise SystemExit(
+            "OPENAI_API_KEY is not set. Paste IPI's key into keys.env at the repo root,"
+            " or export it in this shell."
+        )
+
+    from openai import OpenAI
+
+    return OpenAI()
 
 
 def main() -> None:
@@ -714,6 +859,10 @@ def main() -> None:
                         help="skip the response cache and draw fresh samples")
     parser.add_argument("--include-holdout", action="store_true",
                         help="include held-out cases; gate runs only, never while tuning")
+    parser.add_argument("--judge", action="store_true",
+                        help="grade each reply against its authored ideal, tracked not gated")
+    parser.add_argument("--judge-model", default=DEFAULT_JUDGE_MODEL,
+                        help="model for the --judge pass")
     parser.add_argument("--rescore", metavar="RESULTS_JSON",
                         help="re-score a stored run's replies with zero API calls")
     parser.add_argument("--dry-run", action="store_true",
@@ -732,22 +881,35 @@ def main() -> None:
         raise SystemExit(str(exc))
 
     property_spec, cases = load_golden()
+    judge_model = resolve_judge_model(args.judge, args.judge_model)
 
     if args.rescore:
         stored = json.loads(Path(args.rescore).read_text(encoding="utf-8"))
-        stored = rescore_payload(stored, cases, property_spec, concepts)
+        judge_client = require_client() if judge_model else None
+        stored = rescore_payload(
+            stored, cases, property_spec, concepts,
+            judge_client, judge_model, not args.no_cache,
+        )
         original_id = stored.get("run_id", "unknown")
         now = dt.datetime.now(dt.timezone.utc)
         stored["run_id"] = now.strftime("%Y%m%d-%H%M%S")
         stored["timestamp_utc"] = now.isoformat(timespec="seconds")
         stored.setdefault("invocation", {})["rescore_of"] = original_id
+        if judge_model:
+            stored["invocation"]["judge_model"] = judge_model
         stored["git"] = git_state()
         results_path = write_results(stored)
-        print(f"rescored {original_id} with zero API calls")
+        if judge_model:
+            print(f"rescored {original_id}, judged by {judge_model}")
+        else:
+            print(f"rescored {original_id} with zero API calls")
         print(f"results: {results_path.relative_to(REPO_ROOT)}")
         for run in stored["runs"]:
             s = run["summary"]
-            print(f"{run['model']} / {run['config']}: {s['passed']} passed, {s['failed']} failed")
+            line = f"{run['model']} / {run['config']}: {s['passed']} passed, {s['failed']} failed"
+            if "judge_pass_rate" in s:
+                line += f", judge pass rate {s['judge_pass_rate']}"
+            print(line)
         return
 
     if not args.include_holdout:
@@ -766,22 +928,14 @@ def main() -> None:
         cases = [c for c in cases if c["id"] in args.case]
 
     if args.dry_run:
-        dry_run(models, strategies, cases, args.repeats)
+        dry_run(models, strategies, cases, args.repeats, judge_model)
         return
 
-    if not os.environ.get("OPENAI_API_KEY"):
-        raise SystemExit(
-            "OPENAI_API_KEY is not set. Paste IPI's key into keys.env at the repo root,"
-            " or export it in this shell."
-        )
-
-    from openai import OpenAI
-
-    client = OpenAI()
+    client = require_client()
     runs = run_matrix(
         client, models, strategies, cases, property_spec, concepts,
         args.max_output_tokens, args.reasoning_effort,
-        args.repeats, not args.no_cache,
+        args.repeats, not args.no_cache, judge_model,
     )
 
     now = dt.datetime.now(dt.timezone.utc)
@@ -801,6 +955,8 @@ def main() -> None:
         },
         "runs": runs,
     }
+    if judge_model:
+        payload["invocation"]["judge_model"] = judge_model
     results_path = write_results(payload)
     print(f"\nresults: {results_path.relative_to(REPO_ROOT)}")
     if not args.no_report:
@@ -825,6 +981,8 @@ def main() -> None:
                 f", router accuracy {s['router']['accuracy']}, "
                 f"{s['router']['fallbacks']} fallback(s)"
             )
+        if "judge_pass_rate" in s:
+            line += f", judge pass rate {s['judge_pass_rate']}"
         print(line)
 
 

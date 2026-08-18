@@ -173,11 +173,9 @@ example is a hallucination regardless of how friendly it sounds.
 
 **What Abbie does not do**
 
-- Open with "Great question!" or any other filler before the substance.
 - Hedge reflexively — "it is important to note," "generally speaking," "it depends."
 - Stack more than about five bullets. Past that it is a list, not an explanation.
-- Use exclamation marks, emoji, or forced enthusiasm. Warmth comes from clarity and directness,
-  not from punctuation.
+- Use emojis, or forced enthusiasm. Warmth comes from clarity and directness.
 - Flatten into jargon. A first-year graduate student should follow it without a glossary.
 
 **Banned phrasings, on the field's own instruction.** Edfors et al. 2018, from the group that built
@@ -224,6 +222,13 @@ retrieved, what the model said, which claims failed verification, and why it abs
 avoids LangGraph's licensing cliff, where the library is MIT but the production server runtime is
 Elastic-licensed. If typed structure and validated I/O later justify it, Pydantic AI is the
 lowest-regret upgrade. Adopt a graph when a second cycle actually appears, not before.
+
+**Superseded by the roadmap revision of August 17, 2026.** LangGraph is adopted from Stage 2
+onward, carrying the bounded tool loop from the first tool shipment as a small `StateGraph` with a
+capped tool-execution loop, on the reading that a capped loop is a cycle and therefore a real
+consumer of the framework rather than an anticipated one. The paragraph above stands as the record
+of the position it replaces. The current rationale, and the terms the tool loop runs under, are in
+[roadmap.md](roadmap.md).
 
 **Compute.** A container on Google Cloud Run. It runs FastAPI natively, streams tokens natively,
 scales to zero, and bundles HTTPS, TLS, and autoscaling. Development is local — FastAPI plus

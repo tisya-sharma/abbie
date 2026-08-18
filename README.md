@@ -6,11 +6,13 @@ Abbie answers what antibody validation and characterization mean, how an antibod
 validated, and — as approved data becomes available — how well characterized a given antibody
 is. Every factual claim carries a citation, and the assistant abstains rather than guesses.
 
-Status: Stage 0 near its gate — 31 concepts with every follow-up edge resolving, behavior
-routing, per-behavior composition, the output guardrail, the streamed web demo, and a 47-case
-golden set are all working, and the corpus and unit checks run in CI. What remains for the gate
-is an eval run against the current golden set. The five per-application concepts beyond Western
-blot are the open coverage gap, and the corpus is at `status: draft` pending a sourcing pass.
+Status: Stage 0 gate passed — 37 concepts with every follow-up edge resolving, behavior
+routing, per-behavior composition, the output guardrail, the streamed web demo, and a 77-case
+golden set are all working, and the corpus and unit checks run in CI. The gate record is the
+routed run of August 17, 2026, `eval-20260817-192634`, which passed the pre-registered tier
+rule and is committed under `packages/eval/results/`. The corpus is still mostly at
+`status: draft`: 32 of the 37 concepts await a sourcing pass, and only the five newer
+application concepts are `sourced`.
 
 ## The documents, and who each is for
 

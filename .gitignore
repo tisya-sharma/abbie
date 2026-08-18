@@ -25,6 +25,7 @@ answer_references/
 /warehouse-findings.md
 /chatbot-proposal.md
 /abbie-widget-handoff/SPEC.md
+/demo-runbook.md
 
 # Eval runs reference commit SHAs; promoting one to a committed baseline is deliberate
 packages/eval/results/

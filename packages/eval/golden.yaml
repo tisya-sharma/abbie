@@ -185,10 +185,11 @@ cases:
     notes: |
       Rewritten on 2026-08-15 to track the concept it asserts against. The previous ideal
       organized validation around specificity, sensitivity and reproducibility, which d78a6a9
-      deliberately moved out of antibody-validation.md into why-validation-matters, where it
-      is cited to Bordeaux 2010 and labeled the field's framing rather than IPI's. Teaching
-      the triad here read as IPI's definition and contradicted the corpus. The triad is now
-      covered by q-why-validation-matters.
+      deliberately moved out of antibody-validation.md into why-validation-matters, where the
+      triad on record, specific, selective and reproducible, is cited to Bordeaux 2010 and
+      labeled the field's framing rather than IPI's. Teaching the triad here read as IPI's
+      definition and contradicted the corpus. The triad is now covered by
+      q-why-validation-matters.
 
   - id: q-why-validation-matters
     added: 2026-08-15
@@ -205,12 +206,12 @@ cases:
       That is why reagent reliability is treated as a recognized contributor to the wider
       reproducibility problem in biomedical research, and has been for about a decade.
 
-      The field's long-standing framing asks for three things: specificity, whether the signal
-      comes from your intended target rather than something else; sensitivity, whether the
-      antibody detects the target at the abundance your experiment will actually encounter;
-      and reproducibility, whether the same reagent behaves the same way across lots and
-      across days. Most published guidance is written in those terms, which is worth knowing
-      when you read it. IPI organizes the same evidence differently, into four dimensions.
+      The field's long-standing framing asks for three things: specificity, whether the antibody
+      binds the target it was raised against; selectivity, whether it binds only that target
+      rather than other things in your sample as well; and reproducibility, whether the same
+      reagent gives the same result across lots and across days. Most published guidance is
+      written in those terms, which is worth knowing when you read it. IPI organizes the same
+      evidence differently, into four dimensions.
 
       The cost is also asymmetric. Running the controls is a bounded amount of work, done once
       per application. Discovering afterward that a reagent was not selective can invalidate a
@@ -220,7 +221,7 @@ cases:
       antibody may not be the same molecule?
     notes: |
       Added 2026-08-15 to cover why-validation-matters, which had no case despite being where
-      d78a6a9 moved the specificity/sensitivity/reproducibility triad. The triad must read as
+      d78a6a9 moved the specificity/selectivity/reproducibility triad. The triad must read as
       the field's framing rather than IPI's, which is the distinction that commit drew and the
       reason this case exists separately from q-what-is-validation. The five-pillar framework
       is background-only and must not be volunteered here either.
@@ -237,9 +238,9 @@ cases:
 
       Three things establish it. Sequence, confirmed by mass spectrometry, so the antibody is
       defined rather than assumed. Purity and stability, assessed by size exclusion
-      chromatography, which separates intact antibody from aggregates and fragments — this
-      counts as validation because a preparation that is partly aggregate is not the single
-      defined reagent the rest of your evidence assumes. And reproducibility: recombinant
+      chromatography, which resolves intact antibody from aggregated material — this counts as
+      validation because a preparation that is partly aggregate is not the single defined
+      reagent the rest of your evidence assumes. And reproducibility: recombinant
       antibodies are defined by sequence, so you can make them again and get the same reagent,
       which is what lets validation carry over instead of each new lot being effectively a new
       reagent.
@@ -491,9 +492,10 @@ cases:
 
       How little difference that takes can be surprising. Two antibodies raised against human
       LAMP-1 were mapped residue by residue and then compared across species. The mouse version
-      carried multiple changes in both epitopes, but in the macaque version a single substitution
-      was enough to hinder recognition by one antibody and two were enough for the other. A
-      macaque is a close primate relative, and that closeness did not preserve binding.
+      carried multiple changes in both epitopes, and in the macaque version two positions differed
+      inside one antibody's patch and a single position inside the other's: the first bound about
+      twenty times more weakly than it did the human protein, and the second did not bind at all.
+      A macaque is a close primate relative, and that closeness did not preserve binding.
 
       Sequence comparison can tell you whether the site looks conserved, which is a reasonable way
       to shortlist candidates. It is not evidence that the antibody works. For mouse work, look
@@ -1462,10 +1464,10 @@ cases:
     ideal: |
       An antibody does not recognize a whole protein. It touches one small patch of it.
 
-      The vocabulary follows from that. The antigen is the whole molecule the antibody was
-      raised against. The epitope is the specific region it actually contacts, and the paratope
-      is the part of the antibody doing the contacting. Recognition happens between those two
-      small surfaces, usually a minor part of a large molecule.
+      The vocabulary follows from that. The antigen is the whole molecule the antibody binds.
+      The epitope is the specific region it actually contacts, and the paratope is the part of
+      the antibody doing the contacting. Recognition happens between those two small surfaces,
+      usually a minor part of a large molecule.
 
       The practical consequence is that a single protein carries many epitopes. Two antibodies
       sold against the same target may be binding completely different patches of it, which is
@@ -1525,9 +1527,10 @@ cases:
       other proteins is much lower.
 
       There is a third term worth having. Avidity is the total strength when two molecules are
-      held together at several sites at once. A target carrying repeated copies of an epitope
-      can be gripped far more tightly than single-site affinity would predict, and a multivalent
-      measurement will report avidity while looking like it reports affinity.
+      held together at several sites at once. A target carrying repeated copies of an epitope is
+      gripped at several of those sites at a time, and the strength of that contact is their sum
+      rather than the strength of any one, so a multivalent measurement will report avidity while
+      looking like it reports affinity.
 
       Want to look at how selectivity gets established rather than assumed?
     notes: |
@@ -1580,9 +1583,9 @@ cases:
 
       Both halves of that are load-bearing. The purpose is a named application in a named
       biological system, never general quality, so an antibody is never fit or unfit in the
-      abstract. And sufficient means sufficient for the claim you are making, which is why
-      confirming a band alongside other evidence asks less of a reagent than establishing where
-      a protein sits in tissue.
+      abstract. And sufficient is set by that application and by the scientific question you are
+      asking rather than by a fixed standard, so no sequence of methods is universally required
+      and not every available method is necessary for every antibody.
 
       No single method gets you there. Characterization speaks to integrity, the assays speak to
       engagement, selectivity and readout depending on what was asked and what controls were
@@ -1665,8 +1668,9 @@ cases:
 
       A readout that works does not establish that the signal came from your target. Binding
       does not establish exclusive binding, since those are different claims needing different
-      experiments. Evidence gathered in one assay and system does not carry to another, so
-      confidence has to be re-earned rather than assumed.
+      experiments. Evidence gathered in one assay and system does not necessarily establish
+      performance in another, and where it does bear on your intended application, how much
+      weight it carries depends on how directly it speaks to that use.
 
       Two more concern absence. No signal is informative only where the target was expected to
       be present and reachable, otherwise it tells you nothing. And an untested dimension is
@@ -1698,11 +1702,13 @@ cases:
       experiment sits at the point those two define.
 
       What it records is context rather than quality. A point tells you an experiment was done,
-      not that the result was good, and signal somewhere the target was not expected is
-      uninformative rather than reassuring.
+      not that the result was good, and what a result supports depends on whether the system it
+      came from is biologically informative for your target and application. Absence of signal in
+      an uninformative system is not evidence the antibody failed.
 
       It also prescribes no order. Working simple to complex and starting in your intended
-      application and working backward both assemble the same evidence.
+      application and working backward are both routes to the same goal, assembling the
+      complementary evidence confidence rests on.
 
       Want to see how conclusions get read off it?
     notes: |
@@ -1723,21 +1729,24 @@ cases:
       dimensions, for one named application. It reads evidence already organized on the map
       rather than generating anything new.
 
-      It is deliberately not a score. The four dimensions sit side by side so you can see
-      relative strength, and a dimension with nothing behind it stays visibly empty instead of
+      It is deliberately not a score. The four dimensions sit side by side on a qualitative weak
+      to strong scale, so a dimension with little or nothing behind it reads as weak instead of
       being averaged away. Partial, ambiguous and conflicting findings stay visible too, because
       an aggregate would hide exactly what you need to see.
 
       The same antibody has different profiles for different uses. Established integrity plus a
       single band at the expected weight supports readout in a blot and is consistent with
       engagement. Ask about imaging and integrity carries over unchanged, the blot offers
-      moderate support for engagement, and selectivity and readout there have nothing behind
-      them at all.
+      moderate support for engagement, and selectivity and readout there are weak, since neither
+      has been tested.
 
       Want to look at what a weak dimension actually tells you?
     notes: |
-      Covers validation-profile. The empty-stays-empty property is the design decision worth
-      teaching.
+      Covers validation-profile. The design decision worth teaching is that partial and
+      conflicting findings stay visible rather than being concealed in an aggregate score.
+      Corrected 2026-08-18 against the draft: the scale is a qualitative weak to strong one, so
+      an untested dimension reads as weak rather than empty, and the earlier empty-stays-empty
+      framing is gone from the ideal.
 
       A weak dimension is a statement about what has not been tested rather than a verdict, and
       the reply must not offer letter grades, star ratings or the phrase fully validated.
@@ -1752,10 +1761,12 @@ cases:
       Because buying the same catalog number twice does not guarantee you got the same molecule,
       and the reason depends on how it was made.
 
-      A polyclonal is a mixture harvested from an immunized animal, and that animal is a finite
-      resource. When it runs out the replacement comes from a different animal and is a
-      different mixture. A monoclonal from a hybridoma is meant to be uniform, but hybridoma
-      lines can drift genetically in culture. Lot numbers matter for both reasons.
+      A polyclonal is a mixture harvested from an immunized animal, and immunizing again, even
+      the same animal, never gives you quite the same set of antibodies. Serum is finite too, so
+      when a batch is exhausted the replacement comes from a different animal and differs again.
+      A monoclonal from a hybridoma is meant to be uniform, but hybridoma lines can acquire
+      rearrangements and mutations over time, particularly after long culture. Lot numbers matter
+      for both reasons.
 
       A recombinant antibody is produced from known DNA, so the same sequence gives you the same
       protein indefinitely.
@@ -1784,12 +1795,14 @@ cases:
       separate places evidence comes from. They change how much confidence evidence gathered
       elsewhere deserves.
 
-      A knockout control makes the point. It produces no new claim about your antibody. The
-      imaging signal is the same signal it was before, and what the perturbation buys you is
-      permission to read that signal as your target.
+      A knockout control makes the point. What it adds is not a dimension to establish or a new
+      place for evidence to come from, it is confidence in how a result you already have should
+      be read. The imaging signal is the same signal it was before, and losing it on perturbation
+      is what earns you reading that signal as your target.
 
-      This is where the framework departs most visibly from schemes that count such methods as
-      validation categories in their own right.
+      This is where the framework departs most visibly from strategies that classify evidence by
+      the experimental approach used rather than by the aspect of validation that approach
+      informs.
 
       It is also not decisive on its own. An antibody can cross-react with a relative that is
       not expressed in the system you looked at, so your comparison looks clean while the
@@ -1852,8 +1865,8 @@ cases:
       application would be actively misleading for another.
 
       What you get instead is a profile that shows the four dimensions side by side for a named
-      application, with the empty ones left visibly empty, and an explicit statement of what is
-      still unresolved.
+      application, where a dimension with little or nothing behind it reads as weak, and an
+      explicit statement of what is still unresolved.
 
       Want to look at what that profile shows for a specific application?
     notes: |
@@ -1905,14 +1918,15 @@ cases:
       gets presented as.
 
       The clean part is reproducibility. A recombinant is produced from known DNA, so the same
-      sequence gives the same protein indefinitely, which removes the drift a hybridoma line can
-      undergo and the finite-animal problem a polyclonal has.
+      sequence gives the same protein indefinitely, which sidesteps the rearrangements and
+      mutations a hybridoma line can acquire and the batch-to-batch variation of a polyclonal
+      mixture.
 
       The broader part needs care. There is head-to-head work in which recombinants performed
       better than monoclonals and polyclonals, but the authors describe the advantage as
       correlational rather than causal. Recombinants are newer and may simply have had more
-      characterization behind them, and several of the authors hold commercial interests in the
-      technology.
+      characterization behind them, and the antibodies tested were chosen from the participating
+      manufacturers' own catalogs by those manufacturers, who gave recombinants top priority.
 
       There is also a limit no format escapes. Knowing the sequence fixes identity, not
       performance, so a recombinant can be reproducibly wrong.
@@ -1922,9 +1936,10 @@ cases:
       Falsification case. The corpus records the format comparison with its hedges intact, and
       the failure mode is a reply that drops them and recommends recombinants outright.
 
-      Both hedges must survive: the authors' own correlational caveat and the competing
-      interests. The figures should not be quoted as though they generalize beyond the single
-      application they were measured in.
+      Both hedges must survive: the authors' own correlational caveat and the manufacturer-chosen
+      sample, which the corpus records in place of an earlier funding claim it does not support.
+      The figures should not be quoted as though they generalize beyond the single application
+      they were measured in.
 
   # The prerequisite-expansion pair, added 2026-08-16. Same subject concept, so
   # form is the only variable between them: the definitional one should gloss the
@@ -1984,8 +1999,8 @@ cases:
 
       Whichever you choose, confirm the perturbation in the protein rather than only in the DNA.
       An edited gene can be read around, leaving a shortened product that still carries the
-      epitope, and across one set of verified deletions roughly a third of targets still
-      expressed protein at some level.
+      epitope, and in one large characterization program about 14% of the knockout lines tested
+      still carried some target protein despite a verified edit, in some cases a truncated one.
 
       I am reading this as a blot rather than an imaging experiment. Can you edit the cells your
       samples come from?

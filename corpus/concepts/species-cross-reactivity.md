@@ -15,12 +15,14 @@ sources:
     short: "Pruvost 2023"
     journal: "mAbs"
     title: "Deciphering cross-species reactivity of LAMP-1 antibodies using deep mutational epitope mapping and AlphaFold"
+    depth: full-text
   - label: "Hu Y, Gao C, McKenna W, et al. Cross-Species Epitope Sequence Analysis for Discovery of Existing Antibodies Useful for Phospho-Specific Protein Detection in Model Species. Int J Mol Sci. 2025;26(2):558."
     url: https://doi.org/10.3390/ijms26020558
     short: "Hu 2025"
     journal: "Int J Mol Sci"
     title: "Cross-Species Epitope Sequence Analysis for Discovery of Existing Antibodies Useful for Phospho-Specific Protein Detection in Model Species"
-status: draft
+    depth: full-text
+status: sourced
 reviewed_by:
 clearance: public
 level: core
@@ -41,9 +43,12 @@ are conserved rather than whether the region looks similar overall.
 
 How little difference it takes can be striking. Two antibodies against human LAMP-1 were mapped
 residue by residue, then compared against predicted structures of the protein in other species.
-Both epitopes in the mouse version carried multiple changes. In the macaque version, one
-substitution was enough to hinder recognition by one antibody and two were enough for the other.
-A macaque is a close primate relative, and that closeness did not preserve binding.
+In the mouse version their contact patches carried ten and five differences from the human
+sequence, and at the highest concentration tested neither antibody bound it. In the macaque
+version two positions differed inside one antibody's patch and a single position inside the
+other's, and that was enough: the first bound the macaque protein about twenty times more weakly
+than the human one, and the second did not bind it at all. A macaque is a close primate relative,
+and that closeness did not preserve binding.
 
 Sequence comparison is therefore used to predict where an existing antibody might transfer.
 Software built for this aligns a protein against its orthologs and reports whether the site an

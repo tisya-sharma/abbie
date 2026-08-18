@@ -10,7 +10,8 @@ ask: What does fitness for purpose mean?
 provenance: ipi-authored
 sources:
   - label: IPI 4D framework, internal draft — grounds the statements of IPI's own position. No manuscript text is reproduced.
-status: draft
+    depth: full-text
+status: sourced
 reviewed_by:
 clearance: public
 level: core
@@ -29,15 +30,17 @@ than strong evidence in one.
 
 The phrase carries two words that do most of the work. Purpose means a named application in a
 named biological system, not general quality — an antibody is never fit or unfit in the
-abstract. Sufficient means enough for the claim being made, which depends on what rests on the
-result. An antibody used to confirm a band on a blot alongside other evidence is asked to
-support less than one used to establish where a protein localizes in tissue.
+abstract. Sufficient is set by that application and by the scientific question being asked
+rather than by a fixed standard: no sequence of methods is universally required and not every
+available method is necessary for every antibody, so the breadth of evidence that counts as
+enough moves with what is being asked of the result.
 
-No single method establishes fitness. Reagent characterization speaks to **integrity**. Assays in
-defined systems generate evidence for **engagement**, **selectivity**, or **readout**; which of the three
-depends on the question asked and the controls run. Evidence-strengthening approaches raise
-confidence in how those results should be interpreted. Fitness for Purpose is what emerges when
-all of it is read together against the intended use.
+No single validation method establishes all four dimensions, so none establishes fitness on its
+own. Reagent characterization speaks to **integrity**. Assays in defined systems generate evidence
+for **engagement**, **selectivity**, or **readout**; which of the three depends on the question asked and
+the controls run. Evidence-strengthening approaches raise confidence in how those results should
+be interpreted. Fitness for Purpose is what emerges when all of it is read together against the
+intended use.
 
 This is why the framework declines to produce a single validation number. Fitness is a
 conclusion about a use, so it cannot be a property of the reagent alone, and collapsing four

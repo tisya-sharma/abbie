@@ -9,12 +9,15 @@ ask: What does it mean to validate an antibody?
 provenance: ipi-authored
 sources:
   - label: D. Moshinsky, chatbot kickoff notes, 14 July 2026
+    depth: full-text
   - label: IPI 4D framework, internal draft — defines the framework these concepts state. No manuscript text is reproduced.
+    depth: full-text
   - label: "Institute for Protein Innovation. Quality. proteininnovation.org/quality/. IPI's own public statement of its antibody quality and validation standards, which describes these tiers and assays directly."
     url: https://proteininnovation.org/quality/
     short: "IPI Quality"
     title: "Quality"
-status: draft
+    depth: full-text
+status: sourced
 reviewed_by:
 clearance: public
 level: core
@@ -42,12 +45,14 @@ not automatically carry to another.
 
 The evidence that demonstrates it is what IPI sorts into four dimensions it treats as foundational:
 **molecular integrity**, **target engagement**, **selectivity**, and **experimental readout**.
-Each names a distinct property an antibody has to be shown to have. Controls are what make each
-of them answerable rather than assumed.
+Each names a distinct property an antibody has to be shown to have. Appropriate positive and
+negative controls belong to that evidence too, since they are what makes an observed result
+interpretable rather than assumed.
 
 Because confidence in a biological result depends on confidence in the reagent that produced
 it, validation is not paperwork attached to an antibody after the fact. It determines whether
 the conclusions drawn from an experiment can be trusted at all.
 
-Validation is often confused with characterization, which describes the reagent itself rather
-than its performance in an application. The two are related but answer different questions.
+Validation is distinct from characterization, which establishes properties of the antibody
+reagent itself rather than its performance in an application. The two are related but answer
+different questions.

@@ -10,7 +10,8 @@ ask: How should I read validation evidence?
 provenance: ipi-authored
 sources:
   - label: IPI 4D framework, internal draft — grounds the statements of IPI's own position. No manuscript text is reproduced.
-status: draft
+    depth: full-text
+status: sourced
 reviewed_by:
 clearance: public
 level: core
@@ -23,8 +24,7 @@ leads_to:
 ---
 
 Interpreting validation evidence means asking two things of every result: what it demonstrates,
-and what it leaves unresolved. IPI works from five principles that cover the errors recurring
-most often.
+and what it leaves unresolved. IPI sets out five general principles for doing that.
 
 A working readout does not establish that the signal came from the intended target. A clean band
 or a convincing stain shows the assay produced an interpretable result; attributing that result
@@ -32,20 +32,23 @@ to the target requires evidence for **engagement** and **selectivity**, which th
 supply.
 
 **Selectivity** does not follow from evidence of **engagement**. Demonstrating that an antibody binds its
-target says nothing about whether it also binds something else. Binding and exclusive binding are
+target does not address whether it also binds something else. Binding and exclusive binding are
 different claims requiring different experiments.
 
-Evidence produced within a single assay and system context leaves performance in any other
-context unestablished. Results transfer poorly across applications, and confidence earned in one
-setting has to be re-earned in the next rather than assumed.
+Evidence produced within one assay and system context does not necessarily establish performance
+in another. An antibody that works well in one application may work poorly in another, so
+confidence established for one is not carried automatically to the next, and where evidence from
+one application does bear on another, how much weight it carries depends on how directly it
+speaks to performance in the application and biological system actually intended.
 
 Nothing is learned from an absent signal unless the target should have been present and
-accessible in the first place. In a system where the target is not expressed, or is inaccessible to
-the antibody, seeing nothing tells you about the system rather than about the reagent.
+accessible in the first place. In a system where the target is not expressed, or is inaccessible
+to the antibody, seeing nothing is not evidence that the antibody failed.
 
-Where a dimension has no supporting evidence, that absence is not evidence of failure. An
-untested dimension is untested. Recording it as a gap keeps it visible and points at the
-experiment that would close it; recording it as a deficiency asserts something nobody measured.
+Where a dimension has no supporting evidence, that absence should not automatically be read as
+failure. An untested dimension is untested. Recording it as a gap keeps it visible and points at
+the experiment that would close it; recording it as a deficiency asserts something nobody
+measured.
 
 Applied together, these principles surface uncertainties that individual results tend to hide,
 and they turn a list of completed experiments into a decision about which experiment to run next.

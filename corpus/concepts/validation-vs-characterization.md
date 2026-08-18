@@ -13,13 +13,16 @@ sources:
     short: "Ayoubi 2025"
     journal: "Nat Protoc"
     title: "A consensus platform for antibody characterization"
-  - label: "Taussig MJ, Fonseca C, Trimmer JS. Antibody validation: a view from the mountains. N Biotechnol. 2018;45:1-8."
+    depth: full-text
+  - label: "Taussig MJ, Fonseca C, Trimmer JS. Antibody validation: a view from the mountains. N Biotechnol. 2018;45:1-8. Source for characterization covering the reagent's core attributes and validation extending them to suitability for a particular application."
     url: https://doi.org/10.1016/j.nbt.2018.08.002
     short: "Taussig 2018"
     journal: "N Biotechnol"
     title: "Antibody validation: a view from the mountains"
+    depth: full-text
   - label: IPI 4D framework, internal draft — grounds the statements of IPI's own position. No manuscript text is reproduced.
-status: draft
+    depth: full-text
+status: sourced
 reviewed_by:
 clearance: public
 level: core

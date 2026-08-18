@@ -39,8 +39,7 @@ leads_to:
   - controls-in-validation
   - selectivity
 # Rendered into the downloadable checklist, never into the model's context.
-# Every item is about the control pull-down rather than the pull-down itself,
-# which is the point: this application is interpreted only by comparison.
+# The items span controls, support, depletion, washing, and the readout.
 checklist:
   - item: Control pull-down run with a matched irrelevant reagent on the same lysate and the same support
     proves: What came down is the antibody's doing rather than the support's
@@ -48,8 +47,8 @@ checklist:
     proves: The background was characterized rather than sampled once
   - item: Support and buffer chosen knowing background differs between them and between fractions
     proves: The bead was treated as a variable rather than a constant
-  - item: Input, unbound and eluate fractions all kept
-    proves: A missing protein failed to bind rather than never being present
+  - item: Depletion of the target from the extract measured rather than assumed
+    proves: How efficiently the antibody isolated the target is known, which is what detecting its partners depends on
   - item: Wash stringency chosen against the claim being made, not maximized
     proves: A weakly bound real partner was not washed away in pursuit of a clean lane
   - item: The readout method's own controls run alongside the pull-down's

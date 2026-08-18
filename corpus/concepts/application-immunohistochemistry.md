@@ -74,18 +74,20 @@ is why validation protocols routinely compare two buffers at different pH. How m
 protein any of this actually restores remains unknown.
 
 Much of what determined the outcome happened before the sample arrived and was never written
-down. The influence of fixation strength and duration on whether an epitope stays available has
-been described as unknown and often unpredictable, and time spent without blood supply before
-fixation can sharply reduce how much target is left to find. This variability is the reason
-formalin fixation gets called a major uncontrollable factor in the method.
+down. How much immunoreactivity a given protein loses during fixation and sample preparation has
+never been established with rigorous data, and for some targets, phosphoproteins in particular,
+time spent without blood supply before fixation can sharply reduce how much is left to find.
+This variability is the reason formalin fixation gets called a major uncontrollable factor in
+the method.
 
-The expected pattern is the weakest evidence a stained section offers. A result departing from
-what was predicted more often reflects the antibody binding something else than an interesting
-observation, so the prediction cannot be what confirms the stain. Controls are what make the
-section interpretable at all, and one common candidate does not count: omitting the primary
-antibody tests whether the detection system stains on its own, and says nothing about whether
-the primary bound what it was meant to. Substituting matched immunoglobulin tests that, and
-tissue in which the gene has been deleted tests it best.
+A stained section is read against the pattern the literature already describes, because a result
+departing from that pattern more often indicates the antibody binding something else than an
+interesting scientific observation. Controls are what make the section interpretable at all, and
+one common candidate does not count: omitting the primary antibody tests whether the detection
+system stains on its own, and says nothing about whether the primary bound what it was meant to.
+Substituting serum or isotype-matched immunoglobulin at the primary's own protein concentration
+is what tests that, and an antibody should produce no staining in tissue where the target has
+been confirmed deleted.
 
 What immunohistochemistry establishes is that signal appeared in particular cells of one section
 prepared one way. Because nothing was separated by size or charge before the antibody arrived,

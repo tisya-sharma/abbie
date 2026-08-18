@@ -6,6 +6,7 @@ classify and respond are patched, so these assert the orchestration around the
 model calls rather than the model's output.
 """
 
+import asyncio
 import os
 import queue
 import re
@@ -62,8 +63,14 @@ class TurnHarness:
         self._saved_tracer = telemetry._TRACER
         telemetry._TRACER = provider.get_tracer("test")
         self.session = main.Session(session_id="sess-test")
+        # A turn passes the client into classify and respond, so the argument is
+        # built even though both are patched, and the SDK refuses to build one
+        # without a key. Standing in for it is what keeps this run keyless.
+        self._client_patch = patch.object(main, "get_client", return_value=object())
+        self._client_patch.start()
 
     def tearDown(self):
+        self._client_patch.stop()
         telemetry._TRACER = self._saved_tracer
         os.environ.pop("ABBIE_TRACE_CONTENT", None)
 
@@ -364,6 +371,62 @@ class FeedbackTests(TurnHarness, unittest.TestCase):
     def test_the_page_s_own_origin_is_accepted(self):
         response = self.post(headers={"origin": "http://localhost:8811"})
         self.assertEqual(response.status_code, 204)
+
+
+async def run_startup(app) -> None:
+    """Drive the app's startup the way an ASGI server does.
+
+    TestClient's context manager runs the same hooks, but its portal reports a
+    SystemExit escaping them as a cancellation, which hides both the type and
+    the message. Speaking the lifespan protocol directly shows what uvicorn
+    sees.
+    """
+
+    async def receive():
+        return {"type": "lifespan.startup"}
+
+    async def send(message):
+        return None
+
+    await app({"type": "lifespan", "asgi": {"version": "3.0"}}, receive, send)
+
+
+class ApiKeyGateTests(unittest.TestCase):
+    """The key is required to serve, not to import.
+
+    This suite and any tooling that reads the module import it with no key and
+    no network, so the check belongs on the server's startup. What it must not
+    lose is the fail-fast: a keyless uvicorn still has to stop at the door
+    rather than answer requests and fail one turn at a time.
+    """
+
+    def tearDown(self):
+        main.get_client.cache_clear()
+
+    def test_missing_key_refuses_to_start(self):
+        with patch.dict(os.environ, {}, clear=True):
+            with self.assertRaises(SystemExit) as caught:
+                main.require_api_key()
+        self.assertIn("OPENAI_API_KEY is not set", str(caught.exception))
+        self.assertIn("keys.env", str(caught.exception))
+
+    def test_a_key_in_the_environment_passes(self):
+        with patch.dict(os.environ, {"OPENAI_API_KEY": "sk-test"}):
+            self.assertIsNone(main.require_api_key())
+
+    def test_startup_stops_the_server_without_a_key(self):
+        with patch.dict(os.environ, {}, clear=True):
+            with self.assertRaises(SystemExit) as caught:
+                asyncio.run(run_startup(main.app))
+        self.assertIn("OPENAI_API_KEY is not set", str(caught.exception))
+
+    def test_every_turn_shares_one_client(self):
+        main.get_client.cache_clear()
+        with patch("openai.OpenAI") as constructor:
+            first = main.get_client()
+            second = main.get_client()
+        self.assertIs(first, second)
+        self.assertEqual(constructor.call_count, 1)
 
 
 if __name__ == "__main__":

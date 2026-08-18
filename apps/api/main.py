@@ -18,6 +18,7 @@ import sys
 import threading
 from dataclasses import dataclass, field
 from datetime import date
+from functools import lru_cache
 from pathlib import Path
 from typing import Iterator
 from urllib.parse import urlparse
@@ -70,22 +71,39 @@ def make_client():
     """Build the shared OpenAI client from the environment.
 
     The import lives inside the function so the module can be read without
-    the SDK installed, matching the CLI. One client is shared across worker
-    threads because the underlying httpx client is thread-safe and pools
-    connections; every per-turn datum travels as call arguments.
+    the SDK installed, matching the CLI.
     """
     from openai import OpenAI
 
     return OpenAI()
 
 
-if not os.environ.get("OPENAI_API_KEY"):
-    raise SystemExit(
-        "OPENAI_API_KEY is not set. Paste IPI's key into keys.env at the repo root,"
-        " or export it in this shell."
-    )
+@lru_cache(maxsize=1)
+def get_client():
+    """Return the one OpenAI client, building it on first use.
 
-client = make_client()
+    One client is shared across worker threads because the underlying httpx
+    client is thread-safe and pools connections; every per-turn datum travels
+    as call arguments. Construction is deferred so importing this module needs
+    neither a key nor the SDK — the unit tests import it with neither.
+    """
+    return make_client()
+
+
+def require_api_key() -> None:
+    """Refuse to serve without a key, with the fix in the message.
+
+    This runs at startup rather than at import so the failure lands when
+    someone actually tries to serve traffic, and a keyless test run or a
+    tooling import of this module is unaffected.
+    """
+    if not os.environ.get("OPENAI_API_KEY"):
+        raise SystemExit(
+            "OPENAI_API_KEY is not set. Paste IPI's key into keys.env at the repo root,"
+            " or export it in this shell."
+        )
+
+
 try:
     ANSWER_SYSTEM, CONCEPTS = build_system_message(read_prompt("system.md"))
 except ValueError as exc:
@@ -288,7 +306,7 @@ def run_turn(
         ) as turn:
             with telemetry.llm_span("abbie.router", ROUTER_MODEL) as span:
                 route = classify(
-                    client,
+                    get_client(),
                     question,
                     ROUTER_MODEL,
                     ROUTER_PROMPT,
@@ -341,7 +359,7 @@ def run_turn(
 
             with telemetry.llm_span("abbie.composer", MODEL) as span:
                 result = respond(
-                    client,
+                    get_client(),
                     route,
                     question,
                     PROMPTS,
@@ -470,6 +488,12 @@ def stream_frames(out: queue.Queue[tuple[str, dict] | None]) -> Iterator[str]:
 
 
 app = FastAPI(title="abbie")
+
+
+@app.on_event("startup")
+def check_api_key() -> None:
+    """Fail the server's startup, not this module's import, on a missing key."""
+    require_api_key()
 
 
 @app.on_event("startup")

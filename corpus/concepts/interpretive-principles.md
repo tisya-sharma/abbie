@@ -31,21 +31,21 @@ or a convincing stain shows the assay produced an interpretable result; attribut
 to the target requires evidence for **engagement** and **selectivity**, which the readout alone does not
 supply.
 
-Evidence of **engagement** does not establish **selectivity**. Demonstrating that an antibody binds its
+**Selectivity** does not follow from evidence of **engagement**. Demonstrating that an antibody binds its
 target says nothing about whether it also binds something else. Binding and exclusive binding are
 different claims requiring different experiments.
 
-Evidence generated in one assay and system context does not establish performance in another.
-Results transfer poorly across applications, and confidence earned in one setting has to be
-re-earned in the next rather than assumed.
+Evidence produced within a single assay and system context leaves performance in any other
+context unestablished. Results transfer poorly across applications, and confidence earned in one
+setting has to be re-earned in the next rather than assumed.
 
-Absence of signal is informative only where the target was expected to be present and
-accessible. In a system where the target is not expressed, or is inaccessible to the antibody,
-seeing nothing tells you about the system rather than about the reagent.
+Nothing is learned from an absent signal unless the target should have been present and
+accessible in the first place. In a system where the target is not expressed, or is inaccessible to
+the antibody, seeing nothing tells you about the system rather than about the reagent.
 
-Absence of evidence for a dimension is not evidence of failure. An untested dimension is
-untested. Recording it as a gap keeps it visible and points at the experiment that would close
-it; recording it as a deficiency asserts something nobody measured.
+Where a dimension has no supporting evidence, that absence is not evidence of failure. An
+untested dimension is untested. Recording it as a gap keeps it visible and points at the
+experiment that would close it; recording it as a deficiency asserts something nobody measured.
 
 Applied together, these principles surface uncertainties that individual results tend to hide,
 and they turn a list of completed experiments into a decision about which experiment to run next.

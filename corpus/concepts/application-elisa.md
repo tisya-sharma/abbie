@@ -63,10 +63,10 @@ band, no lane. A number.
 
 The plastic is a participant rather than a container, and this is the fact the method is usually
 taught without. Adsorbing a protein onto a hydrophobic polymer such as polystyrene has been
-described as a denaturation event not unlike treating it with a strong chaotropic salt, and most
-adsorbed protein ends up partly or largely denatured. Coating a plate is therefore something
-done to the antigen, and it can lose an epitope outright, bury one against the surface, or leave
-one recognizable but at much lower affinity.
+described as a denaturation event not unlike treating it with a strong chaotropic salt, a
+chemical that unfolds proteins, and most adsorbed protein ends up partly or largely denatured.
+Coating a plate is therefore something done to the antigen, and it can lose an epitope outright,
+bury one against the surface, or leave one recognizable but at much lower affinity.
 
 Adsorption is efficient as adhesion and poor as preservation, and conflating the two is the
 common error. Somewhere between half and four fifths of most protein antigens adsorb stably when

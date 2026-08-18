@@ -32,6 +32,7 @@ requires:
 leads_to:
   - controls-in-validation
   - selectivity
+  - what-is-an-isotype
 # Rendered into the downloadable checklist, never into the model's context.
 # Every item here is conditional on the sample rather than universal, which is
 # the whole difficulty of writing a checklist for this application at all.
@@ -40,8 +41,8 @@ checklist:
     proves: The epitope faces outward, so an absent signal is a real absence
   - item: Effect of the dissociation method on the markers being measured considered
     proves: A missing surface protein was not cut off during sample preparation
-  - item: Fc receptor blocking used where myeloid cells are present, and omitted where surface immunoglobulin is the target
-    proves: Signal came through the binding site, without breaking the panel it was meant to protect
+  - item: Immunoglobulin blocking used where myeloid cells are present
+    proves: Signal came through the binding site rather than the tail, with the specific stains intact
   - item: Isotype and lot of any control antibody recorded
     proves: Background was attributed to something reproducible rather than to one vial
   - item: Viability stain included in the panel
@@ -72,8 +73,8 @@ A whole cell can also hold an antibody by its tail rather than its binding site,
 generally than the warning usually implies. In one comparison across five donors, isotype
 controls that should have bound nothing raised the signal on monocytes roughly threefold, while
 one isotype did not bind them at all, T cells carry no receptor for the tail in the first place,
-and two lots of the same clone behaved differently. Blocking helps and is not universal advice,
-because the same block interferes with staining immunoglobulin on B cells.
+and two lots of the same clone behaved differently. Blocking with immunoglobulin removes the
+tail binding in that comparison, without degrading the specific stains.
 
 Cells that died before reaching the instrument bind antibody without specificity and fluoresce
 more on their own, which is why a viability stain is treated as essential rather than optional.

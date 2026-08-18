@@ -27,9 +27,9 @@ leads_to:
   - assay-cell-display
 ---
 
-**Target engagement**, the second of IPI's four dimensions, is the ability of an antibody to bind its
-intended target. It is measured in a model system where the target is known to be present and
-accessible, such as a HEK overexpression system, so that a binding signal can be interpreted
+**Target engagement**, the second of IPI's four dimensions, is an antibody's capacity to bind the
+target it is intended for. It is measured in a model system where the target is known to be present
+and accessible, such as a HEK overexpression system, so that a binding signal can be interpreted
 without ambiguity about whether the target was there to be bound.
 
 Typical assays include surface plasmon resonance (SPR), biolayer interferometry (BLI), and cell

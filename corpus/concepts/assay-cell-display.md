@@ -44,7 +44,8 @@ The format supports two distinct questions. Run against the intended target, it 
 **target engagement** evidence in a more physiological setting. Run against related family
 members expressed separately in the same system, it becomes a cross-reactivity experiment and
 therefore **selectivity** evidence, which is the more valuable use, because binding a paralog
-is a failure mode that purified-antigen measurements are structurally unable to reveal.
+is a failure mode that a purified-antigen run against the intended target alone, with no
+relative present to bind, cannot reveal.
 
 The assay also surfaces polyreactivity, the tendency of some antibodies to stick broadly and
 non-specifically. Signal appearing against the controls rather than only against the antigen

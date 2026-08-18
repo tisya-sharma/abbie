@@ -30,13 +30,13 @@ leads_to:
   - fitness-for-purpose
 ---
 
-IPI organizes validation evidence along four foundational dimensions: **molecular integrity**,
-**target engagement**, **selectivity**, and **experimental readout**. Together they describe the distinct
-properties that determine whether an antibody can be relied on, and separating them makes it
-possible to say precisely what has been established and what has not.
+IPI organizes validation evidence along four dimensions it treats as foundational:
+**molecular integrity**, **target engagement**, **selectivity**, and **experimental readout**. Between
+them they describe the distinct properties that determine whether an antibody can be relied on,
+and separating them makes it possible to say precisely what has been established and what has not.
 
 The dimensions are ordered by dependency rather than importance. **Integrity** establishes that
-the reagent is defined and reproducible. **Engagement** establishes that it binds the intended
+the reagent is defined, pure, and reproducible. **Engagement** establishes that it binds the intended
 target. **Selectivity** establishes that the binding is attributable to that target rather than a
 relative. **Readout** establishes that it produces an interpretable result in a specific
 application, with appropriate controls.

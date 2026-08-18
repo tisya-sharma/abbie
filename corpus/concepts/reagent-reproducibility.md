@@ -71,7 +71,8 @@ same protein indefinitely. In a head-to-head comparison across a large antibody 
 outperformed both other formats in Western blot: 67% of recombinants immunodetected their target,
 against 41% of monoclonals and 27% of polyclonals. The authors note this advantage is
 correlational — recombinants are newer reagents and may have received more characterization from
-suppliers — and several hold commercial interests in recombinant technology.
+suppliers — and the study was funded in part by antibody manufacturers with a stake in
+recombinant reagents.
 
 Sequence definition fixes identity, not performance. Fully sequenced reagents can be
 identified unambiguously and recreated in perpetuity, but sequence knowledge is independent of

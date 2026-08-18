@@ -34,10 +34,10 @@ result. An antibody used to confirm a band on a blot alongside other evidence is
 support less than one used to establish where a protein localizes in tissue.
 
 No single method establishes fitness. Reagent characterization speaks to **integrity**. Assays in
-defined systems generate evidence for **engagement**, **selectivity**, or **readout** depending on the
-question asked and the controls run. Evidence-strengthening approaches raise confidence in how
-those results should be interpreted. Fitness for Purpose is what emerges when all of it is read
-together against the intended use.
+defined systems generate evidence for **engagement**, **selectivity**, or **readout**; which of the three
+depends on the question asked and the controls run. Evidence-strengthening approaches raise
+confidence in how those results should be interpreted. Fitness for Purpose is what emerges when
+all of it is read together against the intended use.
 
 This is why the framework declines to produce a single validation number. Fitness is a
 conclusion about a use, so it cannot be a property of the reagent alone, and collapsing four

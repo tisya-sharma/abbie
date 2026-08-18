@@ -20,6 +20,7 @@ level: foundational
 requires: []
 leads_to:
   - what-is-a-target
+  - what-is-an-isotype
   - antibody-validation
   - reagent-reproducibility
   - what-is-a-reagent

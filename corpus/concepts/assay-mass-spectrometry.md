@@ -35,7 +35,9 @@ In practice the antibody is reduced before measurement, breaking the disulfide b
 together so the heavy and light chains can be weighed separately. Measuring the chains
 individually is more informative than measuring the assembled molecule: a discrepancy can be
 localized to one chain, and a problem affecting only the light chain is not hidden inside a much
-larger total.
+larger total. Antibodies also normally carry a sugar on the heavy chain, Fc N-glycosylation, which
+adds to the measured mass, so the comparison accounts for it either by removing the sugar before
+weighing or by including it in the expected value.
 
 The measurement is sensitive enough to be a real identity check rather than a formality. Mass
 differences arising from a wrong construct, an incomplete sequence, an unexpected modification,

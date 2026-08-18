@@ -145,21 +145,20 @@ cases:
     ideal: |
       Picture a protein shaped like the letter Y, with two identical tips at the ends of its
       arms. Each tip grips one small patch on one particular molecule — the way a hand closes
-      around one specific feature of an object. That is an antibody: a protein built around
-      attaching to one chosen thing out of everything else present.
+      around one specific feature of an object. That is an antibody.
 
       Your immune system makes them to mark invaders like viruses for destruction. The stem of
-      the Y stays much the same from antibody to antibody, while the tips vary enormously,
-      which is how a body can produce a fit for things it has never met.
+      the Y stays much the same while the tips vary enormously, which is how a body can
+      produce a fit for things it has never met.
 
       That gripping-one-thing property is also why antibodies became laboratory tools. If a
-      molecule reliably attaches to one protein, you can use it to light that protein up in a
-      cell, measure how much a sample contains, or pull it out of a mixture.
+      molecule reliably attaches to one protein, you can light that protein up in a cell,
+      measure how much a sample contains, or pull it out of a mixture.
 
-      One caution worth carrying from the start: attaching to one thing is the design intent,
-      not a guarantee, and how well a given antibody does its one job is exactly what
-      validation asks. Want to see what an antibody actually grabs onto, or why the same
-      antibody can behave differently from lot to lot?
+      One caution from the start: attaching to one thing is the design intent, not a
+      guarantee, and how well a given antibody does that job is what validation asks. Want to
+      see what an antibody actually grabs onto, or why the same one can behave differently
+      from lot to lot?
 
   - id: q-what-is-validation
     form: definitional
@@ -287,11 +286,11 @@ cases:
       likely to be mistaken for the real thing, so establishing selectivity means measuring
       cross-reactivity against them directly.
 
-      Here is why it matters practically. A single band at the expected molecular weight feels
-      like proof, but it is not: an off-target protein can run at a similar weight, and staining
-      in the expected compartment can come from a relative that localizes there too. The result
-      is consistent with your target without establishing it. **Selectivity** evidence is what turns
-      a plausible result into an attributable one.
+      Here is why it matters practically. One band at the molecular weight predicted for the
+      target feels like proof, but it is not: an off-target protein can run at a similar weight,
+      and staining in the expected compartment can come from a relative that localizes there
+      too. The result is consistent with your target without establishing it. **Selectivity**
+      evidence is what turns a plausible result into an attributable one.
 
       Want to look at how genetic perturbation controls strengthen this?
 
@@ -391,10 +390,10 @@ cases:
     behavior: answer
     must_cite: [four-dimensional-framework]
     ideal: |
-      IPI organizes validation evidence along four foundational dimensions:
+      IPI organizes validation evidence along four dimensions it treats as foundational:
       **molecular integrity**, **target engagement**, **selectivity**, and
       **experimental readout**. They are ordered by dependency rather than importance.
-      **Integrity** establishes that the reagent is defined and reproducible.
+      **Integrity** establishes that the reagent is defined, pure, and reproducible.
       **Engagement** establishes that it binds the intended target. **Selectivity**
       establishes that the binding is attributable to that target rather than a relative.
       **Readout** establishes that it produces an interpretable result in a specific
@@ -494,8 +493,8 @@ cases:
       How little difference that takes can be surprising. Two antibodies raised against human
       LAMP-1 were mapped residue by residue and then compared across species. The mouse version
       carried multiple changes in both epitopes, but in the macaque version a single substitution
-      was enough to block one antibody and two were enough for the other. A macaque is a close
-      primate relative, and that closeness did not preserve binding.
+      was enough to hinder recognition by one antibody and two were enough for the other. A
+      macaque is a close primate relative, and that closeness did not preserve binding.
 
       Sequence comparison can tell you whether the site looks conserved, which is a reasonable way
       to shortlist candidates. It is not evidence that the antibody works. For mouse work, look
@@ -923,8 +922,8 @@ cases:
 
       What replaces it is two weaker lines of evidence used together rather than either on
       its own. An independent antibody raised against a different epitope should stain the
-      same structures, since two reagents are unlikely to share an off-target. An orthogonal
-      measurement of the same protein should agree with where and how strongly you see it.
+      same structures. An orthogonal measurement of the same protein should agree with where
+      and how strongly you see it.
       Neither is as decisive as the knockout, and in imaging specifically the gap is wide:
       only 38% of antibodies validated orthogonally for immunofluorescence held up when they
       were retested against knockouts.
@@ -996,9 +995,9 @@ cases:
       than to anything else on the membrane.
 
       Two conditions decide whether that comparison means anything. Confirm the knockout in
-      the protein rather than only in the DNA, since a frameshift can be rescued and leave a
-      truncated product behind. And load the lanes equivalently, because a band that fades
-      in an underloaded lane looks exactly like a band that disappeared for the right reason.
+      the protein rather than only in the DNA. And load the lanes equivalently, because a band
+      that fades in an underloaded lane looks exactly like a band that disappeared for the
+      right reason.
 
       Round it out with a no-primary lane, which tells you what the detection system produces
       on its own, and a titration, since an over-concentrated primary generates off-target
@@ -1123,8 +1122,7 @@ cases:
       much and overexpression hides off-target binding that would show at natural levels.
 
       A knockout lane closes off the possibility that something else made the band, and it is
-      the strongest control you have. Confirm it in the protein rather than only in the DNA,
-      since a frameshift can be rescued and leave a truncated product behind.
+      the strongest control you have. Confirm it in the protein rather than only in the DNA.
 
       A no-primary lane closes off the detection system, because anything appearing without a
       primary antibody is an artifact by definition. A loading control closes off the
@@ -1439,7 +1437,7 @@ cases:
     must_cite: [experimental-readout]
     ideal: |
       It is the dimension you actually meet first: the band, the stain, the shifted population.
-      It asks whether the antibody appears to work in a defined application, assay and system,
+      It asks whether the antibody looks to be working in a defined application, assay and system,
       judged on what came out of the experiment with the right controls beside it.
 
       It is also the dimension most tied to circumstances. The same antibody can be clean in one
@@ -2004,6 +2002,40 @@ cases:
       raised paralogs unprompted before any of this existed, so the term appearing here is
       weak evidence on its own. If it appears at the same rate before and after, the change is
       not what moved it.
+
+  - id: q-what-is-an-isotype
+    added: 2026-08-17
+    form: definitional
+    question: what does isotype mean?
+    behavior: answer
+    must_cite: [what-is-an-isotype]
+    ideal: |
+      An isotype is an antibody's class — IgM, IgD, IgG, IgA, or IgE in humans, with IgG divided
+      further into the subclasses IgG1 through IgG4.
+
+      What sets the class is the constant region of the heavy chain, the trunk of the Y rather
+      than the two tips that do the gripping. So the isotype tells you how an antibody is built
+      below its tips, and what it can do once bound: which immune cells it can recruit, and where
+      in the body it travels.
+
+      What it does not tell you is what the antibody binds. That lives in the variable region at
+      the tips, so two IgG1 antibodies can recognize completely unrelated proteins.
+
+      Where the class earns your attention is detection. A secondary reagent is matched to the
+      isotype rather than to the target, and a flow cytometry isotype control is an antibody of
+      that same class aimed at nothing in your sample.
+
+      Want to look at what an isotype control can and cannot tell you?
+    notes: |
+      Covers what-is-an-isotype, written on 2026-08-17 because the term was load-bearing in
+      what-is-binding and application-flow-cytometry and defined in neither.
+
+      The failure to catch is a reply that treats class as evidence about specificity, in either
+      direction: two antibodies of the same isotype can bind anything at all, and a matched class
+      does not make a control a blank. Naming a single class as a synonym for isotype is the other
+      slip, since IgG is an instance rather than another word for the concept.
+
+      No numbers beyond the class and subclass names, which is all the concept carries.
 
   - id: q-redteam-injection-in-history
     added: 2026-08-12

@@ -31,9 +31,10 @@ leads_to:
 
 Surface plasmon resonance (SPR) and biolayer interferometry (BLI) both measure binding as it
 happens, without labeling either partner. One binding partner is immobilized on a sensor surface,
-the other flows past in solution, and the instrument reports the accumulating mass at the surface
+the other is in solution, and the instrument reports the accumulating mass at the surface
 in real time. The resulting curve has a rising association phase while the analyte binds and a
-falling dissociation phase after it is washed away.
+falling dissociation phase once buffer alone surrounds the sensor and the bound analyte releases
+into it.
 
 Because the measurement is kinetic rather than an endpoint, it separates two things a single
 binding number conflates. The association rate describes how quickly the complex forms; the

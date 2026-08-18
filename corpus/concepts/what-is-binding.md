@@ -30,6 +30,7 @@ leads_to:
   - selectivity
   - target-engagement
   - paralogs-and-isoforms
+  - what-is-an-isotype
 ---
 
 How tightly does it stick, and does it stick only to the right thing? Those are different
@@ -49,12 +50,12 @@ binding shows up — and that remains true even when the antibody's affinity for
 proteins is much lower than its affinity for the target.
 
 Affinity also has a companion term that is easily conflated with it. Where affinity describes
-binding at a single site, such as one Fab fragment holding one monovalent antigen, avidity is the
-sum total of the strength when two molecules are held together at multiple sites at once. An
-antibody carries more than one identical binding tip, so a target presenting repeated copies of an
-epitope can be held far more tightly than the affinity of any single site would suggest. The
-distinction matters because a measurement made under multivalent conditions reports avidity while
-appearing to report affinity.
+binding at a single site, such as one Fab fragment — a single arm of the Y cut free — holding
+one monovalent antigen, avidity is the sum total of the strength when two molecules are held
+together at multiple sites at once. An antibody carries more than one identical binding tip, so a
+target presenting repeated copies of an epitope can be held far more tightly than the affinity of
+any single site would suggest. The distinction matters because a measurement made under
+multivalent conditions reports avidity while appearing to report affinity.
 
 The same reasoning applies to other measurements that describe the antibody itself. Measuring
 affinity, mapping where the antibody binds, determining its isotype, or reading its gene sequence

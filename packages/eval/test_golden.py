@@ -43,6 +43,17 @@ class MustCiteTests(unittest.TestCase):
         ]
         self.assertEqual(unknown, [], f"must_cite names no such concept: {unknown}")
 
+    def test_every_concept_is_required_by_some_case(self):
+        """The mirror of the check above: a concept no case requires is unscored.
+
+        Coverage has been kept at every concept by hand, which held while the
+        corpus was small enough to remember. Asserting it means a concept added
+        without a case fails here instead of going unmeasured indefinitely.
+        """
+        required = {cid for case in self.cases for cid in case.get("must_cite", [])}
+        uncovered = sorted(set(self.concepts) - required)
+        self.assertEqual(uncovered, [], f"no case requires: {uncovered}")
+
     def test_must_cite_is_empty_where_it_would_be_ignored(self):
         """score_case applies must_cite only to answer cases.
 
@@ -106,6 +117,36 @@ class PropertyCheckSpecTests(unittest.TestCase):
         for behavior, checks in spec.items():
             for form in (None, "definitional"):
                 run_property_checks(reply, checks, concepts, form=form)
+
+
+class IdealPropertyTests(unittest.TestCase):
+    """The ideals have to satisfy the checks the answers are scored against.
+
+    An ideal that runs over the word budget or drops its closing question is
+    asking the model for something the run will then mark wrong, and nothing
+    caught that until a paid eval reported a failure the case authored itself.
+    Scored against the case's own form tag, the way run_property_checks is
+    called at eval time.
+    """
+
+    def test_every_answer_ideal_passes_the_answer_checks(self):
+        spec, cases = load_golden()
+        concepts = load_corpus()
+        failures = []
+        for case in cases:
+            if case["behavior"] != "answer":
+                continue
+            results = run_property_checks(
+                case["ideal"],
+                spec["answer"],
+                concepts,
+                question=case.get("question", ""),
+                form=case["form"],
+            )
+            failed = sorted(name for name, passed in results.items() if not passed)
+            if failed:
+                failures.append(f"{case['id']} -> {failed}")
+        self.assertEqual(failures, [], f"ideal fails its own checks: {failures}")
 
 
 if __name__ == "__main__":

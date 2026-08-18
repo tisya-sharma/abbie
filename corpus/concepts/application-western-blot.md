@@ -71,9 +71,10 @@ phospho-specific antibody competes with the very signal being measured, and a de
 such as serum albumin is the usual substitute.
 
 The detection system deserves its own suspicion. A secondary antibody raised against the same
-species as the sample will find that species' own immunoglobulin, producing bands near fifty and
-twenty-five kilodaltons from heavy and light chains. Many proteins of interest run in that same
-region, so the artifact appears exactly where it is hardest to dismiss.
+species as the sample will find that species' own immunoglobulin, producing bands from heavy and
+light chains near fifty and twenty-five kilodaltons, the unit proteins are weighed in. Many
+proteins of interest run in that same region, so the artifact appears exactly where it is hardest
+to dismiss.
 
 Reading the bands is where interpretation goes wrong in both directions. A single band at the
 expected size is consistent with the target but does not establish it. Extra bands are not

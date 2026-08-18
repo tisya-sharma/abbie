@@ -74,9 +74,10 @@ varies between assay, cell type, and tissue, which changes how much opportunity 
 off-target binding.
 
 This is not theoretical. When 96 monoclonals selected for immunoreactivity in ELISA were tested in
-Western blot, immunohistochemistry on brain sections, and immunofluorescence, the conclusion was
-that antibodies may be suitable for one assay but unsuitable for another even highly related assay,
-and that validation needs to be performed for each intended purpose.
+Western blot, immunohistochemistry on brain sections, and a specialized immunohistochemistry on
+plastic-embedded sections, the conclusion was that antibodies may be suitable for one assay but
+unsuitable for another even highly related assay, and that validation needs to be performed for
+each intended purpose.
 
 Transfer is not uniformly zero in every direction — success in immunofluorescence has been reported
 as the best predictor of performance in Western blot and immunoprecipitation — but the direction of

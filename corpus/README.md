@@ -5,11 +5,18 @@ validation is, how it is done, and what IPI requires, is composed from these fil
 
 ## What this is, mechanically
 
-Each file is one concept. The files are the source of truth and live in git. An ingest job
-splits them into chunks, embeds each chunk, and writes them to Postgres. Abbie retrieves
-chunks at query time and composes an answer from them, citing the concepts it used.
+Each file is one concept. The files are the source of truth and live in git. There is no
+database and no embeddings: `load_corpus` reads every file, drops what the build's clearance
+excludes, and `assemble_context` renders the whole corpus into the system prompt in prerequisite
+order, so every answer is composed against all of it and cites the concepts it used.
 
-You never edit the database. To change what Abbie says, edit a file here and re-run ingest.
+That assembly happens once, at import — `build_system_message` in `apps/api/main.py` — and
+uvicorn's `--reload` watches `*.py` only, so an edit here reaches a running server on the next
+restart. A file that breaks a graph invariant stops startup rather than shipping a broken build.
+
+Retrieval at query time was built and then superseded, and returns only if it beats the
+full-context baseline on the golden set. [roadmap.md](../roadmap.md) records the measurement
+that would reopen it.
 
 ## Why concepts rather than question-and-answer pairs
 
@@ -18,8 +25,8 @@ antibody is what it claims to be?", and "Why does IPI run SEC?" all draw on
 `molecular-integrity`. Stored as answers, that content would be copied three times and drift
 apart. Stored as a concept, it is written once and cited three times.
 
-Real questions also never arrive in the phrasing you anticipated. Retrieval matches against
-knowledge, and the model composes an answer for whatever wording actually came in.
+Real questions also never arrive in the phrasing you anticipated. The model is given the
+knowledge and composes an answer for whatever wording actually came in.
 
 ## Frontmatter
 
@@ -54,7 +61,7 @@ pair, both required, and the loader rejects an entry missing either.
 Write these from the full text, not from what the technique is generally believed to require. Two
 of the per-application checklists were drafted with an item that the sources turned out to
 contradict: that omitting the primary antibody controls for specificity, which it does not, and
-that Fc receptors should always be blocked, which breaks staining of immunoglobulin on B cells.
+that Fc receptors should always be blocked, where the source ties blocking to the cells present.
 Both would have reached a reader as bench instructions in a downloadable document.
 
 It is not read by the model. The export at `/export/checklist` composes a fixed template from
@@ -94,6 +101,7 @@ claim, and a CI rule keyed on digits would fail on a year. **An absent `depth` m
 not full text.** The thirty-one concepts written before this rule existed carry no marker, because
 nobody wrote down how they were read and asserting otherwise would be the exact unverified claim
 the rule exists to prevent. Stage 1's sourcing pass fills them in one concept at a time.
+`what-is-an-isotype`, written after the rule from reference works, carries no marker either.
 
 The immunofluorescence concept is the worked example of why the distinction earns its keep. Written
 from abstracts it said five hundred proteins agreed eighty percent of the time. The full text
@@ -353,21 +361,22 @@ is and shape it accordingly.
    identifier pattern.
 2. **Every factual claim in a `summarized` concept traces to a source that was actually
    retrieved and read.** A fabricated citation is worse than no answer.
-3. **Self-contained prose.** No "as discussed above" or "this document" — a chunk may be
-   retrieved alone.
+3. **Self-contained prose.** No "as discussed above" or "this document" — a concept may be
+   cited and read on its own.
 4. **One concept per file**, so a scientist can review one in two minutes as a pull request
    diff. The diff is the audit trail.
 
 ## The concept map
 
-Thirty-six concepts written, and no `leads_to` edge points at an unwritten file, so every
+Thirty-seven concepts written, and no `leads_to` edge points at an unwritten file, so every
 follow-up the widget can offer resolves. That is a property of the corpus as it stands rather
 than one CI enforces: the loader fails a concept only when *none* of its follow-ups resolve, so
 a typo in one id on a concept with several is filtered out silently at render time. This map
 reflects the August 7 sourcing pass, three
 concepts added on August 12 to close the bench-controls gap described below, thirteen added on
 August 13 covering the framework and the assays, `species-cross-reactivity` added on
-August 15, and the per-application concepts written from August 16.
+August 15, the per-application concepts written from August 16, and `what-is-an-isotype` added on
+August 17.
 
 Five files are at `status: sourced`, all written from the full text of every source they cite and
 all carrying `depth: full-text` on each source row. They are the five per-application concepts
@@ -412,10 +421,11 @@ than a claim that a scientist has checked it.
 | `assay-spr-bli` | advanced | public | IPI QC standard, internal |
 | `assay-cell-display` | advanced | public | IPI QC standard, internal |
 | `application-immunofluorescence` | core | public | Stadler 2010, Schnell 2012, Stadler 2013 |
-| `application-immunohistochemistry` | core | public | Shi 2011, Buchwalow 2011, Howat 2014, Hewitt 2014 |
+| `application-immunohistochemistry` | core | public | Shi 2011, Howat 2014, Hewitt 2014 |
 | `application-flow-cytometry` | core | public | Cossarizza 2021, Andersen 2016 |
 | `application-elisa` | core | public | Butler 2000, Sturgeon 2011, Hoofnagle 2009 |
 | `application-immunoprecipitation` | core | public | Trinkle-Mulcahy 2008, Mellacheruvu 2013, Marcon 2015 |
+| `what-is-an-isotype` | core | public | established, reference works |
 
 The four assay concepts carry no numeric criteria. The bands live in IPI's internal release-gate
 standard, and what "good" means per application is recorded below as deferred pending a
@@ -428,9 +438,9 @@ describing its own process rather than a performance grade, which is the line th
 ### Still to write
 
 Nothing per-application. The six applications are complete as of August 16, and the corpus has no
-concept it knows it is missing. What remains is depth rather than coverage: thirty-one files
-predate the full-text sourcing rule and carry no `depth` marker, and no file has been read by a
-scientist.
+concept it knows it is missing. What remains is depth rather than coverage: thirty-two files
+carry no `depth` marker, thirty-one of them predating the full-text sourcing rule, and no file
+has been read by a scientist.
 
 `recombinant-vs-conventional` was dropped rather than written. `reagent-reproducibility` already
 covers monoclonal, polyclonal, and recombinant with verified figures, down to its aliases, so a

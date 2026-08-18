@@ -38,8 +38,8 @@ as well. Only a comparison across those related proteins distinguishes a selecti
 from one that merely binds tightly.
 
 The reason this matters practically is that a positive result in an application is rarely
-self-interpreting. A single band at the expected molecular weight, or staining in the expected
-compartment, is consistent with the intended target but does not establish it — two different
-proteins can sit at nearly the same position on a blot, and staining in the right place can
-come from a relative that lives there too. **Selectivity** evidence is what converts a plausible
-result into an attributable one.
+self-interpreting. One band at the molecular weight predicted for the target, or staining in the
+expected compartment, is consistent with the intended target but does not establish it — two
+different proteins can sit at nearly the same position on a blot, and staining in the right place
+can come from a relative that lives there too. **Selectivity** evidence is what converts a
+plausible result into an attributable one.

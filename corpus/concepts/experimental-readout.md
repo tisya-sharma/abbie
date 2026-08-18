@@ -28,7 +28,7 @@ leads_to:
 
 **Experimental readout** is the last of IPI's four dimensions and the one you meet first, because it
 is the moment you look at the result: the band on the film, the stain in the cell, the shifted
-population on the plot. It asks whether the antibody appears to work in a defined application,
+population on the plot. It asks whether the antibody looks to be working in a defined application,
 assay, and system context, judged on the experimental output with appropriate positive and
 negative controls.
 
@@ -38,8 +38,8 @@ a clean, interpretable readout in one application and an uninterpretable one in 
 under the conditions actually used.
 
 Controls are what make the output readable rather than merely present. A signal on its own does
-not say where it came from, and the absence of a signal is informative only when the target was
-expected to be present and accessible in the system examined. A blank lane in a sample that
+not say where it came from, and the absence of a signal is informative only where the system
+examined was expected to contain the target in an accessible form. A blank lane in a sample that
 never contained detectable protein reports nothing about the antibody, which is why the positive
 control is doing real work rather than ceremonial work.
 

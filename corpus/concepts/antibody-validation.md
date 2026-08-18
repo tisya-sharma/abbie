@@ -40,7 +40,7 @@ lacks in the abstract. An antibody is validated *for something* — for Western 
 mouse tissue, for flow cytometry on human cells — and evidence gathered in one context does
 not automatically carry to another.
 
-The evidence that demonstrates it is what IPI sorts into four foundational dimensions:
+The evidence that demonstrates it is what IPI sorts into four dimensions it treats as foundational:
 **molecular integrity**, **target engagement**, **selectivity**, and **experimental readout**.
 Each names a distinct property an antibody has to be shown to have. Controls are what make each
 of them answerable rather than assumed.

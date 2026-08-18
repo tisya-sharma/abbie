@@ -63,18 +63,20 @@ is an image of a cell with some part of it lit up.
 
 Fixation is a choice between two chemistries and it is not a neutral one. A sample can be
 dehydrated with an alcohol such as methanol or ethanol, or it can be cross-linked with
-paraformaldehyde and then permeabilized with a detergent. Eighteen antibodies covering eleven
+paraformaldehyde and then permeabilized with a detergent. Eighteen proteins across eleven
 subcellular compartments were put through six protocols in three human cell lines, and
 cross-linking followed by Triton X-100 was the only one that worked everywhere. That is a
 recommendation for breadth rather than a verdict on the alternatives, because the alcohols held
-the Golgi and endoplasmic reticulum perfectly well and gave the sharpest contrast on
-cytoskeletal fibers, while extracting soluble cytoplasmic proteins and failing at the plasma
-membrane and the mitochondria. The fixative is a decision about your target, not a default.
+the Golgi and endoplasmic reticulum well and gave the sharpest contrast on cytoskeletal fibers,
+while extracting soluble cytoplasmic proteins and failing at the plasma membrane and the
+mitochondria. The fixative is a decision about your target, not a default.
 
 Breadth has a price, and it lands where nobody looks. Of five hundred and six proteins carried
-into a later comparison, sixty produced no staining at all, and the authors attribute those
-false negatives to epitope masking by the cross-linking fixation itself. The protocol chosen
-because it works for the most proteins is the same protocol quietly removing some of them.
+into a later comparison, sixty produced no staining at all, and for thirty-seven of those the
+transcript data said the target was expressed in the cell being imaged. The authors read that
+subset as false negatives and give epitope masking by the cross-linking fixation itself as the
+likely cause. The protocol chosen because it works for the most proteins is the same protocol
+quietly removing some of them.
 
 The preparation can also move the protein or take it away, and this can be watched directly.
 Fluorescent protein spread through the cytoplasm survives paraformaldehyde on its own, then

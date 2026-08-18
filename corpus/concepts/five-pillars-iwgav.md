@@ -38,12 +38,13 @@ reasonably ask how IPI's four dimensions relate to it. They are not the same thi
 difference is deliberate rather than cosmetic.
 
 In 2016 an ad hoc committee, the International Working Group for Antibody Validation, proposed
-five categories of evidence: genetic strategies, removing or reducing the target gene and
-checking the signal disappears; orthogonal strategies, checking the signal tracks an
-independent measurement such as RNA sequencing; independent antibody strategies, using a second
-antibody against a different epitope; expression of tagged proteins; and immunocapture followed by mass spectrometry. The stated minimum is that at least one should be used before
-claiming an antibody is validated for a specific application — a floor rather than a ceiling, since
-the proposal adds that multiple strategies strengthen the conclusion.
+five categories of evidence: genetic strategies, removing or reducing the target gene and checking
+the signal disappears or drops accordingly; orthogonal strategies, checking the signal tracks an
+antibody-independent measurement of the target such as targeted mass spectrometry; independent
+antibody strategies, using a second antibody against a different epitope; expression of tagged
+proteins; and immunocapture followed by mass spectrometry. The stated minimum is that at least one
+should be used before claiming an antibody is validated for a specific application — a floor
+rather than a ceiling, since the proposal adds that multiple strategies strengthen the conclusion.
 
 The two frameworks answer different questions. The five pillars organize evidence by the
 *experimental approach* used to generate it. IPI's four dimensions organize evidence by the

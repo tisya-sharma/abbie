@@ -17,12 +17,6 @@ sources:
     journal: "J Histochem Cytochem"
     title: "Antigen retrieval immunohistochemistry: review and future prospects in research and diagnosis over two decades"
     depth: full-text
-  - label: "Buchwalow I, Samoilova V, Boecker W, et al. Non-specific binding of antibodies in immunohistochemistry: fallacies and facts. Sci Rep. 2011;1:28."
-    url: https://doi.org/10.1038/srep00028
-    short: "Buchwalow 2011"
-    journal: "Sci Rep"
-    title: "Non-specific binding of antibodies in immunohistochemistry: fallacies and facts"
-    depth: full-text
   - label: "Howat WJ, Lewis A, Jones P, et al. Antibody validation of immunohistochemistry for biomarker discovery: recommendations of a consortium of academic and pharmaceutical based histopathology researchers. Methods. 2014;70(1):34-38."
     url: https://doi.org/10.1016/j.ymeth.2014.01.018
     short: "Howat 2014"

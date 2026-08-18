@@ -62,9 +62,9 @@ is a small amount of material in a tube. To find out what is in it, you have to 
 experiment, and that is the whole difficulty of the application: every conclusion is borrowed
 from the method that comes next, and arrives dressed as that method's result.
 
-The tube is also more crowded than a clean protocol suggests. Around two hundred proteins are
-detected in a typical immunoprecipitate before any background is removed, so the work of
-deciding what the pull-down caught happens almost entirely after the bench step is finished.
+The tube is also more crowded than a clean protocol suggests. An immunoprecipitate holds many
+proteins besides the target before any background is removed, so the work of deciding what the
+pull-down caught happens almost entirely after the bench step is finished.
 
 Much of what is in the tube was never the antibody's doing. Affinity matrices are themselves a
 major source of nonspecific binding for protein interaction work, and no single support suits

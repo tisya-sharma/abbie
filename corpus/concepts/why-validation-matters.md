@@ -77,7 +77,7 @@ invalidate a body of results built on it, and the discovery may come years later
 else, after the conclusions have been cited.
 
 The problem is also not solved by buying carefully. Two lots of the same catalog antibody may not
-be the same molecule, and an antibody that performs well in one application frequently fails in
+be the same molecule, and an antibody that works well in one application frequently fails in
 another, so neither a supplier's datasheet nor a colleague's success transfers automatically to a
 new experiment. Both facts have practical consequences serious enough to be treated separately.
 

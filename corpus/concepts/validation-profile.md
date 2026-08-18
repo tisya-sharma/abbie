@@ -33,9 +33,9 @@ conflicting findings remain visible for the same reason: an aggregate number wou
 exactly the information a reader needs.
 
 Because a profile is written for a defined application, the same antibody has different profiles
-for different uses. Consider one with established **integrity** that produces a single band at the
-expected molecular weight in Western blot. That supports **readout** in Western blot and is
-consistent with **engagement** — though a single band at the expected weight does not by itself
+for different uses. Consider one with established **integrity** that yields a single band running at
+the predicted molecular weight in Western blot. That supports **readout** in Western blot and is
+consistent with **engagement** — though one band at the predicted weight does not by itself
 establish what the detected protein is, since off-target proteins can migrate similarly. Asked
 about immunofluorescence instead, the **integrity** evidence carries over unchanged, the blot result
 offers moderate support for **engagement**, and **selectivity** and **readout** in imaging have no direct

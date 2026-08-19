@@ -11,6 +11,7 @@ behaviors.
 
 from __future__ import annotations
 
+import os
 import re
 import time
 from dataclasses import dataclass
@@ -44,6 +45,22 @@ HEADER_COMMENT = re.compile(r"\A\s*<!--.*?-->\s*", re.S)
 # One exchange is enough to resolve a pronoun in a follow-up redirect and short
 # enough that the redirect path stays close to context-free.
 REDIRECT_CONTEXT_TURNS = 2
+
+TOOL_LOOP_ENV = "ABBIE_TOOL_LOOP"
+
+
+def tool_loop_enabled(override: bool | None = None) -> bool:
+    """Whether the answer path runs as a bounded tool loop instead of one call.
+
+    Off unless asked for. The loop is Stage 2 infrastructure sitting ahead of
+    the catalog data it exists to fetch, so until that data is published the
+    production path is the single composer call and this flag is what keeps it
+    that way. An explicit argument wins over the environment so a caller and a
+    test can pin the path without touching process state.
+    """
+    if override is not None:
+        return override
+    return os.environ.get(TOOL_LOOP_ENV, "").lower() in {"1", "true", "yes"}
 
 
 def strip_header_comment(text: str) -> str:
@@ -288,16 +305,18 @@ def respond(
     max_output_tokens: int | None = None,
     history: list[dict] | None = None,
     on_delta: Callable[[str], None] | None = None,
+    tool_loop: bool | None = None,
 ) -> TurnResult:
     """Dispatch one turn to the routed behavior with per-behavior context.
 
     refuse and abstain return deterministic text with no model call. redirect
     runs with redirect instructions and the last exchange only, never the
     corpus, so it cannot cite or lecture from it. answer runs the full-context
-    path with conversation history. Both model paths use the caller's reasoning
-    effort: a redirect is two sentences, but landing warmth and wit in two
-    sentences is not the cheap problem it looks like, and pinning that path to
-    minimal is what made every deflection read from the same template. When
+    path with conversation history, as one call or, under tool_loop, as a
+    capped tool loop. Both model paths use the caller's reasoning effort: a
+    redirect is two sentences, but landing warmth and wit in two sentences is
+    not the cheap problem it looks like, and pinning that path to minimal is
+    what made every deflection read from the same template. When
     on_delta is provided, model paths stream deltas through it and template
     paths invoke it once with the whole text.
     """
@@ -337,6 +356,17 @@ def respond(
         + ([{"role": "system", "content": shape_hint}] if shape_hint else [])
         + [{"role": "user", "content": question}]
     )
+    # The one place the tool loop can be reached. Every other behavior has
+    # already returned, so refuse and abstain stay deterministic templates and
+    # redirect stays corpus-free, whatever this flag is set to. The import is
+    # deferred because it pulls LangGraph, which nothing on the default path
+    # should pay to load.
+    if tool_loop_enabled(tool_loop):
+        from packages.agent import run_answer_loop
+
+        return run_answer_loop(
+            client, messages, model, reasoning_effort, max_output_tokens, on_delta
+        ).result
     text, finish, prompt_toks, completion_toks, reasoning_toks, ms = _complete(
         client, model, messages, reasoning_effort, max_output_tokens, on_delta
     )

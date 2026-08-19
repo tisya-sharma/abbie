@@ -9,12 +9,21 @@ dependencies = [
     # Nothing imports httpx directly, but starlette's TestClient does, and the
     # unit gate is not allowed to rest on whatever openai happens to pull in.
     "httpx>=0.28,<1",
+    # Pre-1.0, so the range is a minor one rather than a major one: the graph
+    # API is stable but the package still moves under it, and the bounded tool
+    # loop is the only thing that would break quietly.
+    "langgraph>=0.6,<1",
     "openai>=2.38,<3",
     # The GenAI semantic conventions are still pre-stable and attribute names
     # can move, so the OTel packages are pinned to a minor range rather than
     # tracking latest. Bumping them is a deliberate act with a trace to re-read.
     "opentelemetry-sdk>=1.44,<2",
     "opentelemetry-exporter-otlp-proto-http>=1.44,<2",
+    # packages/antibody imports this directly and returns Pydantic models by
+    # mandate, so it cannot keep arriving through fastapi, which the tool
+    # library is not allowed to import and an MCP deployment need not install.
+    # fastapi also sets a floor here and no ceiling, so the upper bound is ours.
+    "pydantic>=2.9,<3",
     "pyyaml>=6",
     "uvicorn>=0.41,<1",
 ]
@@ -26,6 +35,8 @@ build-backend = "setuptools.build_meta"
 [tool.setuptools]
 packages = [
     "packages",
+    "packages.agent",
+    "packages.antibody",
     "packages.composer",
     "packages.corpus_loader",
     "packages.eval",

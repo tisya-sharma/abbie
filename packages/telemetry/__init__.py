@@ -138,6 +138,29 @@ def llm_span(name: str, model: str) -> Iterator[trace.Span]:
 
 
 @contextmanager
+def tool_span(name: str, tool_name: str, call_id: str) -> Iterator[trace.Span]:
+    """Span for one tool execution inside the bounded loop.
+
+    A loop turn spends an unknown number of calls, so per-call spans are what
+    keep its cost and latency readable rather than arriving as one opaque
+    total. The call id is carried so a span can be matched to the request that
+    produced it when a model asks for several tools at once.
+
+    Arguments and results are deliberately not attached. They can carry
+    whatever a visitor typed, and adding them is the same storage decision that
+    content capture already exists to make explicitly.
+    """
+    with _tracer().start_as_current_span(name) as span:
+        span.set_attribute(
+            gen_ai.GEN_AI_OPERATION_NAME,
+            gen_ai.GenAiOperationNameValues.EXECUTE_TOOL.value,
+        )
+        span.set_attribute(gen_ai.GEN_AI_TOOL_NAME, tool_name)
+        span.set_attribute(gen_ai.GEN_AI_TOOL_CALL_ID, call_id)
+        yield span
+
+
+@contextmanager
 def step_span(name: str) -> Iterator[trace.Span]:
     """Span for a non-model pipeline step, such as the guardrail scan."""
     with _tracer().start_as_current_span(name) as span:

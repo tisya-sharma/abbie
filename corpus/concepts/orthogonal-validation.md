@@ -27,7 +27,7 @@ sources:
     journal: "Nat Commun"
     title: "Enhanced validation of antibodies for research applications"
     depth: full-text
-  - label: IPI 4D framework, internal draft — grounds the statements of IPI's own position. No manuscript text is reproduced.
+  - label: IPI 4D framework, internal draft. Grounds the statements of IPI's own position. No manuscript text is reproduced.
     depth: full-text
 status: sourced
 reviewed_by:
@@ -48,8 +48,8 @@ If it does not track, something is wrong with the attribution.
 
 The independence is the whole point. Two antibodies from the same immunization, or the same
 antibody in two applications, share whatever assumption is failing. A method that does not
-involve antibodies at all — a mass-spectrometry-based measure of protein abundance, or
-transcript-level expression data used with appropriate caution — fails differently, so agreement
+involve antibodies at all, such as a mass-spectrometry-based measure of protein abundance or
+transcript-level expression data used with appropriate caution, fails differently, so agreement
 between the two is genuinely informative rather than a repeated measurement of the same
 potential error.
 

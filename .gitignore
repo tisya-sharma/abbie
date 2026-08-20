@@ -31,6 +31,10 @@ answer_references/
 packages/eval/results/
 packages/eval/.cache/
 
+# Datasheet ingest output. Rebuilt from the public website by
+# scripts/ingest_datasheets.py, so the run is reproducible without carrying it.
+packages/catalog/extract/
+
 # Python
 __pycache__/
 *.py[cod]

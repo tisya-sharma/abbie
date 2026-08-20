@@ -39,17 +39,45 @@ trailing punctuation. For every other behavior, subject is null.
 
 form: only when behavior is answer, the question's form; null otherwise. The message may
 begin with "Abbie's previous offer to the user:" giving the question Abbie just asked —
-use it to recognize acceptance. Choose exactly one:
+use it to recognize acceptance.
 
-- acceptance — the message says yes to Abbie's previous offer, in any words: "yes please",
-  "sure", "outline the whole process", or clicking straight into what was offered.
+Decide the form by what the useful reply would have to be, not by how the question opens.
+The opening words mislead here more than anywhere else: "how do I", "how should I" and
+"I'm trying to work out" introduce questions that want understanding about as often as
+they want a bench sequence. Read past them to what the person would have to be handed.
+Choose exactly one:
+
+- acceptance — the message is a short reply to Abbie's own previous offer and carries no
+  new topic of its own: saying yes in any words, taking one of the things offered, or
+  supplying the fact the offer asked for, including a bare correction or clarification
+  like "no, it's human tissue". A message that opens a topic on its own terms takes its
+  own form even when it follows an offer.
 - deepening — the message asks to go further on the current topic or asks for everything
   at once: "tell me more", "go deeper", "just give me everything upfront".
-- procedural — the user wants to do or choose something: "how do I", "help me pick",
-  "walk me through", "what should I use for".
-- comparative — the question weighs two or more named things against each other.
-- conceptual — the question asks why something is true or how ideas relate.
-- definitional — the question asks what something is.
+- procedural — the useful reply is a sequence of moves the person carries out, in the
+  order they carry them out, ending in a decision about their own experiment. A request
+  for the way to do something, or for help choosing something for their own work, lands
+  here: "help me pick", "walk me through", "what should I use for". Asking for the best
+  way to establish something is asking for the method, so it belongs here even when the
+  thing being established is a matter of evidence.
+- comparative — the useful reply weighs named alternatives against each other, whatever
+  the phrasing. "How is X different from Y" is comparative rather than conceptual, since
+  the reply has to hold the two side by side. When a question both names the alternatives
+  and asks for a choice for the person's own situation, procedural wins, because the
+  reply has to end in a decision for them.
+- conceptual — the useful reply explains why something holds, what a result is allowed to
+  conclude, or how ideas relate. "How do I work out", "how should I read" and "I'm trying
+  to work out whether" usually land here rather than in procedural, since they ask for
+  understanding rather than for a protocol. Asking whether one thing belongs
+  inside another is conceptual too, because answering it means explaining how the ideas
+  sit together rather than defining either one.
+- definitional — the useful reply says what a thing is. "What does X tell you" is
+  definitional, since the reply has to say what X measures. So is a question circling a
+  single concept without naming it, where the work of the reply is to name that concept
+  and say what it means. A question about what would make something knowable, or about
+  what the criterion is, wants the concept explained rather than a method: "how do I know
+  X" asks what would settle it, where "what's the best way to establish X" asks how to go
+  about it and is procedural.
 
 Examples:
 
@@ -77,6 +105,42 @@ Q: yes please
 
 Q: Just give me everything about picking controls upfront.
 {"behavior": "answer", "subject": null, "form": "deepening"}
+
+Q: How do I validate an antibody for an immunohistochemistry experiment?
+{"behavior": "answer", "subject": null, "form": "procedural"}
+
+Q: help me pick between a knockout and a knockdown control for my blot
+{"behavior": "answer", "subject": null, "form": "procedural"}
+
+Q: how should I read validation evidence?
+{"behavior": "answer", "subject": null, "form": "conceptual"}
+
+Q: how do I work out which isoform my antibody actually detected?
+{"behavior": "answer", "subject": null, "form": "conceptual"}
+
+Q: My antibody works in Western blot. Can I use it for immunofluorescence?
+{"behavior": "answer", "subject": null, "form": "conceptual"}
+
+Q: are knockout controls one of the validation dimensions?
+{"behavior": "answer", "subject": null, "form": "conceptual"}
+
+Abbie's previous offer to the user: What should we look at first?
+Q: I'm trying to work out whether freeze-thaw cycles explain my weaker signal
+{"behavior": "answer", "subject": null, "form": "conceptual"}
+
+Q: How do I know the signal is really my target?
+{"behavior": "answer", "subject": null, "form": "definitional"}
+
+Q: what does SEC tell you about an antibody?
+{"behavior": "answer", "subject": null, "form": "definitional"}
+
+Q: how is validation different from characterization?
+{"behavior": "answer", "subject": null, "form": "comparative"}
+
+Abbie's previous offer to the user: Can you make or obtain a knockout line for your
+target?
+Q: No, it's human tissue.
+{"behavior": "answer", "subject": null, "form": "acceptance"}
 
 Q: How well validated is clone 4B2 against STAT3?
 {"behavior": "abstain", "subject": "clone 4B2 against STAT3", "form": null}

@@ -9,14 +9,14 @@ aliases:
 ask: What does intact mass analysis confirm?
 provenance: ipi-authored
 sources:
-  - label: IPI-CHR-001, internal antibody QC standard — grounds the description of IPI's own process. No criteria or record values are reproduced.
+  - label: IPI-CHR-001, internal antibody QC standard. Grounds the description of IPI's own process. No criteria or record values are reproduced.
     depth: full-text
   - label: "Institute for Protein Innovation. Quality. proteininnovation.org/quality/. IPI's own public statement of its antibody quality and validation standards, which describes these tiers and assays directly."
     url: https://proteininnovation.org/quality/
     short: "IPI Quality"
     title: "Quality"
     depth: full-text
-  - label: IPI 4D framework, internal draft — defines the dimensions this concept names. No manuscript text is reproduced.
+  - label: IPI 4D framework, internal draft. Defines the dimensions this concept names. No manuscript text is reproduced.
     depth: full-text
 status: sourced
 reviewed_by:

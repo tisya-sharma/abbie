@@ -44,7 +44,7 @@ leads_to:
 ---
 
 Picture a protein shaped like the letter Y, with two identical tips at the ends of its arms.
-Each tip is shaped to grip one small patch on the surface of one particular molecule — the way a
+Each tip is shaped to grip one small patch on the surface of one particular molecule, the way a
 hand closes around one specific feature of an object. That is an antibody, also called an
 immunoglobulin: a protein built around the idea of attaching to one chosen thing out of
 everything else present.
@@ -59,7 +59,7 @@ anything the body has met. Virtually any substance can elicit an antibody respon
 
 That gripping-one-thing property is why antibodies escaped immunology and became laboratory
 tools, and they are now among the most frequently used tools in basic research and in clinical
-assays. If a molecule reliably attaches to one protein, it can be used to find that protein — to
+assays. If a molecule reliably attaches to one protein, it can be used to find that protein: to
 stain it in a cell or a tissue section, to measure it in a sandwich assay such as an ELISA, or
 to isolate it from a solution so that whatever came out can be identified. The most commonly
 reported use of all is immunoblotting.
@@ -69,5 +69,5 @@ guarantee. A given antibody's tips may also fit patches on other proteins presen
 which is what off-target binding means, and two antibodies raised against the same target can
 bind different regions of it, so whether their signals agree in a given application is something
 to be shown rather than assumed. How well a particular antibody actually does the one job asked
-of it is a question that has to be answered with evidence — and that question is what antibody
+of it is a question that has to be answered with evidence, and that question is what antibody
 validation is.

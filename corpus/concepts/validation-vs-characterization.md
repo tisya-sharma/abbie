@@ -20,7 +20,7 @@ sources:
     journal: "N Biotechnol"
     title: "Antibody validation: a view from the mountains"
     depth: full-text
-  - label: IPI 4D framework, internal draft — grounds the statements of IPI's own position. No manuscript text is reproduced.
+  - label: IPI 4D framework, internal draft. Grounds the statements of IPI's own position. No manuscript text is reproduced.
     depth: full-text
 status: sourced
 reviewed_by:
@@ -46,7 +46,7 @@ system, produces a result that can be attributed to the intended target. Change 
 and the validation question reopens even though the characterization data has not moved.
 
 That asymmetry explains a common frustration. A well-characterized antibody that fails in
-immunohistochemistry has not contradicted its characterization data — it was never validated for
+immunohistochemistry has not contradicted its characterization data: it was never validated for
 immunohistochemistry, and nothing in a purity measurement predicted that it would be. Conversely,
 an antibody that performs beautifully in one assay may be poorly characterized, in which case the
 result is real but not reliably repeatable, because nobody can say whether the next lot is the

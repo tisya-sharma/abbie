@@ -1,0 +1,160 @@
+Anti-NTNG1 [IPI-mNTNG1.4]
+TAB0014369-013
+v 2026.08.14
+Page 1
+Product Datasheet
+Applications| Antibody Details| Antigen Details|References
+Overview
+Antigen NTNG1
+Immunogen Purified recombinant fragment of Mouse NTNG1, corresponding to AA: 28 - 371).
+Host/isotype Rabbit/IgG
+Clonality Recombinant monoclonal
+Clone name IPI-mNTNG1.4
+RRID AB_3751929
+IPI ID TAB0014369-013
+Specificity NTNG1; Does not cross-react with NTNG2.
+Species human and mouse
+Concentration 1 mg/mL
+Purification Expressed in HEK293T cells and affinity purified using Protein A
+Storage Buffer PBS, pH 7.4
+Shipping Shipped on blue ice at +4 °C
+Storage Store at +4C for up to 3 months. For long-term storage, aliquot and store at -20C.
+Avoid multiple freeze/thaw cycles.
+IPI Tested Applications‡
+Applications Tested Concentration Result Reference
+Flow Cytometry 0.66-100 μg/mL Positive https://doi.org/10.57733/addgene.f5hx1j
+IF- Binding 1 μg/mL Positive https://doi.org/10.57733/addgene.7xgo39
+IF - Specificity 1 μg/mL Positive https://doi.org/10.57733/addgene.qvc3i8
+‡ Not suitable for WB application.
+FOR RESEARCH USE ONLY – NOT INTENDED FOR DIAGNOSTIC or THERAPEUTIC USE
+Institute for Protein Innovation•4 Blackfan Circle•Boston, MA 02115•antibodies@proteininnovation.orgAnti-NTNG1 [IPI-mNTNG1.4]
+TAB0014369-013
+v 2026.08.14
+Page 2
+Applications
+Cell Display
+Anti-NTNG1 [IPI-mNTNG1.4] (Addgene #259428) recognizes human and mouse NTNG1.
+Histogram from FACS analysis on ExpiCHO cells transfected with human or mouse NTNG1 (red), or B7H3 negative
+control (gray). Cells expressing human (left panel) or mouse (right panel) NTNG1 were labeled with Anti-NTNG1
+[IPI-mNTNG1.4] and Alexa Fluor 647 F(ab’)2 goat anti-rabbit IgG Fc fragment (Jackson ImmunoResearch,
+111-606-046). Labeled cells were analyzed with an Intellicyt iQue Screener Plus flow cytometer. Histograms
+were generated and normalized to mode using FlowJo™ v10.10.
+doi: https://doi.org/10.57733/addgene.f5hx1j
+FOR RESEARCH USE ONLY – NOT INTENDED FOR DIAGNOSTIC or THERAPEUTIC USE
+Institute for Protein Innovation•4 Blackfan Circle•Boston, MA 02115•antibodies@proteininnovation.orgAnti-NTNG1 [IPI-mNTNG1.4]
+TAB0014369-013
+v 2026.08.14
+Page 3
+Immunofluorescence (IF) – Binding
+Anti-NTNG1 [IPI-mNTNG1.4] (Addgene#259428) shows binding to human and mouse Netrin G1.
+A) Immunofluorescence (IF) of ExpiCHO cells transfected with human (Green/GFP) and mouse (Blue/BFP) Netrin G1
+stained with IPI-mNTNG1.4 (magenta). Confocal images taken at 40X magnification on the ImageXpress confocal
+HT.ai microscope. Scale bar = 20 uM. B) Combined quantification of multiple images of the same transfected
+cells taken at 10X magnification. GFP- or BFP-positive cells were identified via the neural network CellPose, then
+the mean fluorescence intensity (MFI) of the far-red channel for each cell, representing IPI-mNTNG1.4 staining,
+was recorded. Each histogram displays the number of cells with MFIs ranging from below 100 (background
+fluorescence) to 20000. IPI-mNTNG1.4 staining of human and mouse Netrin G1 is shown in the top row, and
+compared to a positive (left) and negative (right) control in the bottom row. For both panels, IPI-NTNG1.4 was used
+at 1 ug/mL (1:1000 dilution).
+doi: https://doi.org/10.57733/addgene.7xgo39
+FOR RESEARCH USE ONLY – NOT INTENDED FOR DIAGNOSTIC or THERAPEUTIC USE
+Institute for Protein Innovation•4 Blackfan Circle•Boston, MA 02115•antibodies@proteininnovation.orgAnti-NTNG1 [IPI-mNTNG1.4]
+TAB0014369-013
+v 2026.08.14
+Page 4
+Immunofluorescence (IF) - Target Specificity
+Anti-NTNG1 [IPI-mNTNG1.4] (Addgene#259428) shows significant binding only to human and mouse Netrin
+G1.
+Each graph depicts the combined quantification of multiple images of the same transfected cells taken at
+10X magnification. GFP or BFP-positive cells were identified via the neural network CellPose, then the mean
+fluorescence intensity (MFI) of the far-red channel for each cell, representing IPI-mNTNG1.4 staining, was recorded.
+Each histogram displays the number of cells with MFIs ranging from below 100 (background fluorescence) to
+20000. IPI-mNTNG1.4 staining of human and mouse variants of selected Netrin G family members is compared on
+the top and bottom rows. To test family-wide cross-reactivity, IPI-NTNG1.4 was used at 1 ug/mL (1:1000 dilution).
+doi: https://doi.org/10.57733/addgene.qvc3i8
+FOR RESEARCH USE ONLY – NOT INTENDED FOR DIAGNOSTIC or THERAPEUTIC USE
+Institute for Protein Innovation•4 Blackfan Circle•Boston, MA 02115•antibodies@proteininnovation.orgAnti-NTNG1 [IPI-mNTNG1.4]
+TAB0014369-013
+v 2026.08.14
+Page 5
+Antibody Details
+Antibody Design and Production
+Human variable domains for the heavy and light chain of the FAB fragment used in yeast display were grafted
+onto the constant CH1, CH2 and CH3 domains of rabbit IgG. The chimera human/rabbit IgG1 construct was
+recombinantly expressed in HEK293 cells, using pTipi2.1 as the expression vector. The antibody was purified by
+affinity chromatography using protein A (XYZ) and acid elution, followed by immediate buffer exchange using 1 x
+PBS buffer pH 7.4.
+Sequence information: Heavy chain and light chain amino acid sequences are available upon request after
+purchase. Contact usto request.
+Antibody Characterization
+LC-MS
+LC-MS: Intact mass analysis via LC-MS methods allows for confirmation antibody mass, and to identify any
+product-relatedvariantssuchasglycosylation. BeforeconductingintactmassanalysisviaLC-MS,theantibody
+was reduced to its heavy chain (HC) and light chain (LC). This process allows for confirmation of the masses
+corresponding to the amino acid sequences of both chains.
+LC-MS Results
+LC Calculated LC Observed LC Delta HC Calculated HC Observed HC Delta
+23817.44 23816.97 -0.47 49758.14 49763.30 5.16
+Heavy Chain (HC) Mass Calculation:The calculated molecular weight (MW) of the HC is derived by adding
+the mass of the unmodified HC amino acid sequence to the mass of the predominant N-glycan form (G0F),
+which is 1444.5 Da. This calculation assumes that the intrachain disulfide bonds remain intact. For HCs with an
+N-terminal glutamine (Q), the mass of Q is converted to pyroglutamic acid (PyroGlu), resulting in a deduction of
+17.03 Da from the total mass. Additionally, for HCs with a Cterminal lysine (K), the mass of K (128.09 Da) is also
+subtracted.
+Light Chain (LC) Mass Calculation:The calculated molecular weight (MW) of the LC is obtained from the
+mass of the unmodified LC amino acid sequence, assuming that the intrachain disulfide bonds are not reduced.
+For LCs with an N-terminal glutamine (Q), the mass of Q is converted to pyroglutamic acid (PyroGlu), leading to
+a deduction of 17.03 Da from the total mass. For LCs with a C-terminal lysine (K), the mass of K (128.09 Da) is
+subtracted as well.
+FOR RESEARCH USE ONLY – NOT INTENDED FOR DIAGNOSTIC or THERAPEUTIC USE
+Institute for Protein Innovation•4 Blackfan Circle•Boston, MA 02115•antibodies@proteininnovation.orgAnti-NTNG1 [IPI-mNTNG1.4]
+TAB0014369-013
+v 2026.08.14
+Page 6
+Size Exclusion Chromatography (SEC)
+5 μL of 1±0.2 mg/mL of sample was analyzed with TSKgel® SuperSW mAb HTP (4 μm) HPLC Column in 1X
+PBS, pH 7.4 as the mobile phase.
+Clone RT (min) Width (min) Area Height Area % Result
+IPI-mNTNG1.4 2.94 0.20 991.57 84.11 99.32 Pass
+Interpretation: SEC-QC pass. Main peak with greater than 90% purity and within retention time of 2.6 to 3.26
+mins.
+FOR RESEARCH USE ONLY – NOT INTENDED FOR DIAGNOSTIC or THERAPEUTIC USE
+Institute for Protein Innovation•4 Blackfan Circle•Boston, MA 02115•antibodies@proteininnovation.orgAnti-NTNG1 [IPI-mNTNG1.4]
+TAB0014369-013
+v 2026.08.14
+Page 7
+Antigen Details
+Immunogen sequence : Mouse NTNG1 (AA: 28 - 371):
+GHYDVCKSLIYTEEGKVWDYTACQPESTDMTKYLKVKLDPPDITCGDPPESFCAMGNPYMCNNECDASTPELAHPPEL
+MFDFEGRHPSTFWQSATWKEYPKPLQVNITLSWSKTIELTDNIVITFESGRPDQMILEKSLDYGRTWQPYQYYATDCLHA
+FHMDPKSVKDLSQHTVLEIICTEEYSTGYSTNSKIIHFEIKDRFAFFAGPRLRNMASLYGQLDTTKKLRDFFTVTDLRIRLLR
+PAVGEIFVDELHLARYFYAISDIKVRGRCKCNLHATSCLYDNSKLTCECEHNTTGPDCGKCKKNYQGRPWSPGSYLPIPK
+GTANTCIPSISSGGGGSGGGGSDYKDDDDKGSGGLNDIFEAQKIEWHEGSGHHHHHHHH
+Sequence information:
+HUGO: MGI:1934028
+Uniprot: Q8R4G0
+Refseq: NM_030699.2
+Structural information:
+Topology: Glycosylphosphatidylinositol (GPI) Anchored
+PDB IDs: 3ZYJ
+Alphafold: AF-Q8R4G0-F1
+Expression profile:
+Human Protein Atlas: ENSG00000162631
+FOR RESEARCH USE ONLY – NOT INTENDED FOR DIAGNOSTIC or THERAPEUTIC USE
+Institute for Protein Innovation•4 Blackfan Circle•Boston, MA 02115•antibodies@proteininnovation.orgAnti-NTNG1 [IPI-mNTNG1.4]
+TAB0014369-013
+v 2026.08.14
+Page 8
+References
+1. Z. Anderson, H. Li, T. Riedel, H. Zhu and D. Moshinsky. (2026). Flow for Anti-NTNG1 [IPI-mNTNG1.4]. Addgene.
+https://doi.org/10.57733/addgene.f5hx1j
+2. A. Morano, T. Riedel, and D. Moshinsky. (2026). ICC for Anti-NTNG1 [IPI-mNTNG1.4]. Addgene.
+https://doi.org/10.57733/addgene.7xgo39
+3. A. Morano, T. Riedel, and D. Moshinsky. (2026). ICC for Anti-NTNG1 [IPI-mNTNG1.4]. Addgene.
+https://doi.org/10.57733/addgene.qvc3i8
+How to cite this antibody:
+Anti-NTNG1 [IPI-mNTNG1.4] - from Institute for Protein Innovation (IPI) (Addgene #259428;
+https://n2t.net/addgene:259428; RRID: AB_3751929).
+If you publish research with this product, pleaselet us knowso that we can cite your paper.
+FOR RESEARCH USE ONLY – NOT INTENDED FOR DIAGNOSTIC or THERAPEUTIC USE
+Institute for Protein Innovation•4 Blackfan Circle•Boston, MA 02115•antibodies@proteininnovation.org

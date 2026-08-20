@@ -9,7 +9,7 @@ aliases:
 ask: What are evidence-strengthening approaches?
 provenance: ipi-authored
 sources:
-  - label: IPI 4D framework, internal draft — grounds the statements of IPI's own position. No manuscript text is reproduced.
+  - label: IPI 4D framework, internal draft. Grounds the statements of IPI's own position. No manuscript text is reproduced.
     depth: full-text
 status: sourced
 reviewed_by:

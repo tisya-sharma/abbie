@@ -10,7 +10,7 @@ provenance: ipi-authored
 sources:
   - label: D. Moshinsky, chatbot kickoff notes, 14 July 2026
     depth: full-text
-  - label: IPI 4D framework, internal draft — defines the framework these concepts state. No manuscript text is reproduced.
+  - label: IPI 4D framework, internal draft. Defines the framework these concepts state. No manuscript text is reproduced.
     depth: full-text
   - label: "Institute for Protein Innovation. Quality. proteininnovation.org/quality/. IPI's own public statement of its antibody quality and validation standards, which describes these tiers and assays directly."
     url: https://proteininnovation.org/quality/
@@ -34,7 +34,7 @@ leads_to:
 
 **Molecular integrity**, the first of IPI's four dimensions, asks the plainest question in validation:
 is the material in the tube actually the molecule it says it is? Everything else rests on the
-answer — if the identity of the reagent is uncertain, nothing measured downstream can be
+answer. If the identity of the reagent is uncertain, nothing measured downstream can be
 attributed to it with confidence.
 
 At IPI, integrity means the antibody sequence is defined and verified by mass spectrometry, so

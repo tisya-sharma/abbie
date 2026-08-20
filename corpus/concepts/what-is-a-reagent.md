@@ -31,7 +31,7 @@ leads_to:
   - application-specificity
 ---
 
-A reagent is a substance used to produce a result in an experiment — something you add in order to
+A reagent is a substance used to produce a result in an experiment: something you add in order to
 find out about something else. A reagent is an instrument, not the object of inquiry.
 
 Calling an antibody a reagent places it on a particular side of that line, and the distinction

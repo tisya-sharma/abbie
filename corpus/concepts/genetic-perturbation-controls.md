@@ -51,8 +51,8 @@ repeated. The reasoning, as the field's validation proposal states it, is that o
 levels are substantially reduced, whatever signal remains is pointing at something else.
 
 These approaches are powerful because they establish a direct link between the gene, the target
-protein, and what the antibody detects. The strongest form uses an isogenic pair — two cell
-lines genetically identical except that one has the target gene deleted — so the only difference
+protein, and what the antibody detects. The strongest form uses an isogenic pair, two cell
+lines genetically identical except that one has the target gene deleted, so the only difference
 between the two experiments is the protein in question.
 
 The evidence categories are not equal in practice. In a large characterization program,

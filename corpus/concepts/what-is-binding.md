@@ -37,7 +37,7 @@ leads_to:
 
 How tightly does it stick, and does it stick only to the right thing? Those are different
 questions, they are constantly confused, and keeping them apart is the single most useful
-distinction a newcomer to antibodies can learn. Both are questions about binding — the contact
+distinction a newcomer to antibodies can learn. Both are questions about binding: the contact
 between an antibody's paratope and an epitope on its target.
 
 Affinity is how tightly a single antibody-epitope interaction holds. Specificity is
@@ -48,7 +48,7 @@ off-target binding, within a given application and experimental context.
 A strong binder is not therefore a specific binder. An antibody can hold its intended target
 very tightly and still bind several other proteins in the same sample. This happens because the
 amount of target protein relative to everything else in a sample affects how much off-target
-binding shows up — and that remains true even when the antibody's affinity for those other
+binding shows up, and that remains true even when the antibody's affinity for those other
 proteins is much lower than its affinity for the target.
 
 Affinity also has a companion term that is easily conflated with it. Where affinity describes

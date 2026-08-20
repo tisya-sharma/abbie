@@ -11,7 +11,7 @@ provenance: ipi-authored
 sources:
   - label: D. Moshinsky, chatbot kickoff notes, 14 July 2026
     depth: full-text
-  - label: IPI 4D framework, internal draft — defines the framework these concepts state. No manuscript text is reproduced.
+  - label: IPI 4D framework, internal draft. Defines the framework these concepts state. No manuscript text is reproduced.
     depth: full-text
   - label: "Institute for Protein Innovation. Quality. proteininnovation.org/quality/. IPI's own public statement of its antibody quality and validation standards, which describes these tiers and assays directly."
     url: https://proteininnovation.org/quality/

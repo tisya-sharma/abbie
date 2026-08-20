@@ -9,7 +9,7 @@ aliases:
 ask: What is a Validation Map?
 provenance: ipi-authored
 sources:
-  - label: IPI 4D framework, internal draft — grounds the statements of IPI's own position. No manuscript text is reproduced.
+  - label: IPI 4D framework, internal draft. Grounds the statements of IPI's own position. No manuscript text is reproduced.
     depth: full-text
 status: sourced
 reviewed_by:
@@ -28,7 +28,7 @@ evidence for them came from. It organizes results by two independent variables: 
 system the experiment used, and the complexity of the assay.
 
 The system axis runs from purified proteins and engineered expression systems toward
-increasingly physiological settings — cell lines expressing endogenous antigen, native tissue,
+increasingly physiological settings: cell lines expressing endogenous antigen, native tissue,
 and the whole organism. The assay axis runs from direct measurements of molecular interaction
 toward complex cellular and tissue-based experiments. Every experiment an antibody has been
 through occupies a point defined by that pair.

@@ -45,7 +45,7 @@ sources:
     journal: "Nature"
     title: "Antibodies: The solution is validation"
     depth: full-text
-  - label: IPI 4D framework, internal draft — defines the dimensions this concept names. No manuscript text is reproduced.
+  - label: IPI 4D framework, internal draft. Defines the dimensions this concept names. No manuscript text is reproduced.
     depth: full-text
 status: sourced
 reviewed_by:
@@ -61,7 +61,7 @@ leads_to:
 
 Antibodies are among the most widely used reagents in biology, and conclusions drawn with them
 inherit whatever is true of the reagent. If an antibody binds something other than its intended
-target, the experiment still produces a clean, publishable-looking result — it just means
+target, the experiment still produces a clean, publishable-looking result. It just means
 something different from what the figure legend says. Nothing about the output signals the
 problem, which is what makes this failure mode distinctive.
 

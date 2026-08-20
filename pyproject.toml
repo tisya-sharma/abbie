@@ -24,6 +24,10 @@ dependencies = [
     # library is not allowed to import and an MCP deployment need not install.
     # fastapi also sets a floor here and no ceiling, so the upper bound is ours.
     "pydantic>=2.9,<3",
+    # Datasheet text extraction for packages/catalog. Pure Python, so the
+    # ingest job needs no system libraries in its container, which the
+    # alternatives with a poppler or MuPDF dependency would.
+    "pypdf>=6,<7",
     "pyyaml>=6",
     "uvicorn>=0.41,<1",
 ]
@@ -37,6 +41,7 @@ packages = [
     "packages",
     "packages.agent",
     "packages.antibody",
+    "packages.catalog",
     "packages.composer",
     "packages.corpus_loader",
     "packages.eval",

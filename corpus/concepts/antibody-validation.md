@@ -10,7 +10,7 @@ provenance: ipi-authored
 sources:
   - label: D. Moshinsky, chatbot kickoff notes, 14 July 2026
     depth: full-text
-  - label: IPI 4D framework, internal draft — defines the framework these concepts state. No manuscript text is reproduced.
+  - label: IPI 4D framework, internal draft. Defines the framework these concepts state. No manuscript text is reproduced.
     depth: full-text
   - label: "Institute for Protein Innovation. Quality. proteininnovation.org/quality/. IPI's own public statement of its antibody quality and validation standards, which describes these tiers and assays directly."
     url: https://proteininnovation.org/quality/
@@ -39,9 +39,9 @@ leads_to:
 IPI views antibody validation as the experimental process of demonstrating that an antibody
 specifically recognizes its intended target and performs reliably for a defined application,
 species, and set of experimental conditions. It is not a property an antibody either has or
-lacks in the abstract. An antibody is validated *for something* — for Western blotting in
-mouse tissue, for flow cytometry on human cells — and evidence gathered in one context does
-not automatically carry to another.
+lacks in the abstract. An antibody is validated *for something*: for Western blotting in mouse
+tissue, for flow cytometry on human cells. Evidence gathered in one context does not
+automatically carry to another.
 
 The evidence that demonstrates it is what IPI sorts into four dimensions it treats as foundational:
 **molecular integrity**, **target engagement**, **selectivity**, and **experimental readout**.

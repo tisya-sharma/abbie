@@ -66,14 +66,22 @@ class Application(StrEnum):
     FLOW_CYTOMETRY = "flow_cytometry"
     ELISA = "elisa"
     IMMUNOPRECIPITATION = "immunoprecipitation"
+    SURFACE_PLASMON_RESONANCE = "surface_plasmon_resonance"
+    CELL_DISPLAY = "cell_display"
 
 
 class Species(StrEnum):
-    """Reactivity species, canonical rather than as a visitor phrases it."""
+    """Species a reagent was raised in or is reported to react with.
+
+    Canonical rather than as a visitor phrases it. Host and reactivity share
+    one enum because they name the same kind of thing, which is why rabbit is
+    here even though nothing claims reactivity against it.
+    """
 
     HUMAN = "human"
     MOUSE = "mouse"
     RAT = "rat"
+    RABBIT = "rabbit"
 
 
 class Provenance(BaseModel):

@@ -9,7 +9,7 @@ aliases:
 ask: What is a Validation Profile?
 provenance: ipi-authored
 sources:
-  - label: IPI 4D framework, internal draft — grounds the statements of IPI's own position. No manuscript text is reproduced.
+  - label: IPI 4D framework, internal draft. Grounds the statements of IPI's own position. No manuscript text is reproduced.
     depth: full-text
 status: sourced
 reviewed_by:
@@ -36,7 +36,7 @@ an aggregate score would conceal exactly the information a reader needs.
 Because a profile is written for a defined application, the same antibody has different profiles
 for different uses. Consider one with established **integrity** that yields a single band running at
 the predicted molecular weight in Western blot. That supports **readout** in Western blot and is
-consistent with **engagement** — though one band at the predicted weight does not by itself
+consistent with **engagement**, though one band at the predicted weight does not by itself
 establish what the detected protein is, since off-target proteins can migrate similarly. Asked
 about immunofluorescence instead, the **integrity** evidence carries over unchanged, the blot result
 offers moderate support for **engagement**, and confidence in **selectivity** and **readout** for imaging is

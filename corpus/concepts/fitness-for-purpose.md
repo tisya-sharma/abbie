@@ -9,7 +9,7 @@ aliases:
 ask: What does fitness for purpose mean?
 provenance: ipi-authored
 sources:
-  - label: IPI 4D framework, internal draft — grounds the statements of IPI's own position. No manuscript text is reproduced.
+  - label: IPI 4D framework, internal draft. Grounds the statements of IPI's own position. No manuscript text is reproduced.
     depth: full-text
 status: sourced
 reviewed_by:
@@ -29,7 +29,7 @@ four dimensions exist to make possible, and it requires sufficient evidence acro
 than strong evidence in one.
 
 The phrase carries two words that do most of the work. Purpose means a named application in a
-named biological system, not general quality — an antibody is never fit or unfit in the
+named biological system, not general quality. An antibody is never fit or unfit in the
 abstract. Sufficient is set by that application and by the scientific question being asked
 rather than by a fixed standard: no sequence of methods is universally required and not every
 available method is necessary for every antibody, so the breadth of evidence that counts as

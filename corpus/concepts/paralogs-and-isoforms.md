@@ -38,7 +38,7 @@ itself cannot answer.
 This is the case genetic evidence is specifically suited to. Removing or reducing the target
 protein and repeating the experiment provides a direct link between the gene, the protein, and
 what the antibody detects, and the approach is described as particularly useful for examining
-specificity for proteins that come from related genes — that is, members of multigene families.
+specificity for proteins that come from related genes, that is, members of multigene families.
 
 A known limit worth stating plainly. Attribution among *isoforms* or splice variants of the
 same gene is a harder problem than attribution among paralogs, and it is not solved by the same

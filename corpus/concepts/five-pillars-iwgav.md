@@ -21,7 +21,7 @@ sources:
     journal: "Nat Protoc"
     title: "A consensus platform for antibody characterization"
     depth: full-text
-  - label: "IPI 4D framework, internal draft — grounds the statements of IPI's own position. No manuscript text is reproduced."
+  - label: "IPI 4D framework, internal draft. Grounds the statements of IPI's own position. No manuscript text is reproduced."
     depth: full-text
 status: sourced
 reviewed_by:
@@ -46,12 +46,13 @@ the signal disappears or drops accordingly; orthogonal strategies, checking the 
 antibody-independent measurement of the target such as targeted mass spectrometry; independent
 antibody strategies, using a second antibody against a different epitope; expression of tagged
 proteins; and immunocapture followed by mass spectrometry. The stated minimum is that at least one
-should be used before claiming an antibody is validated for a specific application — a floor
-rather than a ceiling, since the proposal adds that multiple strategies strengthen the conclusion.
+should be used before claiming an antibody is validated for a specific application. That is a
+floor rather than a ceiling, since the proposal adds that multiple strategies strengthen the
+conclusion.
 
 The two frameworks answer different questions. The five pillars organize evidence by the
 *experimental approach* used to generate it. IPI's four dimensions organize evidence by the
-*foundational property* that evidence supports — is the reagent what it claims to be, does it bind
+*foundational property* that evidence supports: is the reagent what it claims to be, does it bind
 the target, is the binding attributable, does it produce an interpretable result in this
 application.
 

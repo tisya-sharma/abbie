@@ -27,7 +27,7 @@ sources:
     journal: "eLife"
     title: "Antibody characterization is critical to enhance reproducibility in biomedical research"
     depth: full-text
-  - label: IPI 4D framework, internal draft — grounds the statements of IPI's own position. No manuscript text is reproduced.
+  - label: IPI 4D framework, internal draft. Grounds the statements of IPI's own position. No manuscript text is reproduced.
     depth: full-text
 status: sourced
 reviewed_by:
@@ -42,8 +42,8 @@ leads_to:
 ---
 
 Characterization establishes what an antibody reagent is. It measures properties of the molecule
-itself — its sequence or clonal definition, identity, purity, structural integrity, and
-consistency between lots — independently of any experiment the antibody will later be used in.
+itself, independently of any experiment the antibody will later be used in: its sequence or
+clonal definition, identity, purity, structural integrity, and consistency between lots.
 
 At IPI these are measurements on a preparation in a tube. Size-exclusion chromatography reports
 whether the material is monomeric or carries aggregate. Intact mass confirms the molecule matches
@@ -54,7 +54,7 @@ what makes them reusable: a characterization result holds for that lot regardles
 Characterization is the evidence base for **molecular integrity**, the first of IPI's four dimensions,
 and it is foundational in a specific sense. Every later claim rests on knowing which reagent
 produced the data. When identity or purity is unestablished, a downstream result cannot be
-attributed with confidence to any particular molecule, and a failure has no unambiguous cause —
+attributed with confidence to any particular molecule, and a failure has no unambiguous cause:
 the antibody, the preparation, and the assay all remain candidates.
 
 It is also where one class of reproducibility problem can be removed before any experiment is

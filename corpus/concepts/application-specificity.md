@@ -58,7 +58,7 @@ leads_to:
   - application-immunoprecipitation
 ---
 
-An application is a specific experimental use of an antibody — Western blot, immunofluorescence,
+An application is a specific experimental use of an antibody: Western blot, immunofluorescence,
 immunohistochemistry, flow cytometry, enzyme-linked immunosorbent assay (ELISA),
 immunoprecipitation. Antibodies are fit-for-purpose reagents, and validation attaches to the
 application rather than to the antibody in general. "This antibody works" is an incomplete
@@ -84,7 +84,7 @@ plastic-embedded sections, the conclusion was that antibodies may be suitable fo
 unsuitable for another even highly related assay, and that validation needs to be performed for
 each intended purpose.
 
-Transfer is not uniformly zero in every direction — success in immunofluorescence has been reported
-as the best predictor of performance in Western blot and immunoprecipitation — but the direction of
-transfer cannot be assumed, and evidence in one application does not substitute for evidence in
-another.
+Transfer is not uniformly zero in every direction, and success in immunofluorescence has been
+reported as the best predictor of performance in Western blot and immunoprecipitation. The
+direction of transfer still cannot be assumed, and evidence in one application does not substitute
+for evidence in another.

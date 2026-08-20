@@ -444,7 +444,7 @@ checked it.
 | `what-is-an-isotype` | core | public | Janeway 2001 |
 
 The four assay concepts carry no numeric criteria. The bands live in IPI's internal release-gate
-standard, and what "good" means per application is recorded below as deferred pending a
+standard, and what "good" means per application is recorded below as an open question pending a
 scientist. Describing what an assay establishes needs no threshold.
 
 What they do carry, in one case, is a qualitative disposition: `assay-cell-display` states that
@@ -513,28 +513,41 @@ resurface — this list exists so they can be rejected on sight rather than re-l
   `orthogonal-validation`, so a future sourcing pass will meet it there and must still not
   import it.
 
-## Two questions left blank in the kickoff notes
+## What the kickoff meeting left unanswered
 
-They are not the same kind of question, and treating them the same is what kept both stuck.
-One is now answered; the other is still deferred.
+The question-and-answer table in the kickoff notes pairs questions put to the science team with
+Deb's answers, and Deb's answers are the authoritative wording this corpus cites. Five rows came
+back without one. They are this project's own asks, open because the meeting ran out of time
+rather than because Deb set them aside.
+
+They are not all the same kind, and treating them as one kind is what kept them stuck. Two were
+researchable and are written. One was a pointer to a document rather than a question, and closed
+when that document arrived. Two still wait on a scientist.
 
 1. **What "functional" means for SPR, and what good versus acceptable versus poor looks like
-   per application.** Deferred, not researchable. The literature has no consensus banding to
-   look up, and the 4D framework declines to produce a quantitative score by design, so any
-   thresholds Abbie states would be IPI's position rather than the field's. This waits for a
-   scientist. Until then no concept grades antibody performance, and questions that ask for a
-   band are answered qualitatively or abstained on. This is narrower than "no concept states a
-   number": `controls-in-validation` reports the affinity range one program required its parental
-   cell lines to be detectable at, and the fivefold steps another protocol uses to titrate a
-   primary antibody into its linear range. Those describe whether a control is fit to interpret,
-   which is a methodological requirement rather than a verdict on a reagent.
-2. **Monoclonal versus polyclonal, and why recombinant antibodies are preferable.** Answered,
-   and not in a file of its own. It was resolvable from published sources, and
-   `reagent-reproducibility` now carries it: all three formats, the head-to-head Western blot
-   figures, and the authors' own caveat that the advantage is correlational. It also holds the
-   alias a visitor would ask under. This is why `recombinant-vs-conventional` was dropped rather
-   than written, as recorded under Still to write above.
+   per application.** Two rows, both still open. The SPR row came back blank and the
+   per-application row came back as "good vs, okay, vs bad," which restates the question rather
+   than banding it, so neither is an answer. Not researchable either. The literature has no
+   consensus banding to look up, and the 4D framework declines to produce a quantitative score
+   by design, so any thresholds Abbie states would be IPI's position rather than the field's.
+   This waits for a scientist. Until then no concept grades antibody performance, and questions
+   that ask for a band are answered qualitatively or abstained on. This is narrower than
+   "no concept states a number": `controls-in-validation` reports the affinity range one program
+   required its parental cell lines to be detectable at, and the fivefold steps another protocol
+   uses to titrate a primary antibody into its linear range. Those describe whether a control is
+   fit to interpret, which is a methodological requirement rather than a verdict on a reagent.
+2. **Monoclonal versus polyclonal, and why recombinant antibodies are preferable.** Two rows,
+   both answered, and not in a file of their own. They were resolvable from published sources,
+   and `reagent-reproducibility` now carries them: all three formats, the head-to-head Western
+   blot figures, and the authors' own caveat that the advantage is correlational. It also holds
+   the alias a visitor would ask under. This is why `recombinant-vs-conventional` was dropped
+   rather than written, as recorded under Still to write above.
+3. **The pass/fail criteria SOP.** One row, and a pointer to a document rather than a question.
+   Closed by obtaining the document: `IPI-CHR-001`, which now grounds `assay-sec`,
+   `assay-mass-spectrometry`, `assay-spr-bli` and `assay-cell-display`. Its numeric criteria stay
+   internal and appear in no concept, which is the same line the assay concepts draw above.
 
 The distinction generalizes: a question with a published answer gets researched and written at
-`sourced`. A question that asks IPI to take a position gets deferred and stays visibly absent
-rather than being quietly filled in with a plausible number.
+`sourced`. A pointer to an internal document gets closed by obtaining the document, and grounds
+concepts without its criteria being reproduced. A question that asks IPI to take a position stays
+open and visibly absent rather than being quietly filled in with a plausible number.
